@@ -32,6 +32,13 @@ class Theproduct extends StatefulWidget {
 }
 
 class _TheproductState extends State<Theproduct> {
+  List<Product> filteredProducts = [];
+  @override
+  void initState() {
+    super.initState();
+    filteredProducts = products;
+  }
+
   List<Product> products = [
     Product(
       name: "Apple MacBook Air",
@@ -141,6 +148,16 @@ class _TheproductState extends State<Theproduct> {
                         SizedBox(width: 8.w),
                         Expanded(
                           child: TextField(
+                            onChanged: (value) {
+                              setState(() {
+                                filteredProducts =
+                                    products.where((product) {
+                                      return product.name
+                                          .toLowerCase()
+                                          .contains(value.toLowerCase());
+                                    }).toList();
+                              });
+                            },
                             decoration: InputDecoration(
                               hintText: "ابحث...",
                               border: InputBorder.none,
@@ -199,9 +216,9 @@ class _TheproductState extends State<Theproduct> {
 
             Expanded(
               child: ListView.builder(
-                itemCount: products.length,
+                itemCount: filteredProducts.length,
                 itemBuilder: (context, index) {
-                  final product = products[index];
+                  final product = filteredProducts[index];
 
                   return ProductCard(
                     name: product.name,

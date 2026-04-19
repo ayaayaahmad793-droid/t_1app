@@ -81,7 +81,7 @@ class _HomepageState extends State<Homepage> {
                 ),
                 SizedBox(height: 15.h),
 
-                /// 🔹 SEARCH
+                /// SEARCH
                 Row(
                   children: [
                     Expanded(
@@ -122,71 +122,116 @@ class _HomepageState extends State<Homepage> {
 
                 SizedBox(height: 15.h),
 
-                /// 🔹 BANNER
-                Container(
-                  height: 150.h,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15.r),
-                    image: const DecorationImage(
-                      image: AssetImage("assets/banner.png"),
-                      fit: BoxFit.cover,
+                /// BANNER
+                Stack(
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20.r),
+                      ),
+                      child: Image.asset(
+                        "images/HomeRoot.png",
+                        width: 343.w,
+                        height: 197.h,
+                        fit: BoxFit.cover,
+                      ),
                     ),
-                  ),
-                  child: Padding(
-                    padding: EdgeInsets.all(12.w),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "تسوق معنا وادعم",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 14.sp,
-                          ),
+                    Positioned(
+                      top: 20.h,
+                      left: 15.w,
+                      child: Text(
+                        "تسوق محلي, وادعم \n مجتمعك",
+                        style: GoogleFonts.cairo(
+                          fontSize: 12.sp,
+                          fontWeight: FontWeight.w500,
+                          color: Color(0xffFFFFFF),
                         ),
-                        Text(
-                          "المنتج الفلسطيني",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 18.sp,
-                            fontWeight: FontWeight.bold,
-                          ),
+                      ),
+                    ),
+                    Positioned(
+                      bottom: 20.h,
+                      right: 20.w,
+                      child: Text(
+                        "ابدا البيع بلمسة,\n وشارك الخير بصفقة",
+                        style: GoogleFonts.cairo(
+                          fontSize: 12.sp,
+                          fontWeight: FontWeight.w500,
+                          color: Color(0xffFFFFFF),
                         ),
-                        const Spacer(),
-                        Container(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 10.w,
-                            vertical: 5.h,
-                          ),
-                          decoration: BoxDecoration(
-                            color: Colors.orange,
+                      ),
+                    ),
+                    Positioned(
+                      left: 10.w,
+                      bottom: 5.h,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xffF57C00),
+                          shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20.r),
                           ),
-                          child: Text(
-                            "تسوق الآن",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 12.sp,
-                            ),
+                        ),
+                        onPressed: () {},
+                        child: Text(
+                          "تسوق الان",
+                          style: GoogleFonts.cairo(
+                            fontSize: 10.sp,
+                            fontWeight: FontWeight.w500,
+                            color: const Color(0xff000000),
                           ),
                         ),
-                      ],
+                      ),
                     ),
-                  ),
+                    Positioned(
+                      top: 80.h,
+                      child: IconButton(
+                        onPressed: () {},
+                        icon: Icon(
+                          Icons.arrow_back_ios,
+                          color: Color(0xffFFFFFF),
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      top: 80.h,
+                      left: 0.w,
+                      child: IconButton(
+                        onPressed: () {},
+                        icon: Icon(
+                          Icons.arrow_forward_ios,
+                          color: Color(0xffFFFFFF),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
 
                 SizedBox(height: 15.h),
+                Container(
+                  child: Text(
+                    "الاقسام الرئيسية",
+                    style: GoogleFonts.cairo(
+                      fontWeight: FontWeight.w500,
+                      fontSize: 16.sp,
+                      color: Color(0xff000000),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 15.h),
 
-                /// 🔹 CATEGORIES
+                ///  CATEGORIES
                 SizedBox(
                   height: 35.h,
                   child: ListView(
                     scrollDirection: Axis.horizontal,
                     children: [
-                      chip("الكل", true),
-                      chip("ملابس", false),
-                      chip("مواد غذائية", false),
-                      chip("حلويات", false),
+                      Row(
+                        children: [
+                          chip("الكل", true),
+                          chip("ملابس", false),
+                          chip("مواد غذائية", false),
+                          chip("حلويات", false),
+                        ],
+                      ),
                     ],
                   ),
                 ),
@@ -216,7 +261,7 @@ class _HomepageState extends State<Homepage> {
     );
   }
 
-  /// 🔹 CHIP
+  ///  CHIP
   Widget chip(String text, bool active) {
     return Container(
       margin: EdgeInsets.only(left: 8.w),

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:t_1app/HomePage.dart';
-import 'package:t_1app/RegularUser.dart';
+
 import 'package:t_1app/ShopData.dart';
 
 class Accounttype extends StatefulWidget {

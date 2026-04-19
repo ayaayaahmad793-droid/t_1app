@@ -89,6 +89,17 @@ flutter:
     - images/product3.png
     - images/product4.png
     - images\camera.png
+    - images/HomeRoot.png
+    - images/hp1.png
+    - images/hp2.png
+    - images/hp3.png
+    - images/hp4.png
+    - images/hp5.png
+    - images/hp6.png
+    - images/hp7.png
+    - images/hp8.png
+    - images/HomeProfile.png
+
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
 

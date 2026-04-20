@@ -10,14 +10,23 @@ class Homepage extends StatefulWidget {
 }
 
 class Product {
-  final String name;
-  final String price;
-  final String image;
+  final String productName;
+  final String shopName;
+  final int price;
+  final double evaluation;
+  final Image productImage;
 
-  Product({required this.name, required this.price, required this.image});
+  Product({
+    required this.productName,
+    required this.productImage,
+    required this.shopName,
+    required this.price,
+    required this.evaluation,
+  });
 }
 
 class _HomepageState extends State<Homepage> {
+  String selectedText = "الكل";
   @override
   Widget build(BuildContext context) {
     return Directionality(
@@ -218,6 +227,8 @@ class _HomepageState extends State<Homepage> {
                 ),
                 SizedBox(height: 15.h),
 
+                ////////////////////////////////////////////////////////////
+
                 ///  CATEGORIES
                 SizedBox(
                   height: 35.h,
@@ -226,10 +237,10 @@ class _HomepageState extends State<Homepage> {
                     children: [
                       Row(
                         children: [
-                          chip("الكل", true),
-                          chip("ملابس", false),
-                          chip("مواد غذائية", false),
-                          chip("حلويات", false),
+                          chip("الكل"),
+                          chip("عالم البيت"),
+                          chip("عالم الخير"),
+                          chip("الحياة"),
                         ],
                       ),
                     ],
@@ -237,20 +248,196 @@ class _HomepageState extends State<Homepage> {
                 ),
 
                 SizedBox(height: 10.h),
+                /*  Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "قسم العروض",
+                      style: GoogleFonts.cairo(
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    Text(
+                      "شاهد الكل",
+                      style: GoogleFonts.cairo(
+                        fontSize: 13.sp,
+                        fontWeight: FontWeight.w500,
+                        color: Color(0xff979797),
+                      ),
+                    ),
+                  ],
+                ), */
+                SizedBox(height: 5.h),
 
                 /// 🔹 PRODUCTS
                 Expanded(
-                  child: GridView.builder(
-                    itemCount: 6,
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      crossAxisSpacing: 10.w,
-                      mainAxisSpacing: 10.h,
-                      childAspectRatio: 0.68,
-                    ),
-                    itemBuilder: (context, index) {
-                      return productCard();
-                    },
+                  child: ListView(
+                    children: [
+                      Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "قسم العروض",
+                                style: GoogleFonts.cairo(
+                                  fontSize: 16.sp,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              Text(
+                                "شاهد الكل",
+                                style: GoogleFonts.cairo(
+                                  fontSize: 13.sp,
+                                  fontWeight: FontWeight.w500,
+                                  color: Color(0xff979797),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              productCard(
+                                "فستان قصير",
+                                "shopName",
+                                10,
+                                20,
+                                3,
+                                "images/hp2.png",
+                              ),
+                              productCard(
+                                "فراشي بعدة اشكال للمكياج",
+                                "shopName",
+                                10,
+                                20,
+                                3,
+                                "images/hp1.png",
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 10.h),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                " وصل حديثا",
+                                style: GoogleFonts.cairo(
+                                  fontSize: 16.sp,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              Text(
+                                "شاهد الكل",
+                                style: GoogleFonts.cairo(
+                                  fontSize: 13.sp,
+                                  fontWeight: FontWeight.w500,
+                                  color: Color(0xff979797),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              productCard(
+                                "بوت ابيض مع كعب عالي",
+                                "shopName",
+                                10,
+                                20,
+                                3,
+                                "images/hp4.png",
+                              ),
+                              productCard(
+                                "جزمة برتقالية",
+                                "shopName",
+                                10,
+                                20,
+                                3,
+                                "images/hp3.png",
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 10.h),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "  الاكثر طلبا",
+                                style: GoogleFonts.cairo(
+                                  fontSize: 16.sp,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              Text(
+                                "شاهد الكل",
+                                style: GoogleFonts.cairo(
+                                  fontSize: 13.sp,
+                                  fontWeight: FontWeight.w500,
+                                  color: Color(0xff979797),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              productCard(
+                                "شاورما مع سلطات",
+                                "shopName",
+                                10,
+                                20,
+                                3,
+                                "images/hp6.png",
+                              ),
+                              productCard(
+                                "كلمنتينا طازجة",
+                                "shopName",
+                                10,
+                                20,
+                                3,
+                                "images/hp5.png",
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 10.h),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "تبادل",
+                                style: GoogleFonts.cairo(
+                                  fontSize: 16.sp,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              productCard(
+                                "productName",
+                                "shopName",
+                                10,
+                                20,
+                                3,
+                                "images/hp8.png",
+                              ),
+                              productCard(
+                                "productName",
+                                "shopName",
+                                10,
+                                20,
+                                3,
+                                "images/hp7.png",
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
               ],
@@ -262,92 +449,157 @@ class _HomepageState extends State<Homepage> {
   }
 
   ///  CHIP
-  Widget chip(String text, bool active) {
-    return Container(
-      margin: EdgeInsets.only(left: 8.w),
-      padding: EdgeInsets.symmetric(horizontal: 14.w),
-      decoration: BoxDecoration(
-        color: active ? Colors.orange : Colors.white,
-        borderRadius: BorderRadius.circular(20.r),
-      ),
-      alignment: Alignment.center,
-      child: Text(
-        text,
-        style: TextStyle(
-          fontSize: 12.sp,
-          color: active ? Colors.white : Colors.black,
+  Widget chip(String text) {
+    return InkWell(
+      borderRadius: BorderRadius.circular(18.r),
+      onTap: () {
+        setState(() {
+          selectedText = text; // خزني المختار
+        });
+      },
+      child: Container(
+        width: 100.w,
+        height: 35.h,
+        margin: EdgeInsets.only(left: 8.w),
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color:
+              selectedText == text
+                  ? Color(0xffF57C00)
+                  // لما يكون مختار
+                  : Colors.transparent,
+          border: Border.all(
+            color: selectedText == text ? Color(0xffF57C00) : Color(0xff919191),
+          ),
+          borderRadius: BorderRadius.circular(18.r),
+        ),
+        child: Text(
+          text,
+          style: GoogleFonts.cairo(
+            fontSize: 14.sp,
+            fontWeight: FontWeight.w500,
+            color: Color(0xff000000),
+          ),
         ),
       ),
     );
   }
 
   /// 🔹 PRODUCT CARD
-  Widget productCard() {
+  Widget productCard(
+    String productName,
+    String shopName,
+    int price,
+    int oldPrice,
+    double evaluation,
+    String productImage,
+  ) {
     return Container(
+      width: 162.w,
+      height: 205.h,
       decoration: BoxDecoration(
+        border: Border(
+          bottom: BorderSide(color: Color(0xff8D8D8D), width: 1),
+          left: BorderSide(color: Color(0xff8D8D8D), width: 1),
+          right: BorderSide(color: Color(0xff8D8D8D), width: 1),
+        ),
         color: Colors.white,
         borderRadius: BorderRadius.circular(15.r),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+
         children: [
           Stack(
             children: [
               ClipRRect(
                 borderRadius: BorderRadius.vertical(top: Radius.circular(15.r)),
-                child: Image.asset(
-                  "images/hp1.png",
-                  height: 120.h,
-                  width: double.infinity,
-                  fit: BoxFit.cover,
-                ),
+                child: Image.asset(productImage, height: 118.h, width: 162.w),
               ),
               Positioned(
                 top: 8,
-                left: 8,
+                right: 8,
                 child: CircleAvatar(
                   radius: 14.r,
                   backgroundColor: Colors.white,
-                  child: const Icon(Icons.favorite_border, size: 16),
+                  child: const Icon(Icons.favorite_border, size: 24),
                 ),
               ),
             ],
           ),
-
           Padding(
-            padding: EdgeInsets.all(8.w),
+            padding: EdgeInsets.only(right: 10.w),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "فستان برتقالي",
-                  style: TextStyle(
-                    fontSize: 13.sp,
-                    fontWeight: FontWeight.bold,
+                  productName,
+                  style: GoogleFonts.cairo(
+                    fontSize: 12.sp,
+                    fontWeight: FontWeight.w500,
+                    color: Color(0xff000000),
                   ),
                 ),
 
                 SizedBox(height: 4.h),
-
                 Row(
                   children: [
-                    const Icon(Icons.star, color: Colors.orange, size: 14),
-                    Text(" 4.3", style: TextStyle(fontSize: 11.sp)),
+                    Icon(Icons.store, color: Color(0xff2E7D32), size: 18),
+                    Text(
+                      shopName,
+                      style: GoogleFonts.cairo(
+                        fontSize: 10.sp,
+                        fontWeight: FontWeight.w500,
+                        color: Color(0xff1B1B1B),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 4.h),
+                Row(
+                  children: [
+                    Text(
+                      "\$${price.toString()}",
+                      style: GoogleFonts.cairo(
+                        fontWeight: FontWeight.w400,
+                        fontSize: 12.sp,
+                      ),
+                    ),
+                    SizedBox(width: 5.w),
+                    Text(
+                      "\$${oldPrice.toString()}",
+                      style: GoogleFonts.cairo(
+                        color: Color(0xff8D8D8D),
+                        decoration: TextDecoration.lineThrough,
+                        decorationColor: Color(0xff8D8D8D),
+                        fontWeight: FontWeight.w400,
+                        fontSize: 10.sp,
+                      ),
+                    ),
                   ],
                 ),
 
-                SizedBox(height: 4.h),
-
-                Text("₪520", style: TextStyle(fontSize: 12.sp)),
-
-                Text(
-                  "₪650",
-                  style: TextStyle(
-                    fontSize: 10.sp,
-                    decoration: TextDecoration.lineThrough,
-                    color: Colors.grey,
+                Padding(
+                  padding: EdgeInsets.only(right: 100.w),
+                  child: Row(
+                    children: [
+                      Text(
+                        evaluation.toString(),
+                        style: GoogleFonts.cairo(
+                          fontSize: 12.sp,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      const Icon(
+                        Icons.star,
+                        color: Color(0xffFFB800),
+                        size: 17,
+                      ),
+                    ],
                   ),
                 ),
+
+                SizedBox(height: 2.h),
               ],
             ),
           ),

@@ -37,6 +37,14 @@ class _HtheallState extends State<Htheall> {
       evaluation: 4.5,
       productImage: "images/hp2.png",
     ),
+    Product(
+      productName: "فستان",
+      shopName: "متجر 1",
+      price: 10,
+      oldPrice: 20,
+      evaluation: 4.5,
+      productImage: "images/hp2.png",
+    ),
   ];
 
   List<Product> newProducts = [
@@ -98,20 +106,14 @@ class _HtheallState extends State<Htheall> {
   Widget build(BuildContext context) {
     return Directionality(
       textDirection: TextDirection.rtl,
-      child: Scaffold(
-        backgroundColor: const Color(0xffFFFFFF),
-        body: SafeArea(
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20.w),
-            child: ListView(
-              children: [
-                Department(offers, "قسم العروض"),
-                Department(newProducts, "وصل حديثا"),
-                Department(popular, "الاكثر طلبا"),
-                Department(exchange, "الاكثر طلبا"),
-              ],
-            ),
-          ),
+      child: Container(
+        child: ListView(
+          children: [
+            Department(offers, "قسم العروض"),
+            Department(newProducts, "وصل حديثا"),
+            Department(popular, "الاكثر طلبا"),
+            Department(exchange, "تبادل"),
+          ],
         ),
       ),
     );
@@ -121,6 +123,7 @@ class _HtheallState extends State<Htheall> {
   Widget productCard(Product product) {
     return Container(
       width: 162.w,
+      height: 210.h,
 
       margin: EdgeInsets.only(left: 10.w),
       decoration: BoxDecoration(
@@ -167,7 +170,7 @@ class _HtheallState extends State<Htheall> {
                   ),
                 ),
 
-                SizedBox(height: 5.h),
+                SizedBox(height: 4.h),
                 Row(
                   children: [
                     Icon(Icons.store, color: Color(0xff2E7D32), size: 18),
@@ -181,7 +184,7 @@ class _HtheallState extends State<Htheall> {
                     ),
                   ],
                 ),
-                SizedBox(height: 5.h),
+                SizedBox(height: 4.h),
                 Row(
                   children: [
                     Text(
@@ -191,7 +194,7 @@ class _HtheallState extends State<Htheall> {
                         fontSize: 12.sp,
                       ),
                     ),
-                    SizedBox(width: 5.w),
+                    SizedBox(width: 4.w),
                     Text(
                       "\$${product.oldPrice.toString()}",
                       style: GoogleFonts.cairo(
@@ -224,8 +227,6 @@ class _HtheallState extends State<Htheall> {
                     ],
                   ),
                 ),
-
-                SizedBox(height: 2.h),
               ],
             ),
           ),
@@ -234,40 +235,52 @@ class _HtheallState extends State<Htheall> {
     );
   }
 
-  /// 🔹 DEPARTMENT
+  /// DEPARTMENT
   Widget Department(List<Product> products, String departmentName) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         /// العنوان
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
+        departmentName == "تبادل"
+            ? Text(
               departmentName,
               style: GoogleFonts.cairo(
                 fontSize: 16.sp,
                 fontWeight: FontWeight.w500,
               ),
+            )
+            : Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      departmentName,
+                      style: GoogleFonts.cairo(
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    Text(
+                      "شاهد الكل",
+                      style: GoogleFonts.cairo(
+                        fontSize: 13.sp,
+                        color: const Color(0xff979797),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
             ),
-            Text(
-              "شاهد الكل",
-              style: GoogleFonts.cairo(
-                fontSize: 13.sp,
-                color: const Color(0xff979797),
-              ),
-            ),
-          ],
-        ),
 
-        SizedBox(height: 10.h),
+        SizedBox(height: 3.h),
 
         /// المنتجات
         SizedBox(
-          height: 230.h,
+          height: 220.h,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
-            itemCount: (products.length / 2).ceil(), // 🔥 مهم
+            itemCount: (products.length / 2).ceil(), //  مهم
             itemBuilder: (context, index) {
               int firstIndex = index * 2;
               int secondIndex = firstIndex + 1;
@@ -286,7 +299,7 @@ class _HtheallState extends State<Htheall> {
           ),
         ),
 
-        SizedBox(height: 20.h),
+        SizedBox(height: 10.h),
       ],
     );
   }

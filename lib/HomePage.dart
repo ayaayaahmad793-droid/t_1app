@@ -312,188 +312,9 @@ class _HomepageState extends State<Homepage> {
                 ),
 
                 SizedBox(height: 10.h),
-               
 
                 /// 🔹 PRODUCTS
-                Expanded(
-                  child: ListView(
-                    children: [
-                      Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                "قسم العروض",
-                                style: GoogleFonts.cairo(
-                                  fontSize: 16.sp,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                              Text(
-                                "شاهد الكل",
-                                style: GoogleFonts.cairo(
-                                  fontSize: 13.sp,
-                                  fontWeight: FontWeight.w500,
-                                  color: Color(0xff979797),
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 205.h,
-                            child: ListView(
-                              physics: BouncingScrollPhysics(),
-                              children: [
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    productCard(
-                                      "فستان قصير",
-                                      "shopName",
-                                      10,
-                                      20,
-                                      3,
-                                      "images/hp2.png",
-                                    ),
-                                    productCard(
-                                      "فراشي بعدة اشكال للمكياج",
-                                      "shopName",
-                                      10,
-                                      20,
-                                      3,
-                                      "images/hp1.png",
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(height: 10.h),
-                              ],
-                            ),
-                          ),
-                          SizedBox(height: 10.h),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                " وصل حديثا",
-                                style: GoogleFonts.cairo(
-                                  fontSize: 16.sp,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                              Text(
-                                "شاهد الكل",
-                                style: GoogleFonts.cairo(
-                                  fontSize: 13.sp,
-                                  fontWeight: FontWeight.w500,
-                                  color: Color(0xff979797),
-                                ),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              productCard(
-                                "بوت ابيض مع كعب عالي",
-                                "shopName",
-                                10,
-                                20,
-                                3,
-                                "images/hp4.png",
-                              ),
-                              productCard(
-                                "جزمة برتقالية",
-                                "shopName",
-                                10,
-                                20,
-                                3,
-                                "images/hp3.png",
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 10.h),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                "  الاكثر طلبا",
-                                style: GoogleFonts.cairo(
-                                  fontSize: 16.sp,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                              Text(
-                                "شاهد الكل",
-                                style: GoogleFonts.cairo(
-                                  fontSize: 13.sp,
-                                  fontWeight: FontWeight.w500,
-                                  color: Color(0xff979797),
-                                ),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              productCard(
-                                "شاورما مع سلطات",
-                                "shopName",
-                                10,
-                                20,
-                                3,
-                                "images/hp6.png",
-                              ),
-                              productCard(
-                                "كلمنتينا طازجة",
-                                "shopName",
-                                10,
-                                20,
-                                3,
-                                "images/hp5.png",
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 10.h),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                "تبادل",
-                                style: GoogleFonts.cairo(
-                                  fontSize: 16.sp,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              productCard(
-                                "productName",
-                                "shopName",
-                                10,
-                                20,
-                                3,
-                                "images/hp8.png",
-                              ),
-                              productCard(
-                                "productName",
-                                "shopName",
-                                10,
-                                20,
-                                3,
-                                "images/hp7.png",
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
+                Expanded(child: getSelectedPage()),
               ],
             ),
           ),
@@ -508,7 +329,7 @@ class _HomepageState extends State<Homepage> {
       borderRadius: BorderRadius.circular(18.r),
       onTap: () {
         setState(() {
-          selectedText = text; // خزني المختار
+          selectedText = text;
         });
       },
       child: Container(
@@ -680,57 +501,22 @@ class _HomepageState extends State<Homepage> {
     );
   }
 
-  /* Widget department (Widget Function(
-      String productName,
-      String shopName,
-      int price,
-      int oldPrice,
-      double evaluation,
-      String productImage,
-    ) productCard,String depatmentName){
+  Widget getSelectedPage() {
+    switch (selectedText) {
+      case "الكل":
+        return Htheall();
 
-    return  Column ( children:[Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                               depatmentName,
-                                style: GoogleFonts.cairo(
-                                  fontSize: 16.sp,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                              Text(
-                                "شاهد الكل",
-                                style: GoogleFonts.cairo(
-                                  fontSize: 13.sp,
-                                  fontWeight: FontWeight.w500,
-                                  color: Color(0xff979797),
-                                ),
-                              ),
-                            ],
-                          ),
+      case "عالم البيت":
+        return Center(child: Text("صفحة عالم البيت"));
 
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              productCard(
-                                productName,
-                                shopName,
-                                10,
-                                20,
-                                3,
-                                "images/hp4.png",
-                              ),
-                              productCard(
-                                productName,
-                                 shopName,
-                                10,
-                                20,
-                                3,
-                                "images/hp3.png",
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 10.h)]);
-  } */
+      case "عالم الخير":
+        return Center(child: Text("صفحة عالم الخير"));
+
+      case "الحياة":
+        return Center(child: Text("صفحة الحياة"));
+
+      default:
+        return Htheall();
+    }
+  }
 }

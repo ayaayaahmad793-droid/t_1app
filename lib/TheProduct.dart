@@ -33,11 +33,17 @@ class Theproduct extends StatefulWidget {
 }
 
 class _TheproductState extends State<Theproduct> {
-  final recorder = AudioRecorder();
+  final Record recorder = Record();
   bool isRecording = false;
   Future<void> startRecording() async {
     if (await recorder.hasPermission()) {
-      await recorder.start(const RecordConfig(), path: 'recording.m4a');
+      await recorder.start(
+        path: 'recording.m4a',
+        encoder: AudioEncoder.aacLc,
+        bitRate: 128000,
+        samplingRate: 44100,
+      );
+
       setState(() {
         isRecording = true;
       });
@@ -46,11 +52,18 @@ class _TheproductState extends State<Theproduct> {
 
   Future<void> stopRecording() async {
     final path = await recorder.stop();
+
     print("تم حفظ التسجيل في: $path");
 
     setState(() {
       isRecording = false;
     });
+  }
+
+  @override
+  void dispose() {
+    recorder.dispose();
+    super.dispose();
   }
 
   List<Product> filteredProducts = [];
@@ -196,7 +209,7 @@ class _TheproductState extends State<Theproduct> {
                           child: IconButton(
                             icon: Icon(
                               isRecording ? Icons.stop : Icons.mic,
-                              color: Colors.red,
+                              color: Color(0xff000000),
                             ),
                             onPressed: () async {
                               if (isRecording) {

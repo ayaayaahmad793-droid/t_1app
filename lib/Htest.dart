@@ -312,7 +312,8 @@ class _HomepageState extends State<Homepage> {
                 ),
 
                 SizedBox(height: 10.h),
-               
+                
+                SizedBox(height: 5.h),
 
                 /// 🔹 PRODUCTS
                 Expanded(

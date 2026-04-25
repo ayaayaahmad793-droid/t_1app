@@ -4,6 +4,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:record/record.dart';
 import 'package:t_1app/HomeBanner.dart';
 import 'package:t_1app/HtheAll.dart';
+import 'package:t_1app/SearchSett.dart';
+import 'package:t_1app/SelectedPage.dart';
+import 'package:t_1app/uniqeProduct.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({super.key});
@@ -31,8 +34,19 @@ class Product {
 }
 
 class _HomepageState extends State<Homepage> {
+  ///  الصفحات الديناميكية
+  final List<PageItem> myPages = [
+    PageItem(title: "الكل", page: Htheall()),
+    PageItem(title: "عالم البيت", page: Center(child: Text("عالم البيت"))),
+    PageItem(title: "عالم الخير", page: Center(child: Text("عالم الخير"))),
+    PageItem(title: "الحياة", page: Center(child: Text("الحياة"))),
+  ];
+
+  String selectedText = "الكل";
+
   final Record recorder = Record();
   bool isRecording = false;
+
   Future<void> startRecording() async {
     if (await recorder.hasPermission()) {
       await recorder.start(
@@ -50,7 +64,6 @@ class _HomepageState extends State<Homepage> {
 
   Future<void> stopRecording() async {
     final path = await recorder.stop();
-
     print("تم حفظ التسجيل في: $path");
 
     setState(() {
@@ -62,13 +75,6 @@ class _HomepageState extends State<Homepage> {
   void dispose() {
     recorder.dispose();
     super.dispose();
-  }
-
-  List<Product> filteredProducts = [];
-  @override
-  void initState() {
-    super.initState();
-    filteredProducts = products;
   }
 
   List<Product> products = [
@@ -88,32 +94,22 @@ class _HomepageState extends State<Homepage> {
       evaluation: 4.3,
       shopName: "shop name",
     ),
-    Product(
-      productName: "product name",
-      price: 4.999,
-      oldPrice: 9.999,
-      productImage: Image.asset("images/hp1.png"),
-      evaluation: 4.3,
-      shopName: "shop name",
-    ),
-    Product(
-      productName: "product name",
-      price: 4.999,
-      oldPrice: 9.999,
-      productImage: Image.asset("images/hp1.png"),
-      evaluation: 4.3,
-      shopName: "shop name",
-    ),
   ];
 
-  String selectedText = "الكل";
+  List<Product> filteredProducts = [];
+
+  @override
+  void initState() {
+    super.initState();
+    filteredProducts = products;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
-        backgroundColor: Color(0xffFFFFFF),
-
+        backgroundColor: const Color(0xffFFFFFF),
         bottomNavigationBar: bottomBar(),
         body: SafeArea(
           child: Padding(
@@ -123,7 +119,7 @@ class _HomepageState extends State<Homepage> {
               children: [
                 SizedBox(height: 10.h),
 
-                /// HEADER
+                /// 🔹 HEADER
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -131,12 +127,8 @@ class _HomepageState extends State<Homepage> {
                       width: 91.w,
                       height: 37.h,
                       alignment: Alignment.centerRight,
-
                       decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Color(0xff919191), // لون البوردر
-                          width: 1.w, // سماكة البوردر
-                        ),
+                        border: Border.all(color: Color(0xff919191)),
                         borderRadius: BorderRadius.circular(20.r),
                       ),
                       child: Row(
@@ -146,175 +138,86 @@ class _HomepageState extends State<Homepage> {
                             width: 37.w,
                             height: 37.h,
                           ),
-                          Container(
-                            child: Text(
-                              "مرحبا نور",
-                              style: GoogleFonts.cairo(
-                                fontWeight: FontWeight.w400,
-                                fontSize: 12.sp,
-                              ),
-                            ),
+                          Text(
+                            "مرحبا نور",
+                            style: GoogleFonts.cairo(fontSize: 12.sp),
                           ),
                         ],
                       ),
                     ),
-
-                    SizedBox(width: 8.w),
-
-                    Container(
-                      width: 37.w,
-                      height: 38.h,
-                      child: IconButton(
-                        icon: Icon(Icons.notifications_none),
-                        onPressed: () {},
-                      ),
+                    IconButton(
+                      icon: const Icon(Icons.notifications_none),
+                      onPressed: () {},
                     ),
                   ],
                 ),
-                SizedBox(height: 15.h),
 
-                /// SEARCH
-                Row(
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(right: 5.w),
-                      child: Container(
-                        width: 283.w,
-                        height: 44.h,
-                        decoration: BoxDecoration(
-                          color: Color(0xffFFFFFF),
-                          borderRadius: BorderRadius.circular(16.r),
-                          border: Border.all(color: Color(0xff919191)),
-                        ),
-                        child: Row(
-                          children: [
-                            SizedBox(
-                              width: 24.w,
-                              height: 24.h,
-                              child: Icon(
-                                Icons.search,
-                                color: Color(0xff292D32),
-                              ),
-                            ),
-                            SizedBox(width: 8.w),
-                            Expanded(
-                              child: TextField(
-                                onChanged: (value) {
-                                  setState(() {
-                                    filteredProducts =
-                                        products.where((product) {
-                                          return product.productName
-                                              .toLowerCase()
-                                              .contains(value.toLowerCase());
-                                        }).toList();
-                                  });
-                                },
-                                decoration: InputDecoration(
-                                  hintText: "ابحث عن منتجات...",
-                                  border: InputBorder.none,
-                                  hintStyle: GoogleFonts.poppins(
-                                    fontSize: 12.sp,
-                                    fontWeight: FontWeight.w400,
-                                    color: Color(0xff9A9A9A),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              width: 24.w,
-                              height: 24.h,
-                              child: IconButton(
-                                icon: Icon(
-                                  isRecording ? Icons.stop : Icons.mic,
-                                  color: Color(0xff000000),
-                                ),
-                                onPressed: () async {
-                                  if (isRecording) {
-                                    await stopRecording();
-                                  } else {
-                                    await startRecording();
-                                  }
-                                },
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    SizedBox(width: 10.w),
-                    InkWell(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder:
-                                (context) => Htheall(), // غير اسم الصفحة هون
-                          ),
-                        );
-                      },
-                      child: Stack(
-                        children: [
-                          Image.asset(
-                            "images/OrangeSmall.png",
-                            width: 44.w,
-                            height: 44.h,
-                          ),
-                          Positioned(
-                            top: 10.h,
-                            left: 11.w,
-                            child: Image.asset(
-                              "images/sett.png",
-                              width: 24.w,
-                              height: 24.h,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
+                SizedBox(height: 10.h),
+
+                /// 🔹 SEARCH
+                CustomSearchBar(
+                  hintText: "ابحث عن منتجات...",
+                  isRecording: isRecording,
+                  onMicPressed: () async {
+                    if (isRecording) {
+                      await stopRecording();
+                    } else {
+                      await startRecording();
+                    }
+                  },
+                  onFilterPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => Uniqeproduct()),
+                    );
+                  },
+                  onChanged: (value) {
+                    setState(() {
+                      filteredProducts =
+                          products.where((product) {
+                            return product.productName.toLowerCase().contains(
+                              value.toLowerCase(),
+                            );
+                          }).toList();
+                    });
+                  },
                 ),
+
                 SizedBox(height: 15.h),
 
-                /// BANNER
+                /// 🔹 BANNER
                 HomeBanner(),
 
                 SizedBox(height: 15.h),
-                Container(
-                  child: Text(
-                    "الاقسام الرئيسية",
-                    style: GoogleFonts.cairo(
-                      fontWeight: FontWeight.w500,
-                      fontSize: 16.sp,
-                      color: Color(0xff000000),
-                    ),
-                  ),
+
+                Text(
+                  "الاقسام الرئيسية",
+                  style: GoogleFonts.cairo(fontSize: 16.sp),
                 ),
+
                 SizedBox(height: 15.h),
 
-                ////////////////////////////////////////////////////////////
-
-                ///  CATEGORIES
+                ///  CATEGORIES (ديناميكي)
                 SizedBox(
                   height: 35.h,
                   child: ListView(
                     scrollDirection: Axis.horizontal,
-                    children: [
-                      Row(
-                        children: [
-                          chip("الكل"),
-                          chip("عالم البيت"),
-                          chip("عالم الخير"),
-                          chip("الحياة"),
-                        ],
-                      ),
-                    ],
+                    children:
+                        myPages.map((item) {
+                          return chip(item.title);
+                        }).toList(),
                   ),
                 ),
 
                 SizedBox(height: 10.h),
 
-                /// 🔹 PRODUCTS
-                Expanded(child: getSelectedPage()),
+                /// الصفحات
+                Expanded(
+                  child: DynamicSelectedPage(
+                    selectedText: selectedText,
+                    items: myPages,
+                  ),
+                ),
               ],
             ),
           ),
@@ -338,147 +241,13 @@ class _HomepageState extends State<Homepage> {
         margin: EdgeInsets.only(left: 8.w),
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          color:
-              selectedText == text
-                  ? Color(0xffF57C00)
-                  // لما يكون مختار
-                  : Colors.transparent,
+          color: selectedText == text ? Color(0xffF57C00) : Colors.transparent,
           border: Border.all(
             color: selectedText == text ? Color(0xffF57C00) : Color(0xff919191),
           ),
           borderRadius: BorderRadius.circular(18.r),
         ),
-        child: Text(
-          text,
-          style: GoogleFonts.cairo(
-            fontSize: 14.sp,
-            fontWeight: FontWeight.w500,
-            color: Color(0xff000000),
-          ),
-        ),
-      ),
-    );
-  }
-
-  /// 🔹 PRODUCT CARD
-  Widget productCard(
-    String productName,
-    String shopName,
-    int price,
-    int oldPrice,
-    double evaluation,
-    String productImage,
-  ) {
-    return Container(
-      width: 162.w,
-      height: 205.h,
-      decoration: BoxDecoration(
-        border: Border(
-          bottom: BorderSide(color: Color(0xff8D8D8D), width: 1),
-          left: BorderSide(color: Color(0xff8D8D8D), width: 1),
-          right: BorderSide(color: Color(0xff8D8D8D), width: 1),
-        ),
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(15.r),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-
-        children: [
-          Stack(
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.vertical(top: Radius.circular(15.r)),
-                child: Image.asset(productImage, height: 118.h, width: 162.w),
-              ),
-              Positioned(
-                top: 8,
-                right: 8,
-                child: CircleAvatar(
-                  radius: 14.r,
-                  backgroundColor: Colors.white,
-                  child: const Icon(Icons.favorite_border, size: 24),
-                ),
-              ),
-            ],
-          ),
-          Padding(
-            padding: EdgeInsets.only(right: 10.w),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  productName,
-                  style: GoogleFonts.cairo(
-                    fontSize: 12.sp,
-                    fontWeight: FontWeight.w500,
-                    color: Color(0xff000000),
-                  ),
-                ),
-
-                SizedBox(height: 4.h),
-                Row(
-                  children: [
-                    Icon(Icons.store, color: Color(0xff2E7D32), size: 18),
-                    Text(
-                      shopName,
-                      style: GoogleFonts.cairo(
-                        fontSize: 10.sp,
-                        fontWeight: FontWeight.w500,
-                        color: Color(0xff1B1B1B),
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 4.h),
-                Row(
-                  children: [
-                    Text(
-                      "\$${price.toString()}",
-                      style: GoogleFonts.cairo(
-                        fontWeight: FontWeight.w400,
-                        fontSize: 12.sp,
-                      ),
-                    ),
-                    SizedBox(width: 5.w),
-                    Text(
-                      "\$${oldPrice.toString()}",
-                      style: GoogleFonts.cairo(
-                        color: Color(0xff8D8D8D),
-                        decoration: TextDecoration.lineThrough,
-                        decorationColor: Color(0xff8D8D8D),
-                        fontWeight: FontWeight.w400,
-                        fontSize: 10.sp,
-                      ),
-                    ),
-                  ],
-                ),
-
-                Padding(
-                  padding: EdgeInsets.only(right: 100.w),
-                  child: Row(
-                    children: [
-                      Text(
-                        evaluation.toString(),
-                        style: GoogleFonts.cairo(
-                          fontSize: 12.sp,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      const Icon(
-                        Icons.star,
-                        color: Color(0xffFFB800),
-                        size: 17,
-                      ),
-                    ],
-                  ),
-                ),
-
-                SizedBox(height: 2.h),
-              ],
-            ),
-          ),
-        ],
+        child: Text(text, style: GoogleFonts.cairo(fontSize: 14.sp)),
       ),
     );
   }
@@ -487,10 +256,10 @@ class _HomepageState extends State<Homepage> {
   Widget bottomBar() {
     return Container(
       height: 65.h,
-      decoration: const BoxDecoration(color: Colors.green),
-      child: Row(
+      color: Colors.green,
+      child: const Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: const [
+        children: [
           Icon(Icons.home, color: Colors.white),
           Icon(Icons.grid_view, color: Colors.white),
           Icon(Icons.shopping_cart, color: Colors.white),
@@ -499,24 +268,5 @@ class _HomepageState extends State<Homepage> {
         ],
       ),
     );
-  }
-
-  Widget getSelectedPage() {
-    switch (selectedText) {
-      case "الكل":
-        return Htheall();
-
-      case "عالم البيت":
-        return Center(child: Text("صفحة عالم البيت"));
-
-      case "عالم الخير":
-        return Center(child: Text("صفحة عالم الخير"));
-
-      case "الحياة":
-        return Center(child: Text("صفحة الحياة"));
-
-      default:
-        return Htheall();
-    }
   }
 }

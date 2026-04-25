@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class Htheall extends StatefulWidget {
-  const Htheall({super.key});
+class Uniqeall extends StatefulWidget {
+  const Uniqeall({super.key});
 
   @override
-  State<Htheall> createState() => _HtheallState();
+  State<Uniqeall> createState() => _UniqeallState();
 }
 
 class Product {
@@ -27,94 +27,54 @@ class Product {
   });
 }
 
-class _HtheallState extends State<Htheall> {
-  List<Product> offers = [
+class _UniqeallState extends State<Uniqeall> {
+  List<Product> products = [
     Product(
-      productName: "فستان",
-      shopName: "متجر 1",
-      price: 10,
-      oldPrice: 20,
-      evaluation: 4.5,
-      productImage: "images/hp2.png",
+      productName: "product name",
+      price: 4.999,
+      oldPrice: 9.999,
+      productImage: "images/hp1.png",
+      evaluation: 4.3,
+      shopName: "shop name",
     ),
     Product(
-      productName: "فستان",
-      shopName: "متجر 1",
-      price: 10,
-      oldPrice: 20,
-      evaluation: 4.5,
-      productImage: "images/hp2.png",
-    ),
-  ];
-
-  List<Product> newProducts = [
-    Product(
-      productName: "جزمة",
-      shopName: "متجر 2",
-      price: 15,
-      oldPrice: 25,
-      evaluation: 4.2,
-      productImage: "images/hp3.png",
+      productName: "product name",
+      price: 4.999,
+      oldPrice: 9.999,
+      productImage: "images/hp1.png",
+      evaluation: 4.3,
+      shopName: "shop name",
     ),
     Product(
-      productName: "جزمة",
-      shopName: "متجر 2",
-      price: 15,
-      oldPrice: 25,
-      evaluation: 4.2,
-      productImage: "images/hp3.png",
+      productName: "product name",
+      price: 4.999,
+      oldPrice: 9.999,
+      productImage: "images/hp1.png",
+      evaluation: 4.3,
+      shopName: "shop name",
+    ),
+    Product(
+      productName: "product name",
+      price: 4.999,
+      oldPrice: 9.999,
+      productImage: "images/hp1.png",
+      evaluation: 4.3,
+      shopName: "shop name",
     ),
   ];
-
-  List<Product> popular = [
-    Product(
-      productName: "شاورما 😄",
-      shopName: "مطعم",
-      price: 5,
-      oldPrice: 8,
-      evaluation: 4.8,
-      productImage: "images/hp6.png",
-    ),
-    Product(
-      productName: "شاورما 😄",
-      shopName: "مطعم",
-      price: 5,
-      oldPrice: 8,
-      evaluation: 4.8,
-      productImage: "images/hp6.png",
-    ),
-  ];
-  List<Product> exchange = [
-    Product(
-      productName: "شاورما 😄",
-      shopName: "مطعم",
-      price: 5,
-      oldPrice: 8,
-      evaluation: 4.8,
-      productImage: "images/hp6.png",
-    ),
-    Product(
-      productName: "شاورما 😄",
-      shopName: "مطعم",
-      price: 5,
-      oldPrice: 8,
-      evaluation: 4.8,
-      productImage: "images/hp6.png",
-    ),
-  ];
+  @override
   @override
   Widget build(BuildContext context) {
     return Directionality(
       textDirection: TextDirection.rtl,
-      child: Container(
-        child: ListView(
-          children: [
-            Department(offers, "قسم العروض"),
-            Department(newProducts, "وصل حديثا"),
-            Department(popular, "الاكثر طلبا"),
-            Department(exchange, "تبادل"),
-          ],
-        ),
+      child: ListView.builder(
+        itemCount: products.length,
+        itemBuilder: (context, index) {
+          return Padding(
+            padding: EdgeInsets.only(bottom: 10.h),
+            child: productCard(products[index]),
+          );
+        },
       ),
     );
   }
@@ -237,7 +197,7 @@ class _HtheallState extends State<Htheall> {
 
   /// DEPARTMENT
   Widget Department(List<Product> products, String departmentName) {
-    return Column(
+    return /* Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         /// العنوان
@@ -273,34 +233,29 @@ class _HtheallState extends State<Htheall> {
               ],
             ),
 
-        SizedBox(height: 3.h),
+    */
+    /// المنتجات
+    SizedBox(
+      height: 250.h,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: (products.length / 2).ceil(), //  مهم
+        itemBuilder: (context, index) {
+          int firstIndex = index * 2;
+          int secondIndex = firstIndex + 1;
 
-        /// المنتجات
-        SizedBox(
-          height: 250.h,
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: (products.length / 2).ceil(), //  مهم
-            itemBuilder: (context, index) {
-              int firstIndex = index * 2;
-              int secondIndex = firstIndex + 1;
+          return Row(
+            children: [
+              productCard(products[firstIndex]),
 
-              return Row(
-                children: [
-                  productCard(products[firstIndex]),
+              SizedBox(width: 10.w),
 
-                  SizedBox(width: 10.w),
-
-                  if (secondIndex < products.length)
-                    productCard(products[secondIndex]),
-                ],
-              );
-            },
-          ),
-        ),
-
-        SizedBox(height: 10.h),
-      ],
+              if (secondIndex < products.length)
+                productCard(products[secondIndex]),
+            ],
+          );
+        },
+      ),
     );
   }
 }

@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:t_1app/HomePage.dart';
-import 'package:t_1app/HtheAll.dart';
 import 'package:t_1app/SearchSett.dart';
 import 'package:t_1app/SelectedPage.dart';
-import 'package:t_1app/UniqeAll.dart';
+import 'package:t_1app/widgets/UniqeAll.dart';
 import 'package:t_1app/header.dart';
 import 'package:record/record.dart';
 
@@ -16,7 +15,7 @@ class Uniqeproduct extends StatefulWidget {
   State<Uniqeproduct> createState() => _UniqeproductState();
 }
 
-class Product {
+class ProductU1 {
   final String productName;
   final String shopName;
   final double price;
@@ -24,7 +23,7 @@ class Product {
   final double evaluation;
   final Image productImage;
 
-  Product({
+  ProductU1({
     required this.productName,
     required this.productImage,
     required this.shopName,
@@ -175,7 +174,7 @@ class _UniqeproductState extends State<Uniqeproduct> {
                 },
               ),
 
-              SizedBox(height: 15.h),
+              SizedBox(height: 20.h),
 
               /// TITLE
               Row(
@@ -198,7 +197,7 @@ class _UniqeproductState extends State<Uniqeproduct> {
                 ],
               ),
 
-              SizedBox(height: 15.h),
+              SizedBox(height: 20.h),
 
               /// CATEGORIES
               SizedBox(
@@ -211,8 +210,6 @@ class _UniqeproductState extends State<Uniqeproduct> {
                       }).toList(),
                 ),
               ),
-
-              SizedBox(height: 10.h),
 
               /// الصفحات
               Expanded(

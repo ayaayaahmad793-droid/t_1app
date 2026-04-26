@@ -3,10 +3,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:record/record.dart';
 import 'package:t_1app/HomeBanner.dart';
-import 'package:t_1app/HtheAll.dart';
+import 'package:t_1app/screens/department.dart';
+import 'package:t_1app/widgets/HtheAll.dart';
 import 'package:t_1app/SearchSett.dart';
 import 'package:t_1app/SelectedPage.dart';
 import 'package:t_1app/uniqeProduct.dart';
+import 'package:t_1app/widgets/NavigationBar.dart'; // 🔥 مهم
 
 class Homepage extends StatefulWidget {
   const Homepage({super.key});
@@ -34,7 +36,9 @@ class Product {
 }
 
 class _HomepageState extends State<Homepage> {
-  ///  الصفحات الديناميكية
+  int _currentIndex = 0; // 🔥 الصفحة الحالية (الهوم)
+
+  /// الصفحات الديناميكية
   final List<PageItem> myPages = [
     PageItem(title: "الكل", page: Htheall()),
     PageItem(title: "عالم البيت", page: Center(child: Text("عالم البيت"))),
@@ -110,7 +114,42 @@ class _HomepageState extends State<Homepage> {
       textDirection: TextDirection.rtl,
       child: Scaffold(
         backgroundColor: const Color(0xffFFFFFF),
-        bottomNavigationBar: bottomBar(),
+
+        ///  الناف 
+        bottomNavigationBar: CustomNavBar(
+          currentIndex: _currentIndex,
+          onTap: (index) {
+            setState(() {
+              _currentIndex = index;
+            });
+
+            switch (index) {
+              case 0:
+                // أنتِ في الهوم
+                break;
+
+              case 1:
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => Department()),
+                );
+                break;
+
+              case 2:
+                // CartPage
+                break;
+
+              case 3:
+                // FavoritesPage
+                break;
+
+              case 4:
+                // ProfilePage
+                break;
+            }
+          },
+        ),
+
         body: SafeArea(
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 16.w),
@@ -119,7 +158,7 @@ class _HomepageState extends State<Homepage> {
               children: [
                 SizedBox(height: 10.h),
 
-                /// 🔹 HEADER
+                /// HEADER
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -154,7 +193,7 @@ class _HomepageState extends State<Homepage> {
 
                 SizedBox(height: 10.h),
 
-                /// 🔹 SEARCH
+                /// SEARCH
                 CustomSearchBar(
                   hintText: "ابحث عن منتجات...",
                   isRecording: isRecording,
@@ -168,7 +207,7 @@ class _HomepageState extends State<Homepage> {
                   onFilterPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => Uniqeproduct()),
+                      MaterialPageRoute(builder: (context) => Department()),
                     );
                   },
                   onChanged: (value) {
@@ -185,7 +224,7 @@ class _HomepageState extends State<Homepage> {
 
                 SizedBox(height: 15.h),
 
-                /// 🔹 BANNER
+                /// BANNER
                 HomeBanner(),
 
                 SizedBox(height: 15.h),
@@ -197,7 +236,7 @@ class _HomepageState extends State<Homepage> {
 
                 SizedBox(height: 15.h),
 
-                ///  CATEGORIES (ديناميكي)
+                /// CATEGORIES
                 SizedBox(
                   height: 35.h,
                   child: ListView(
@@ -226,7 +265,7 @@ class _HomepageState extends State<Homepage> {
     );
   }
 
-  ///  CHIP
+  /// CHIP
   Widget chip(String text) {
     return InkWell(
       borderRadius: BorderRadius.circular(18.r),
@@ -248,24 +287,6 @@ class _HomepageState extends State<Homepage> {
           borderRadius: BorderRadius.circular(18.r),
         ),
         child: Text(text, style: GoogleFonts.cairo(fontSize: 14.sp)),
-      ),
-    );
-  }
-
-  /// 🔹 BOTTOM BAR
-  Widget bottomBar() {
-    return Container(
-      height: 65.h,
-      color: Colors.green,
-      child: const Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          Icon(Icons.home, color: Colors.white),
-          Icon(Icons.grid_view, color: Colors.white),
-          Icon(Icons.shopping_cart, color: Colors.white),
-          Icon(Icons.favorite, color: Colors.white),
-          Icon(Icons.person, color: Colors.white),
-        ],
       ),
     );
   }

@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:record/record.dart';
 import 'package:t_1app/HomeBanner.dart';
-import 'package:t_1app/HtheAll.dart';
+import 'package:t_1app/widgets/HtheAll.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({super.key});

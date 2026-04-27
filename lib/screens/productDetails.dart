@@ -1,199 +1,287 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:t_1app/header.dart';
-import 'package:t_1app/models/UniqeProduct.dart';
-import 'package:t_1app/uniqeProduct.dart';
+import 'package:t_1app/models/productDetails.dart';
 
-class Productdetails extends StatefulWidget {
-  final Product product;
-
-  const Productdetails({super.key, required this.product});
+class ProductSliderPage extends StatefulWidget {
+  const ProductSliderPage({super.key});
 
   @override
-  State<Productdetails> createState() => _ProductdetailsState();
+  State<ProductSliderPage> createState() => _ProductSliderPageState();
 }
 
-class _ProductdetailsState extends State<Productdetails> {
+class _ProductSliderPageState extends State<ProductSliderPage> {
+  final PageController _controller = PageController(viewportFraction: 0.7);
+
+  double currentPage = 0;
   int quantity = 1;
-  int selectedSize = 0;
+
+  final List<DetProduct> products = [
+    DetProduct(
+      image: 'images/hp1.png',
+      name: 'Skin Proad كريم',
+      description: 'منتج للعناية بالبشرة...',
+      price: 200,
+    ),
+    DetProduct(
+      image: 'images/hp2.png',
+      name: 'كريم ترطيب',
+      description: 'ترطيب عميق...',
+      price: 180,
+    ),
+    DetProduct(
+      image: 'images/hp3.png',
+      name: 'غسول وجه',
+      description: 'تنظيف يومي...',
+      price: 120,
+    ),
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+    _controller.addListener(() {
+      setState(() {
+        currentPage = _controller.page!;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-
-    ///  اختصار الوصول للمنتج
-    final product = widget.product;
+    int currentIndex = currentPage.round();
 
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
-        backgroundColor: Color(0xffFFFFFF),
+        body: SafeArea(
+          child: Column(
+            children: [
+              SizedBox(height: 20.h),
 
-        body: Column(
-          children: [
-            Padding(
-              padding: EdgeInsets.only(),
-              child: CustomHeader(
-                title: "",
-                onBack: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => Uniqeproduct()),
-                  );
-                },
-              ),
-            ),
+              ///  السلايدر
+              SizedBox(
+                height: 280.h,
+                child: PageView.builder(
+                  controller: _controller,
+                  itemCount: products.length,
+                  itemBuilder: (context, index) {
+                    double scale = (1 - (currentPage - index).abs()).clamp(
+                      0.7,
+                      1,
+                    );
 
-            /// 🔹 HEADER + IMAGE
-            Stack(
-              children: [
-                Container(
-                  width: 230.w,
-                  height: 263.h,
-                  margin: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(25),
-                    color: Colors.green.shade100,
-                  ),
-                  child: Image.asset(
-                    product.productImage,
-                    width: 230.w,
-                    height: 263.h,
-                    fit: BoxFit.fill,
-                  ),
-                ),
-
-                /// زر المشاركة
-                Positioned(
-                  top: 3,
-                  right: 10,
-                  child: IconButton(
-                    icon: const Icon(Icons.share_outlined, size: 16),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                  ),
-                ),
-
-                /// أيقونة القلب
-                Positioned(
-                  top: 10,
-                  right: 40,
-                  child: CircleAvatar(
-                    radius: 14.r,
-                    backgroundColor: Colors.white,
-                    child: GestureDetector(
+                    return GestureDetector(
                       onTap: () {
-                        setState(() {
-                          product.isFavorite = !product.isFavorite;
-                        });
+                        _controller.animateToPage(
+                          index,
+                          duration: const Duration(milliseconds: 300),
+                          curve: Curves.easeInOut,
+                        );
                       },
-                      child: Icon(
-                        product.isFavorite
-                            ? Icons.favorite
-                            : Icons.favorite_border,
-                        color: product.isFavorite ? Colors.red : Colors.grey,
-                        size: 18,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-
-            /// 🔹 التفاصيل
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    /// السعر + الاسم
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "\$${product.price}",
-                          style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
+                      child: Transform.scale(
+                        scale: scale,
+                        child: Container(
+                          width: 230.w, //  العرض
+                          height: 263.h, //  الطول
+                          margin: EdgeInsets.symmetric(horizontal: 2.w),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(40.r),
+                            image: DecorationImage(
+                              image: AssetImage(products[index].image),
+                              fit: BoxFit.cover,
+                            ),
+                            boxShadow: [
+                              if (index == currentIndex)
+                                BoxShadow(
+                                  color: Colors.black26,
+                                  blurRadius: 10.r,
+                                  offset: const Offset(0, 5),
+                                ),
+                            ],
                           ),
                         ),
-                        Text(
-                          product.productName,
-                          style: const TextStyle(fontSize: 16),
-                        ),
-                      ],
-                    ),
-
-                    const SizedBox(height: 5),
-
-                    /// التقييم ديناميك
-                    Row(
-                      children: List.generate(5, (index) {
-                        return Icon(
-                          index < product.evaluation.round()
-                              ? Icons.star
-                              : Icons.star_border,
-                          color: Colors.orange,
-                          size: 18,
-                        );
-                      }),
-                    ),
-
-                    const SizedBox(height: 10),
-
-                    /// الوصف
-                    const Text(
-                      "الوصف",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
                       ),
+                    );
+                  },
+                ),
+              ),
+
+              SizedBox(height: 20.h),
+
+              /// 🔥 المعلومات
+              Expanded(
+                child: Container(
+                  padding: EdgeInsets.all(20.w),
+                  decoration: BoxDecoration(
+                    color: Colors.grey[100],
+                    borderRadius: BorderRadius.vertical(
+                      top: Radius.circular(25.r),
                     ),
-                    const SizedBox(height: 5),
-
-                    Text(
-                      product.productDescription,
-                      style: const TextStyle(color: Colors.grey),
-                    ),
-
-                    const SizedBox(height: 15),
-
-                    /// الحجم
-                    const Text(
-                      "الحجم",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-
-                    Row(
-                      children: List.generate(3, (index) {
-                        List<String> sizes = ["كبير", "متوسط", "صغير"];
-                        return Row(
-                          children: [
-                            Radio(
-                              value: index,
-                              groupValue: selectedSize,
-                              onChanged: (value) {
-                                setState(() {
-                                  selectedSize = value!;
-                                });
-                              },
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      /// الاسم + السعر
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "\$${products[currentIndex].price}",
+                            style: TextStyle(
+                              fontSize: 18.sp,
+                              fontWeight: FontWeight.bold,
                             ),
-                            Text(sizes[index]),
-                          ],
-                        );
-                      }),
-                    ),
+                          ),
+                          Text(
+                            products[currentIndex].name,
+                            style: TextStyle(fontSize: 16.sp),
+                          ),
+                        ],
+                      ),
 
-                    const Spacer(),
+                      SizedBox(height: 10.h),
 
+                      /// الوصف
+                      Text(
+                        products[currentIndex].description,
+                        style: TextStyle(fontSize: 13.sp, color: Colors.grey),
+                      ),
+
+                      const Spacer(),
+
+                      /// 🔹 الكمية + زر
+                      Row(
+                        children: [
+                          /// زر السلة
+                          Expanded(
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Color(0xffF57C00),
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 15,
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20.r),
+                                ),
+                              ),
+                              onPressed: () {},
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Container(
+                                    child: Icon(Icons.shopping_cart_outlined),
+                                  ),
+                                  Container(
+                                    child: Text(
+                                      "الاضافة إلى السلة",
+                                      style: GoogleFonts.cairo(
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 16.sp,
+                                        color: Color(0xff000000),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+
+                          SizedBox(width: 10.w),
+
+                          /// الكمية
+                          Container(
+                            width: 117.w,
+                            height: 34.h,
+                            decoration: BoxDecoration(
+                              color: Color(0xff2E7D32),
+                              borderRadius: BorderRadius.circular(15.r),
+                            ),
+                            child: Row(
+                              children: [
+                                IconButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      if (quantity > 1) quantity--;
+                                    });
+                                  },
+                                  icon: const Icon(
+                                    Icons.remove,
+                                    color: Colors.white,
+                                    size: 24,
+                                  ),
+                                ),
+                                Text(
+                                  quantity.toString(),
+                                  style: const TextStyle(color: Colors.white),
+                                ),
+                                IconButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      quantity++;
+                                    });
+                                  },
+                                  icon: const Icon(
+                                    Icons.add,
+                                    color: Colors.white,
+                                    size: 24,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/*
                     /// 🔹 الكمية + زر
                     Row(
                       children: [
+                        /// زر السلة
+                        Expanded(
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Color(0xffF57C00),
+                              padding: const EdgeInsets.symmetric(vertical: 15),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20.r),
+                              ),
+                            ),
+                            onPressed: () {},
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Container(
+                                  child: Icon(Icons.shopping_cart_outlined),
+                                ),
+                                Container(
+                                  child: Text(
+                                    "الاضافة إلى السلة",
+                                    style: GoogleFonts.cairo(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 16.sp,
+                                      color: Color(0xff000000),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+
+                        SizedBox(width: 10.w),
+
                         /// الكمية
                         Container(
                           width: 117.w,
@@ -235,35 +323,6 @@ class _ProductdetailsState extends State<Productdetails> {
                             ],
                           ),
                         ),
-
-                        const SizedBox(width: 10),
-
-                        /// زر السلة
-                        Expanded(
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Color(0xffF57C00),
-                              padding: const EdgeInsets.symmetric(vertical: 15),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20.r),
-                              ),
-                            ),
-                            onPressed: () {},
-                            child: Row(
-                              children: [
-                                Icon(Icons.shopping_cart_outlined),
-                                Text(
-                                  "الاضافة إلى السلة",
-                                  style: GoogleFonts.cairo(
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 16.sp,
-                                    color: Color(0xff000000),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
                       ],
                     ),
 
@@ -277,4 +336,4 @@ class _ProductdetailsState extends State<Productdetails> {
       ),
     );
   }
-}
+} */

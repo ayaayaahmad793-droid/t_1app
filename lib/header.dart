@@ -16,7 +16,7 @@ class CustomHeader extends StatelessWidget {
           padding: EdgeInsets.only(top: 60.h),
           child: Center(
             child: Container(
-              padding: EdgeInsets.only(bottom: 15.h),
+              padding: EdgeInsets.only(),
               child: Text(
                 title,
                 style: GoogleFonts.cairo(

@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:record/record.dart';
+import 'package:t_1app/FavoritePage.dart';
 import 'package:t_1app/HomeBanner.dart';
+import 'package:t_1app/screens/FavPage.dart';
 import 'package:t_1app/screens/department.dart';
+import 'package:t_1app/screens/productDetails.dart';
 import 'package:t_1app/widgets/HtheAll.dart';
 import 'package:t_1app/SearchSett.dart';
 import 'package:t_1app/SelectedPage.dart';
@@ -36,7 +39,7 @@ class Product {
 }
 
 class _HomepageState extends State<Homepage> {
-  int _currentIndex = 0; // 🔥 الصفحة الحالية (الهوم)
+  int _currentIndex = 0; //  الصفحة الحالية (الهوم)
 
   /// الصفحات الديناميكية
   final List<PageItem> myPages = [
@@ -115,7 +118,7 @@ class _HomepageState extends State<Homepage> {
       child: Scaffold(
         backgroundColor: const Color(0xffFFFFFF),
 
-        ///  الناف 
+        ///  الناف
         bottomNavigationBar: CustomNavBar(
           currentIndex: _currentIndex,
           onTap: (index) {
@@ -131,7 +134,7 @@ class _HomepageState extends State<Homepage> {
               case 1:
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (_) => Department()),
+                  MaterialPageRoute(builder: (_) => Favpage()),
                 );
                 break;
 
@@ -140,7 +143,10 @@ class _HomepageState extends State<Homepage> {
                 break;
 
               case 3:
-                // FavoritesPage
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => Department()),
+                );
                 break;
 
               case 4:
@@ -186,7 +192,14 @@ class _HomepageState extends State<Homepage> {
                     ),
                     IconButton(
                       icon: const Icon(Icons.notifications_none),
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ProductSliderPage(),
+                          ),
+                        );
+                      },
                     ),
                   ],
                 ),
@@ -207,7 +220,7 @@ class _HomepageState extends State<Homepage> {
                   onFilterPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => Department()),
+                      MaterialPageRoute(builder: (context) => Favpage()),
                     );
                   },
                   onChanged: (value) {

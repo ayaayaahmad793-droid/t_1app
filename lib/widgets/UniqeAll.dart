@@ -17,6 +17,7 @@ class _UniqeallState extends State<Uniqeall> {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: ListView.builder(
+        padding: EdgeInsets.zero,
         itemCount: (products.length / 2).ceil(),
         itemBuilder: (context, rowIndex) {
           int firstIndex = rowIndex * 2;
@@ -50,12 +51,12 @@ class _UniqeallState extends State<Uniqeall> {
       borderRadius: BorderRadius.circular(15.r),
       onTap: () {
         // هون شو بدك يصير عند الضغط
-        Navigator.push(
+        /*  Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => Productdetails(product: product),
           ),
-        );
+        ); */
       },
       child: Container(
         width: 162.w,

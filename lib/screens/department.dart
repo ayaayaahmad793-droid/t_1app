@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:t_1app/FavoritePage.dart';
 import 'package:t_1app/HomePage.dart';
+import 'package:t_1app/screens/FavPage.dart';
 import 'package:t_1app/widgets/NavigationBar.dart';
 import 'package:t_1app/models/depCategory.dart';
 import 'package:t_1app/widgets/depCategoryCard.dart';
@@ -15,7 +17,7 @@ class Department extends StatefulWidget {
 }
 
 class _DepartmentState extends State<Department> {
-  int _currentIndex = 1; // الأقسام
+  int _currentIndex = 3; // الأقسام
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +26,7 @@ class _DepartmentState extends State<Department> {
       child: Scaffold(
         backgroundColor: const Color(0xffFFFFFF),
 
-        // 🔥 المحتوى
+        //  المحتوى
         body: Column(
           children: [
             GreenHeader(title: "الاقسام"),
@@ -85,13 +87,16 @@ class _DepartmentState extends State<Department> {
                 );
                 break;
               case 1:
-                // أنتِ حالياً هنا
+                  Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => Favpage()),
+                );
                 break;
               case 2:
                 // CartPage
                 break;
               case 3:
-                // FavoritesPage
+                // انا هنا
                 break;
               case 4:
                 // HomePage

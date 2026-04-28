@@ -5,7 +5,7 @@ import 'package:t_1app/HomePage.dart';
 import 'package:t_1app/SearchSett.dart';
 import 'package:t_1app/SelectedPage.dart';
 import 'package:t_1app/widgets/UniqeAll.dart';
-import 'package:t_1app/header.dart';
+import 'package:t_1app/widgets/header.dart';
 import 'package:record/record.dart';
 
 class Uniqeproduct extends StatefulWidget {

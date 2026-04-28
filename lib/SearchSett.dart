@@ -44,7 +44,7 @@ class CustomSearchBar extends StatelessWidget {
                   child: TextField(
                     onChanged: onChanged,
                     decoration: InputDecoration(
-                      hintText: hintText, // 👈 صار متغير
+                      hintText: hintText, //  صار متغير
                       border: InputBorder.none,
                       hintStyle: GoogleFonts.poppins(
                         fontSize: 12.sp,

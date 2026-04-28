@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:t_1app/HomePage.dart';
-import 'package:t_1app/header.dart';
+import 'package:t_1app/widgets/header.dart';
 import 'package:t_1app/screens/department.dart';
 import 'package:t_1app/widgets/NavigationBar.dart';
 import 'package:t_1app/widgets/UniqeAll.dart';

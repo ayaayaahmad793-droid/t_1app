@@ -6,12 +6,14 @@ import 'package:t_1app/FavoritePage.dart';
 import 'package:t_1app/HomeBanner.dart';
 import 'package:t_1app/screens/FavPage.dart';
 import 'package:t_1app/screens/department.dart';
+import 'package:t_1app/screens/exchangePage.dart';
+import 'package:t_1app/screens/exchangePage.dart';
 import 'package:t_1app/screens/productDetails.dart';
 import 'package:t_1app/widgets/HtheAll.dart';
 import 'package:t_1app/SearchSett.dart';
 import 'package:t_1app/SelectedPage.dart';
 import 'package:t_1app/uniqeProduct.dart';
-import 'package:t_1app/widgets/NavigationBar.dart'; // 🔥 مهم
+import 'package:t_1app/widgets/NavigationBar.dart'; //  مهم
 
 class Homepage extends StatefulWidget {
   const Homepage({super.key});
@@ -196,7 +198,7 @@ class _HomepageState extends State<Homepage> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => ProductSliderPage(),
+                            builder: (context) => Exchange(),
                           ),
                         );
                       },

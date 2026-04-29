@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -34,12 +36,20 @@ class ExchangeCard extends StatelessWidget {
             children: [
               ClipRRect(
                 borderRadius: BorderRadius.vertical(top: Radius.circular(10.r)),
-                child: Image.asset(
-                  image,
-                  width: double.infinity,
-                  height: 114.h,
-                  fit: BoxFit.cover,
-                ),
+                child:
+                    image.startsWith('/')
+                        ? Image.file(
+                          File(image),
+                          width: double.infinity,
+                          height: 114.h,
+                          fit: BoxFit.cover,
+                        )
+                        : Image.asset(
+                          image,
+                          width: double.infinity,
+                          height: 114.h,
+                          fit: BoxFit.cover,
+                        ),
               ),
 
               Positioned(

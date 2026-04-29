@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:t_1app/models/exchangeItem.dart';
+import 'package:t_1app/widgets/AddExchangeItem.dart';
 import 'package:t_1app/widgets/exchangeCard.dart';
 import 'package:t_1app/widgets/greenHeader.dart';
 import 'package:t_1app/widgets/searchBox.dart';
@@ -68,7 +69,21 @@ class _ExchangeState extends State<Exchange> {
                       borderRadius: BorderRadius.circular(8.r),
                     ),
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AddProductDialog(
+                          onAdd: (newItem) {
+                            setState(() {
+                              items.add(newItem);
+                              isFavorite.add(false);
+                            });
+                          },
+                        );
+                      },
+                    );
+                  },
                   child: Text(
                     "أضف منتجك للتبديل +",
                     style: GoogleFonts.cairo(

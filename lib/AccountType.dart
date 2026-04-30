@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:t_1app/RegularUser.dart';
+import 'package:t_1app/HomePage.dart';
+
 import 'package:t_1app/ShopData.dart';
 
 class Accounttype extends StatefulWidget {
@@ -191,9 +192,7 @@ class _AccounttypeState extends State<Accounttype> {
                   onPressed: () {
                     selectedIndex == 0
                         ? Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => Regularuser(),
-                          ),
+                          MaterialPageRoute(builder: (context) => Homepage()),
                         )
                         : null;
                     selectedIndex == 1

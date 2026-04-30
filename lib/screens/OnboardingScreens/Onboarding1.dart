@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:t_1app/Onboarding2.dart';
+import 'package:t_1app/screens/OnboardingScreens/Onboarding2.dart';
 
 class Onboarding1 extends StatefulWidget {
   const Onboarding1({super.key});

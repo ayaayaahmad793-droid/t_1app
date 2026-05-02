@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'dart:async';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:t_1app/Resetpassword.dart';
+import 'package:t_1app/widgets/CurveHeader.dart';
 
 class AuthCode extends StatefulWidget {
   const AuthCode({super.key});
@@ -75,41 +76,12 @@ class _AuthCodeState extends State<AuthCode> {
           child: Column(
             children: [
               /// الانحناء
-              Stack(
-                children: [
-                  Image.asset(
-                    "images/curve1.png",
-                    width: double.infinity,
-                    height: 250.h,
-                    fit: BoxFit.fill,
-                  ),
+                           const CurveHeader(title: " أدخل رمز التحقق"),
 
-                  Positioned(
-                    top: 80.h,
-                    right: 20.w,
-                    child: Text(
-                      "أدخل رمز التحقق",
-                      style: GoogleFonts.cairo(
-                        color: Colors.white,
-                        fontSize: 24.sp,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-
-                  Positioned(
-                    top: 80.h,
-                    left: 10.w,
-                    child: IconButton(
-                      icon: const Icon(
-                        Icons.arrow_forward_ios,
-                        color: Colors.white,
-                      ),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                    ),
-                  ),
+              Transform.translate(
+                offset: Offset(0, -80.h), // زيدي أو قللي حسب الشكل
+                child: Column(
+                  children: [
 
                   Padding(
                     padding: EdgeInsets.only(top: 185.h, right: 20.w),
@@ -122,8 +94,7 @@ class _AuthCodeState extends State<AuthCode> {
                       ),
                     ),
                   ),
-                ],
-              ),
+              
 
               /// مربعات الإدخال
               SizedBox(height: 20.h),
@@ -220,7 +191,7 @@ class _AuthCodeState extends State<AuthCode> {
             ],
           ),
         ),
-      ),
-    );
+     ] ),
+       )) );
   }
 }

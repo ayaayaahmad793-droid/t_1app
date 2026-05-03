@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:provider/provider.dart';
-import 'package:t_1app/AuthCode.dart';
+import 'package:t_1app/screens/AuthCode.dart';
 import 'package:t_1app/models/Button_Model.dart';
 import 'package:t_1app/providers/forgot_provider.dart';
 import 'package:t_1app/widgets/Button.dart';

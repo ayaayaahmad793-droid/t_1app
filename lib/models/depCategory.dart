@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:t_1app/AccountType.dart';
+import 'package:t_1app/screens/AccountType.dart';
 import 'package:t_1app/HomePage.dart';
 
 class CategoryModel {

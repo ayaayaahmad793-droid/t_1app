@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:t_1app/AccountType.dart';
+import 'package:t_1app/screens/AccountType.dart';
 import 'package:t_1app/HomePage.dart';
 import 'package:t_1app/models/Button_Model.dart';
 import 'package:t_1app/widgets/Button.dart';

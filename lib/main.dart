@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:t_1app/providers/account_type_provider.dart';
 import 'package:t_1app/providers/forgot_provider.dart';
 import 'package:t_1app/providers/otp_provider.dart';
 import 'package:t_1app/providers/register_provider.dart';
@@ -9,7 +11,7 @@ import 'package:provider/provider.dart';
 import 'providers/login_provider.dart';
 
 void main() {
- runApp(
+  runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => LoginProvider()),
@@ -17,14 +19,17 @@ void main() {
         ChangeNotifierProvider(create: (_) => ForgotProvider()),
         ChangeNotifierProvider(create: (_) => OtpProvider()),
         ChangeNotifierProvider(create: (_) => ResetProvider()),
+        ChangeNotifierProvider(create: (_) => AccountTypeProvider()),
       ],
-      child: const MyApp(),
+      child: MyApp(),
     ),
   );
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final int? accountType;
+
+  const MyApp({super.key, this.accountType});
 
   @override
   Widget build(BuildContext context) {

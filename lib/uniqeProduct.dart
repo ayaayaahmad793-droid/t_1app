@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:t_1app/HomePage.dart';
+import 'package:t_1app/models/Home_all_model/product_model.dart';
+import 'package:t_1app/screens/HomePage.dart';
 import 'package:t_1app/SearchSett.dart';
 import 'package:t_1app/SelectedPage.dart';
 import 'package:t_1app/widgets/UniqeAll.dart';
@@ -15,23 +16,7 @@ class Uniqeproduct extends StatefulWidget {
   State<Uniqeproduct> createState() => _UniqeproductState();
 }
 
-class ProductU1 {
-  final String productName;
-  final String shopName;
-  final double price;
-  final double oldPrice;
-  final double evaluation;
-  final Image productImage;
 
-  ProductU1({
-    required this.productName,
-    required this.productImage,
-    required this.shopName,
-    required this.price,
-    required this.oldPrice,
-    required this.evaluation,
-  });
-}
 
 class _UniqeproductState extends State<Uniqeproduct> {
   ///  الصفحات الديناميكية
@@ -81,43 +66,7 @@ class _UniqeproductState extends State<Uniqeproduct> {
   @override
   void initState() {
     super.initState();
-    filteredProducts = products;
   }
-
-  List<Product> products = [
-    Product(
-      productName: "product name",
-      price: 4.999,
-      oldPrice: 9.999,
-      productImage: Image.asset("images/hp1.png"),
-      evaluation: 4.3,
-      shopName: "shop name",
-    ),
-    Product(
-      productName: "product name",
-      price: 4.999,
-      oldPrice: 9.999,
-      productImage: Image.asset("images/hp1.png"),
-      evaluation: 4.3,
-      shopName: "shop name",
-    ),
-    Product(
-      productName: "product name",
-      price: 4.999,
-      oldPrice: 9.999,
-      productImage: Image.asset("images/hp1.png"),
-      evaluation: 4.3,
-      shopName: "shop name",
-    ),
-    Product(
-      productName: "product name",
-      price: 4.999,
-      oldPrice: 9.999,
-      productImage: Image.asset("images/hp1.png"),
-      evaluation: 4.3,
-      shopName: "shop name",
-    ),
-  ];
 
   String selectedText = "الكل";
 
@@ -162,16 +111,7 @@ class _UniqeproductState extends State<Uniqeproduct> {
                     MaterialPageRoute(builder: (context) => Uniqeproduct()),
                   );
                 },
-                onChanged: (value) {
-                  setState(() {
-                    filteredProducts =
-                        products.where((product) {
-                          return product.productName.toLowerCase().contains(
-                            value.toLowerCase(),
-                          );
-                        }).toList();
-                  });
-                },
+                onChanged: (value) {},
               ),
 
               SizedBox(height: 20.h),

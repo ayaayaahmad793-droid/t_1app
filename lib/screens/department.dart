@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:t_1app/FavoritePage.dart';
-import 'package:t_1app/HomePage.dart';
+import 'package:t_1app/screens/HomePage.dart';
 import 'package:t_1app/screens/FavPage.dart';
 import 'package:t_1app/widgets/NavigationBar.dart';
 import 'package:t_1app/models/depCategory.dart';
 import 'package:t_1app/widgets/depCategoryCard.dart';
 import 'package:t_1app/widgets/greenHeader.dart';
+import 'package:t_1app/models/Home_all_model/product_model.dart';
 
 class Department extends StatefulWidget {
   const Department({super.key});
@@ -17,46 +17,55 @@ class Department extends StatefulWidget {
 }
 
 class _DepartmentState extends State<Department> {
-  int _currentIndex = 3; // الأقسام
+  int _currentIndex = 3;
 
   @override
   Widget build(BuildContext context) {
     return Directionality(
       textDirection: TextDirection.rtl,
+
       child: Scaffold(
         backgroundColor: const Color(0xffFFFFFF),
 
-        //  المحتوى
         body: Column(
           children: [
             GreenHeader(title: "الاقسام"),
-            SizedBox(height: 25.h),
+
+            SizedBox(height: 20.h),
 
             Container(
               alignment: Alignment.topRight,
               padding: EdgeInsets.only(right: 20.w),
+
               child: Text(
                 "الأقسام الرئيسية",
+
                 style: GoogleFonts.cairo(
                   fontWeight: FontWeight.w600,
                   fontSize: 16.sp,
                 ),
               ),
             ),
+            SizedBox(height: 20.h),
 
             Expanded(
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 12.w),
+
                 child: ListView.builder(
+                  padding: EdgeInsets.zero,
                   itemCount: categories.length,
+
                   itemBuilder: (context, index) {
                     final category = categories[index];
 
                     return CategoryCard(
                       category: category,
+
                       onTap: () {
-                        Navigator.push(
+                        Navigator.pushReplacement(
                           context,
+
                           MaterialPageRoute(
                             builder: (context) => category.page,
                           ),
@@ -70,36 +79,38 @@ class _DepartmentState extends State<Department> {
           ],
         ),
 
-        //  الناف بار
         bottomNavigationBar: CustomNavBar(
           currentIndex: _currentIndex,
+
           onTap: (index) {
             setState(() {
               _currentIndex = index;
             });
 
-            // التنقل ( الصفحات  )
             switch (index) {
               case 0:
-                Navigator.push(
+                Navigator.pushReplacement(
                   context,
+
                   MaterialPageRoute(builder: (_) => Homepage()),
                 );
                 break;
+
               case 1:
-                  Navigator.push(
+                Navigator.pushReplacement(
                   context,
+
                   MaterialPageRoute(builder: (_) => Favpage()),
                 );
                 break;
+
               case 2:
-                // CartPage
                 break;
+
               case 3:
-                // انا هنا
                 break;
+
               case 4:
-                // HomePage
                 break;
             }
           },

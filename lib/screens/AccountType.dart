@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:t_1app/HomePage.dart';
+import 'package:t_1app/screens/HomePage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:t_1app/ShopData.dart';
+import 'package:t_1app/screens/ShopData.dart';
 import 'package:t_1app/models/Button_Model.dart';
 import 'package:t_1app/providers/account_type_provider.dart';
 import 'package:t_1app/widgets/Button.dart';
@@ -19,7 +19,6 @@ class Accounttype extends StatefulWidget {
 }
 
 class _AccounttypeState extends State<Accounttype> {
- 
   final List<Map<String, String>> accountTypes = [
     {"title": "مستخدم عادي", "subtitle": "لتصفح، الشراء، التبرع او التبادل"},
     {"title": "صاحب محل", "subtitle": "لعرض المنتجات ورؤية الطلبات"},
@@ -56,7 +55,7 @@ class _AccounttypeState extends State<Accounttype> {
               ),
             ),
 
-           ...List.generate(accountTypes.length, (index) {
+            ...List.generate(accountTypes.length, (index) {
               return AccountTypeCard(
                 index: index,
                 selectedIndex: provider.selectedIndex,

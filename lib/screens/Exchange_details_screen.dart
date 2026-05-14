@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:t_1app/successDialog.dart';
 import 'package:t_1app/widgets/header.dart';
 
 class ProductDetailsPage extends StatefulWidget {
@@ -363,7 +364,24 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                     width: double.infinity,
                     height: 48.h,
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.pop(context);
+
+                        showDialog(
+                          context: context,
+                          barrierDismissible: false,
+                          builder:
+                              (_) => Successdialog(
+                                message:
+                                    "تم إرسال طلبك بنجاح، سيتم التواصل معك قريبًا",
+                                nextPage: ProductDetailsPage(
+                                  title: widget.title,
+                                  description: widget.description,
+                                  images: widget.images,
+                                ),
+                              ),
+                        );
+                      },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Color(0xffF57C00),
 

@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:t_1app/AddProduct.dart';
-import 'package:t_1app/HomePage.dart';
+import 'package:t_1app/screens/HomePage.dart';
 import 'package:record/record.dart';
+import 'package:t_1app/models/Button_Model.dart';
+import 'package:t_1app/widgets/Button.dart';
+import 'package:t_1app/widgets/greenHeader.dart';
 
 class Product {
   final String name;
@@ -120,44 +123,7 @@ class _TheproductState extends State<Theproduct> {
         backgroundColor: const Color(0xffFFFFFF),
         body: Column(
           children: [
-            Stack(
-              children: [
-                Image.asset(
-                  "images/linear1.png",
-                  fit: BoxFit.fill,
-                  width: 415.w,
-                  height: 115.h,
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 70.h),
-                  child: Center(
-                    child: Text(
-                      "  المنتجات",
-                      style: GoogleFonts.cairo(
-                        fontSize: 20.sp,
-                        fontWeight: FontWeight.w600,
-                        color: const Color(0xffFFFFFF),
-                      ),
-                    ),
-                  ),
-                ),
-                Positioned(
-                  top: 57.h,
-                  left: 10.w,
-                  child: IconButton(
-                    icon: const Icon(
-                      Icons.arrow_forward_ios,
-                      color: Color(0xff000000),
-                    ),
-                    onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => Homepage()),
-                      );
-                    },
-                  ),
-                ),
-              ],
-            ),
+            GreenHeader(title: "المنتجات"),
             SizedBox(height: 15.h),
 
             Row(
@@ -385,25 +351,15 @@ class _TheproductState extends State<Theproduct> {
               child: SizedBox(
                 width: 375.w,
                 height: 50.h,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xffF57C00),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8.r),
-                    ),
-                  ),
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => Addproduct()),
-                    );
-                  },
-                  child: Text(
-                    " اضافة المنتج",
-                    style: GoogleFonts.cairo(
-                      fontSize: 16.sp,
-                      fontWeight: FontWeight.w600,
-                      color: const Color(0xff000000),
-                    ),
+                child: CustomButton(
+                  button: ButtonModel(
+                    text: "اضافة المنتج",
+                    color: Color(0xffF57C00),
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(builder: (context) => Addproduct()),
+                      );
+                    },
                   ),
                 ),
               ),

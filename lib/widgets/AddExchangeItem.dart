@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -9,7 +8,15 @@ import 'package:t_1app/models/exchangeItem.dart';
 class AddProductDialog extends StatefulWidget {
   final Function(ExchangeItem) onAdd;
 
-  const AddProductDialog({super.key, required this.onAdd});
+  final String title1;
+  final String title2;
+
+  const AddProductDialog({
+    super.key,
+    required this.onAdd,
+    required this.title1,
+    required this.title2,
+  });
 
   @override
   State<AddProductDialog> createState() => _AddProductDialogState();
@@ -74,14 +81,15 @@ class _AddProductDialogState extends State<AddProductDialog> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    "قم باضافة البيانات المطلوبة لتتم ",
+                    widget.title1,
                     style: GoogleFonts.cairo(
                       fontWeight: FontWeight.w500,
                       fontSize: 16.sp,
                     ),
                   ),
+
                   Text(
-                    "اضافة منتجك للتبادل",
+                    widget.title2,
                     style: GoogleFonts.cairo(
                       fontWeight: FontWeight.w500,
                       fontSize: 16.sp,
@@ -241,29 +249,23 @@ class _AddProductDialogState extends State<AddProductDialog> {
 
                         widget.onAdd(newItem);
 
-                        /// نخزن navigator قبل ما نسكر
                         final navigator = Navigator.of(
                           context,
                           rootNavigator: true,
                         );
 
-                        /// سكري Dialog الإدخال
                         Navigator.pop(context);
 
-                        /// ننتظر frame جديد (مهم جدًا)
                         await Future.delayed(Duration(milliseconds: 200));
 
-                        /// نفتح Dialog النجاح
                         showDialog(
                           context: navigator.context,
                           barrierDismissible: false,
                           builder: (context) => buildSuccessDialog(),
                         );
 
-                        /// ننتظر
                         await Future.delayed(Duration(seconds: 2));
 
-                        /// نسكر Dialog النجاح
                         navigator.pop();
                       },
                       child: Text(

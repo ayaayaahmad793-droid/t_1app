@@ -15,7 +15,18 @@ class Exchange extends StatefulWidget {
 }
 
 class _ExchangeState extends State<Exchange> {
-  List<bool> isFavorite = List.generate(10, (index) => false);
+  List<ExchangeItem> exchangeList = [];
+
+  List<bool> isFavorite = [];
+  @override
+  void initState() {
+    super.initState();
+
+    exchangeList = List.from(items);
+
+    isFavorite = List.generate(exchangeList.length, (index) => false);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Directionality(
@@ -34,7 +45,7 @@ class _ExchangeState extends State<Exchange> {
                 padding: EdgeInsets.symmetric(horizontal: 20.w),
                 child: GridView.builder(
                   padding: EdgeInsets.symmetric(vertical: 10.h),
-                  itemCount: items.length,
+                  itemCount: exchangeList.length,
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
                     crossAxisSpacing: 10.w,
@@ -43,9 +54,9 @@ class _ExchangeState extends State<Exchange> {
                   ),
                   itemBuilder: (context, index) {
                     return ExchangeCard(
-                      title: items[index].title,
-                      description: items[index].description,
-                      image: items[index].image,
+                      title: exchangeList[index].title,
+                      description: exchangeList[index].description,
+                      image: exchangeList[index].image,
                       isFavorite: isFavorite[index],
                       onFavoriteTap: () {
                         setState(() {
@@ -72,16 +83,18 @@ class _ExchangeState extends State<Exchange> {
                   onPressed: () {
                     showDialog(
                       context: context,
-                      builder: (context) {
-                        return AddProductDialog(
-                          onAdd: (newItem) {
-                            setState(() {
-                              items.add(newItem);
-                              isFavorite.add(false);
-                            });
-                          },
-                        );
-                      },
+                      builder:
+                          (_) => AddProductDialog(
+                            onAdd: (item) {
+                              setState(() {
+                                exchangeList.insert(0, item);
+
+                                isFavorite.insert(0, false);
+                              });
+                            },
+                            title1: "قم بإضافة البيانات المطلوبة لتتم",
+                            title2: "إضافة منتجك للتبادل",
+                          ),
                     );
                   },
                   child: Text(

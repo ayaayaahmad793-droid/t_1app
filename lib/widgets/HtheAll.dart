@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:t_1app/models/exchangeItem.dart';
+import 'package:t_1app/widgets/exchangeCard.dart';
+import 'package:t_1app/models/Home_all_model/product_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:t_1app/widgets/Home_widget/product_card_widget.dart';
 
 class Htheall extends StatefulWidget {
   const Htheall({super.key});
@@ -9,79 +14,83 @@ class Htheall extends StatefulWidget {
   State<Htheall> createState() => _HtheallState();
 }
 
-class Product {
-  final String productName;
-  final String shopName;
-  final double price;
-  final double oldPrice;
-  final double evaluation;
-  final String productImage;
-
-  Product({
-    required this.productName,
-    required this.shopName,
-    required this.price,
-    required this.oldPrice,
-    required this.evaluation,
-    required this.productImage,
-  });
-}
-
 class _HtheallState extends State<Htheall> {
+  @override
+  void initState() {
+    super.initState();
+    loadFavorites();
+  }
+
+  Future<void> saveFavorite(Product product) async {
+    final prefs = await SharedPreferences.getInstance();
+
+    await prefs.setBool(product.productName, product.isFavorite);
+  }
+
+  Future<void> loadFavorites() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    for (var product in [...offers, ...newProducts, ...popular]) {
+      product.isFavorite = prefs.getBool(product.productName) ?? false;
+    }
+
+    setState(() {});
+  }
+
   List<Product> offers = [
     Product(
-      productName: "فستان",
-      shopName: "متجر 1",
+      productName: "فستان قصير",
+      shopName: "متجر الأناقة",
       price: 10,
       oldPrice: 20,
       evaluation: 4.5,
       productImage: "images/hp2.png",
     ),
     Product(
-      productName: "فستان",
-      shopName: "متجر 1",
-      price: 10,
-      oldPrice: 20,
+      productName: "فراشي مكياج",
+      shopName: "هلا كوزمتكس",
+      price: 5,
+      oldPrice: 10,
       evaluation: 4.5,
-      productImage: "images/hp2.png",
+      productImage: "images/hp1.png",
     ),
   ];
 
   List<Product> newProducts = [
     Product(
-      productName: "جزمة",
-      shopName: "متجر 2",
+      productName: "بوت ابيض مع كعب داخلي",
+      shopName: "سما شوز",
       price: 15,
       oldPrice: 25,
       evaluation: 4.2,
-      productImage: "images/hp3.png",
+      productImage: "images/hp4.png",
     ),
     Product(
-      productName: "جزمة",
-      shopName: "متجر 2",
+      productName: "جزمة برتقالية",
+      shopName: "صافي شوز",
       price: 15,
       oldPrice: 25,
-      evaluation: 4.2,
+      evaluation: 4.1,
       productImage: "images/hp3.png",
     ),
   ];
 
   List<Product> popular = [
     Product(
-      productName: "شاورما 😄",
-      shopName: "مطعم",
+      productName: "شاةروما مع سلطات",
+      shopName: "مطعم سنابل",
       price: 5,
       oldPrice: 8,
-      evaluation: 4.8,
+      evaluation: 4.9,
       productImage: "images/hp6.png",
     ),
     Product(
-      productName: "شاورما 😄",
-      shopName: "مطعم",
-      price: 5,
+      productName: "كلمنتينا طازجة",
+      shopName: "أبو حمدة للفواكه",
+      price: 6,
       oldPrice: 8,
-      evaluation: 4.8,
-      productImage: "images/hp6.png",
+      evaluation: 4.2,
+      productImage: "images/hp5.png",
     ),
   ];
   List<Product> exchange = [
@@ -115,122 +124,6 @@ class _HtheallState extends State<Htheall> {
             Department(exchange, "تبادل"),
           ],
         ),
-      ),
-    );
-  }
-
-  /// 🔹 PRODUCT CARD
-  Widget productCard(Product product) {
-    return Container(
-      width: 162.w,
-      height: 230.h, ///////////////
-
-      margin: EdgeInsets.only(left: 10.w),
-      decoration: BoxDecoration(
-        border: Border.all(color: const Color(0xff8D8D8D)),
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(15.r),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Stack(
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.vertical(top: Radius.circular(15.r)),
-                child: Image.asset(
-                  product.productImage,
-                  height: 118.h,
-                  width: 162.w,
-                  fit: BoxFit.fill,
-                ),
-              ),
-              Positioned(
-                top: 8,
-                right: 8,
-                child: CircleAvatar(
-                  radius: 14.r,
-                  backgroundColor: Colors.white,
-                  child: const Icon(Icons.favorite_border, size: 24),
-                ),
-              ),
-            ],
-          ),
-          Padding(
-            padding: EdgeInsets.only(right: 10.w, top: 10.h),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  product.productName,
-                  style: GoogleFonts.cairo(
-                    fontSize: 12.sp,
-                    fontWeight: FontWeight.w500,
-                    color: Color(0xff000000),
-                  ),
-                ),
-
-                SizedBox(height: 4.h),
-                Row(
-                  children: [
-                    Icon(Icons.store, color: Color(0xff2E7D32), size: 18),
-                    Text(
-                      product.shopName,
-                      style: GoogleFonts.cairo(
-                        fontSize: 10.sp,
-                        fontWeight: FontWeight.w500,
-                        color: Color(0xff1B1B1B),
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 4.h),
-                Row(
-                  children: [
-                    Text(
-                      "\$${product.price.toString()}",
-                      style: GoogleFonts.cairo(
-                        fontWeight: FontWeight.w400,
-                        fontSize: 12.sp,
-                      ),
-                    ),
-                    SizedBox(width: 4.w),
-                    Text(
-                      "\$${product.oldPrice.toString()}",
-                      style: GoogleFonts.cairo(
-                        color: Color(0xff8D8D8D),
-                        decoration: TextDecoration.lineThrough,
-                        decorationColor: Color(0xff8D8D8D),
-                        fontWeight: FontWeight.w400,
-                        fontSize: 10.sp,
-                      ),
-                    ),
-                  ],
-                ),
-
-                Padding(
-                  padding: EdgeInsets.only(right: 100.w),
-                  child: Row(
-                    children: [
-                      Text(
-                        product.evaluation.toString(),
-                        style: GoogleFonts.cairo(
-                          fontSize: 12.sp,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      const Icon(
-                        Icons.star,
-                        color: Color(0xffFFB800),
-                        size: 17,
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
       ),
     );
   }
@@ -273,33 +166,61 @@ class _HtheallState extends State<Htheall> {
               ],
             ),
 
-        SizedBox(height: 3.h),
-
         /// المنتجات
-        SizedBox(
-          height: 250.h,
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: (products.length / 2).ceil(), //  مهم
-            itemBuilder: (context, index) {
-              int firstIndex = index * 2;
-              int secondIndex = firstIndex + 1;
+        SizedBox(height: 3.h),
+        departmentName == "تبادل"
+            ? SizedBox(
+              height: 250.h,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: items.length,
 
-              return Row(
-                children: [
-                  productCard(products[firstIndex]),
+                itemBuilder: (context, index) {
+                  final item = items[index];
 
-                  SizedBox(width: 10.w),
+                  return Padding(
+                    padding: EdgeInsets.only(left: 10.w),
 
-                  if (secondIndex < products.length)
-                    productCard(products[secondIndex]),
-                ],
-              );
-            },
-          ),
-        ),
+                    child: ExchangeCard(
+                      title: item.title,
+                      description: item.description,
+                      image: item.image,
 
-        SizedBox(height: 10.h),
+                      isFavorite: item.isFavorite,
+
+                      onFavoriteTap: () {
+                        setState(() {
+                          item.isFavorite = !item.isFavorite;
+                        });
+                      },
+                    ),
+                  );
+                },
+              ),
+            )
+            : SizedBox(
+              height: 250.h,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: (products.length / 2).ceil(),
+
+                itemBuilder: (context, index) {
+                  int firstIndex = index * 2;
+                  int secondIndex = firstIndex + 1;
+
+                  return Row(
+                    children: [
+                      ProductCard(product: products[firstIndex]),
+
+                      SizedBox(width: 10.w),
+
+                      if (secondIndex < products.length)
+                        ProductCard(product: products[secondIndex]),
+                    ],
+                  );
+                },
+              ),
+            ),
       ],
     );
   }

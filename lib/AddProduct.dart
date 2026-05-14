@@ -3,7 +3,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:t_1app/models/Button_Model.dart';
+import 'package:t_1app/widgets/Button.dart';
 import 'dart:io';
+
+import 'package:t_1app/widgets/greenHeader.dart';
 
 class Addproduct extends StatefulWidget {
   const Addproduct({super.key});
@@ -13,6 +17,11 @@ class Addproduct extends StatefulWidget {
 }
 
 class _AddproductState extends State<Addproduct> {
+  final nameController = TextEditingController();
+  final descController = TextEditingController();
+  final priceController = TextEditingController();
+  final discountController = TextEditingController();
+  final quantityController = TextEditingController();
   String? available;
   File? _image;
   final ImagePicker _picker = ImagePicker();
@@ -33,6 +42,16 @@ class _AddproductState extends State<Addproduct> {
         _image = File(pickedFile.path);
       });
     }
+  }
+
+  @override
+  void dispose() {
+    nameController.dispose();
+    descController.dispose();
+    priceController.dispose();
+    discountController.dispose();
+    quantityController.dispose();
+    super.dispose();
   }
 
   void showSuccessDialog(BuildContext context) {
@@ -126,43 +145,7 @@ class _AddproductState extends State<Addproduct> {
         body: SingleChildScrollView(
           child: Column(
             children: [
-              Stack(
-                children: [
-                  Image.asset(
-                    "images/linear1.png",
-                    fit: BoxFit.fill,
-                    width: 415.w,
-                    height: 115.h,
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 70.h),
-                    child: Center(
-                      child: Text(
-                        " اضافة المنتجات",
-                        style: GoogleFonts.cairo(
-                          fontSize: 20.sp,
-                          fontWeight: FontWeight.w600,
-                          color: const Color(0xffFFFFFF),
-                        ),
-                      ),
-                    ),
-                  ),
-
-                  Positioned(
-                    top: 57.h,
-                    left: 10.w,
-                    child: IconButton(
-                      icon: const Icon(
-                        Icons.arrow_forward_ios,
-                        color: Color(0xff000000),
-                      ),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                    ),
-                  ),
-                ],
-              ),
+              GreenHeader(title: "اضافة المنتجات"),
 
               Padding(
                 padding: EdgeInsets.only(right: 20.w, top: 15.h),
@@ -496,24 +479,28 @@ class _AddproductState extends State<Addproduct> {
                 child: SizedBox(
                   width: 375.w,
                   height: 50.h,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xffF57C00),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8.r),
-                      ),
-                    ),
-                    onPressed: () {
-                      // بعد إضافة المنتج (firebase)
-                      showSuccessDialog(context);
-                    },
-                    child: Text(
-                      " تاكيد اضافة المنتج",
-                      style: GoogleFonts.cairo(
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.w600,
-                        color: const Color(0xff000000),
-                      ),
+                  child: CustomButton(
+                    button: ButtonModel(
+                      text: "تاكيد اضافة المنتج",
+                      color: Color(0xffF57C00),
+                      onPressed: () {
+                        if (nameController.text.isEmpty) {
+                          return;
+                        }
+                        final product = {
+                          "name": nameController.text,
+                          "desc": descController.text,
+                          "price": priceController.text,
+                          "discount": discountController.text,
+                          "quantity": quantityController.text,
+                          "available": available,
+                          "image": _image?.path,
+                        };
+
+                        print(product); // جاهز للـ Firebase
+
+                        showSuccessDialog(context);
+                      },
                     ),
                   ),
                 ),

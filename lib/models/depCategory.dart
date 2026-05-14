@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:t_1app/screens/AccountType.dart';
-import 'package:t_1app/HomePage.dart';
+import 'package:t_1app/screens/Giveyourgoodness_page.dart';
+import 'package:t_1app/screens/HomePage.dart';
 
 class CategoryModel {
   final String title;
@@ -18,33 +18,33 @@ class CategoryModel {
 
 final List<CategoryModel> categories = [
   CategoryModel(
-    title: "لوازم البيت",
-    subtitle: "أثاث، أدوات منزلية",
+    title: " عالم البيت ",
+    subtitle: "اثاث , ادوات منزلية ",
     image: "images/dep1.png",
     page: Homepage(), //
   ),
   CategoryModel(
-    title: "عالم الملابس",
-    subtitle: "ملابس، أحذية، إكسسوارات",
-    image: "images/dep1.png",
+    title: "عالم الملابس ",
+    subtitle: "نسائي , رجالي , اطفال",
+    image: "images/dep2.png",
     page: Homepage(), //
   ),
   CategoryModel(
-    title: "المواد التموينية",
-    subtitle: "طعام، شراب، مستلزمات",
-    image: "images/dep1.png",
+    title: "الحياة اليومية",
+    subtitle: "طعام , تنظيف , مستلزمات",
+    image: "images/dep3.png",
     page: Homepage(), //
   ),
   CategoryModel(
     title: "تكنولوجيا",
-    subtitle: "موبايل، لابتوب، ملحقات",
-    image: "images/dep1.png",
+    subtitle: "هواتف , لابتوبات , ملحقات ",
+    image: "images/dep4.png",
     page: Homepage(), //
   ),
   CategoryModel(
-    title: "عالم الأطفال",
-    subtitle: "ملابس، ألعاب، مستلزمات",
-    image: "images/dep1.png",
-    page: Accounttype(), //
+    title: "عالم الخير (التبرع) ",
+    subtitle: "التبرع للناس المحتاجة",
+    image: "images/dep5.png",
+    page: GiveyourgoodnessPage(), //
   ),
 ];

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:t_1app/models/productDetails.dart';
+import 'package:t_1app/widgets/categoryRadio.dart';
 
 class ProductSliderPage extends StatefulWidget {
   const ProductSliderPage({super.key});
@@ -18,22 +19,24 @@ class _ProductSliderPageState extends State<ProductSliderPage> {
 
   final List<DetProduct> products = [
     DetProduct(
-      image: 'images/hp1.png',
+      image: 'images/uniqeProductAll2.png',
       name: 'Skin Proad كريم',
-      description: 'منتج للعناية بالبشرة...',
+      longDescription:
+          "منتجات Skin Proud تمنح بشرتك ترطيباً عميقاً، تغذية وحماية يومية، مع مكونات طبيعية مناسبة لجميع أنواع البشرة ونتائج واضحة مع الاستخدام المنتظم.",
       price: 200,
     ),
     DetProduct(
-      image: 'images/hp2.png',
-      name: 'كريم ترطيب',
-      description: 'ترطيب عميق...',
+      image: 'images/uniqeProductAll1.png',
+      name: 'كريم العناية بالبشرة',
+      longDescription: 'يعمل على ترطيب البشرة والعناية بها ولمعانها',
       price: 180,
     ),
     DetProduct(
-      image: 'images/hp3.png',
-      name: 'غسول وجه',
-      description: 'تنظيف يومي...',
-      price: 120,
+      image: 'images/uniqeProductAll3.png',
+      name: 'ايفون 17',
+      longDescription:
+          'هاتف يعمل بالعديد من التقنيات المدعومة بالذكاء الاصطناعي',
+      price: 1500,
     ),
   ];
 
@@ -109,12 +112,12 @@ class _ProductSliderPageState extends State<ProductSliderPage> {
 
               SizedBox(height: 20.h),
 
-              /// 🔥 المعلومات
+              ///  المعلومات
               Expanded(
                 child: Container(
                   padding: EdgeInsets.all(20.w),
                   decoration: BoxDecoration(
-                    color: Colors.grey[100],
+                    color: Color(0xffFFFFFF),
                     borderRadius: BorderRadius.vertical(
                       top: Radius.circular(25.r),
                     ),
@@ -127,30 +130,61 @@ class _ProductSliderPageState extends State<ProductSliderPage> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
+                            products[currentIndex].name,
+                            style: GoogleFonts.cairo(
+                              fontSize: 16.sp,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          Text(
                             "\$${products[currentIndex].price}",
                             style: TextStyle(
                               fontSize: 18.sp,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          Text(
-                            products[currentIndex].name,
-                            style: TextStyle(fontSize: 16.sp),
-                          ),
                         ],
                       ),
 
-                      SizedBox(height: 10.h),
+                      SizedBox(height: 15.h),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "(20 من التعليقات)",
+                            style: TextStyle(
+                              fontSize: 12.sp,
+                              fontWeight: FontWeight.w400,
+                              color: Color(0xff4B4B4B),
+                            ),
+                          ),
+                          Image.asset("images/stars.png"),
+                        ],
+                      ),
+                      SizedBox(height: 15.h),
+                      Text(
+                        "الوصف",
+                        style: GoogleFonts.cairo(
+                          fontWeight: FontWeight.w500,
+                          fontSize: 16.sp,
+                        ),
+                      ),
+                      SizedBox(height: 15.h),
 
                       /// الوصف
                       Text(
-                        products[currentIndex].description,
-                        style: TextStyle(fontSize: 13.sp, color: Colors.grey),
+                        products[currentIndex].longDescription,
+                        style: GoogleFonts.cairo(
+                          fontSize: 12.sp,
+                          color: Color(0xff2B2B2B),
+                          fontWeight: FontWeight.w400,
+                        ),
                       ),
-
+                      SizedBox(height: 15.h),
+                      CategoryRadio(),
                       const Spacer(),
 
-                      /// 🔹 الكمية + زر
+                      ///  الكمية + زر
                       Row(
                         children: [
                           /// زر السلة

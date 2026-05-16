@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:record/record.dart';
 import 'package:t_1app/FavoritePage.dart';
+import 'package:t_1app/widgets/HomeWorld_all.dart';
 import 'package:t_1app/widgets/Home_widget/HomeBanner.dart';
 import 'package:t_1app/screens/FavPage.dart';
 import 'package:t_1app/screens/department.dart';
@@ -19,13 +20,10 @@ class Homepage extends StatefulWidget {
   final String userName;
   final String profileImage;
 
- 
-
   const Homepage({
     super.key,
     this.userName = "مرحبا اية",
     this.profileImage = "images/HomeProfile.png",
-   
   });
 
   @override
@@ -76,12 +74,7 @@ class _HomepageState extends State<Homepage> {
     filteredProducts = products;
 
     myPages = [
-      PageItem(
-        title: "الكل",
-        page: Htheall(
- 
-),
-      ),
+      PageItem(title: "الكل", page: Htheall()),
 
       PageItem(title: "عالم البيت", page: Center(child: Text("عالم البيت"))),
 
@@ -146,9 +139,7 @@ class _HomepageState extends State<Homepage> {
               case 1:
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                    builder: (_) => Favpage(),
-                  ),
+                  MaterialPageRoute(builder: (_) => Favpage()),
                 );
                 break;
 
@@ -156,12 +147,7 @@ class _HomepageState extends State<Homepage> {
                 break;
 
               case 3:
-                MaterialPageRoute(
-  builder:
-      (_) => Department(
-       
-      ),
-);
+                MaterialPageRoute(builder: (_) => Department());
                 break;
 
               case 4:
@@ -189,7 +175,7 @@ class _HomepageState extends State<Homepage> {
                   onNotificationTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => Exchange()),
+                      MaterialPageRoute(builder: (context) => HomeworldAll()),
                     );
                   },
                 ),
@@ -213,11 +199,7 @@ class _HomepageState extends State<Homepage> {
                   onFilterPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(
-                        builder:
-                            (context) =>
-                                Favpage(),
-                      ),
+                      MaterialPageRoute(builder: (context) => Favpage()),
                     );
                   },
 

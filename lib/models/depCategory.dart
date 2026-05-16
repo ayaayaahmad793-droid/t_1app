@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:t_1app/models/home_world_model.dart';
 import 'package:t_1app/screens/Giveyourgoodness_page.dart';
 import 'package:t_1app/screens/HomePage.dart';
+import 'package:t_1app/screens/HomeWorld.dart';
 
 class CategoryModel {
   final String title;
@@ -21,7 +23,7 @@ final List<CategoryModel> categories = [
     title: " عالم البيت ",
     subtitle: "اثاث , ادوات منزلية ",
     image: "images/dep1.png",
-    page: Homepage(), //
+    page: Homeworld(), //
   ),
   CategoryModel(
     title: "عالم الملابس ",

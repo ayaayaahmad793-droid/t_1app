@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:t_1app/screens/AccountType.dart';
+import 'package:t_1app/successDialog.dart';
 import 'package:t_1app/widgets/AmmountButton.dart';
 import 'package:t_1app/widgets/DonationTypeCard.dart';
 import 'package:t_1app/widgets/charity_card.dart';
@@ -253,7 +254,18 @@ class _DonateMoneyPageState extends State<DonateMoneyPage> {
                 width: double.infinity,
                 height: 50.h,
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      barrierDismissible: false,
+                      builder:
+                          (context) => Successdialog(
+                            message:
+                                "تمت عملية التبرع بنجاح شكراً لكرمك، ساهمت الآن في صناعة فرق حقيقي",
+                            nextPage: DonateMoneyPage(),
+                          ),
+                    );
+                  },
 
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF2E7D32),

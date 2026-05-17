@@ -7,7 +7,6 @@ import 'package:t_1app/widgets/NavigationBar.dart';
 import 'package:t_1app/models/depCategory.dart';
 import 'package:t_1app/widgets/depCategoryCard.dart';
 import 'package:t_1app/widgets/greenHeader.dart';
-import 'package:t_1app/models/Home_all_model/product_model.dart';
 
 class Department extends StatefulWidget {
   const Department({super.key});

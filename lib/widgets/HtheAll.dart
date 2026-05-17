@@ -67,7 +67,7 @@ class _HtheallState extends State<Htheall> {
     ),
     Product(
       productName: "جزمة برتقالية",
-      shopName: "صافي شوز",
+      shopName: "الغمري شوز",
       price: 15,
       oldPrice: 25,
       evaluation: 4.1,

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:t_1app/models/home_world_model.dart';
+import 'package:t_1app/screens/EverydayLifePage.dart';
 import 'package:t_1app/screens/Giveyourgoodness_page.dart';
 import 'package:t_1app/screens/HomePage.dart';
 import 'package:t_1app/screens/HomeWorld.dart';
+import 'package:t_1app/screens/MakeupAndClothesPage.dart';
+import 'package:t_1app/screens/TechnologyPage.dart';
 
 class CategoryModel {
   final String title;
@@ -26,22 +28,22 @@ final List<CategoryModel> categories = [
     page: Homeworld(), //
   ),
   CategoryModel(
-    title: "عالم الملابس ",
+    title: "عالم الملابس والمكياج ",
     subtitle: "نسائي , رجالي , اطفال",
     image: "images/dep2.png",
-    page: Homepage(), //
+    page: Makeupandclothespage(),
   ),
   CategoryModel(
     title: "الحياة اليومية",
     subtitle: "طعام , تنظيف , مستلزمات",
     image: "images/dep3.png",
-    page: Homepage(), //
+    page: Everydaylifepage(), //
   ),
   CategoryModel(
     title: "تكنولوجيا",
     subtitle: "هواتف , لابتوبات , ملحقات ",
     image: "images/dep4.png",
-    page: Homepage(), //
+    page: Technologypage(), //
   ),
   CategoryModel(
     title: "عالم الخير (التبرع) ",

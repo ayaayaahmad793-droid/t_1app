@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:t_1app/screens/CartPage.dart';
 import 'package:t_1app/screens/HomePage.dart';
 import 'package:t_1app/screens/FavPage.dart';
 import 'package:t_1app/widgets/NavigationBar.dart';
@@ -104,6 +105,10 @@ class _DepartmentState extends State<Department> {
                 break;
 
               case 2:
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (_) => Cartpage()),
+                );
                 break;
 
               case 3:

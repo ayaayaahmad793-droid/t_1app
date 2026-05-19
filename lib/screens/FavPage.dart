@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:t_1app/models/fav_model.dart';
+import 'package:t_1app/screens/CartPage.dart';
 import 'package:t_1app/screens/HomePage.dart';
 import 'package:t_1app/widgets/UniqeAll.dart';
 import 'package:t_1app/widgets/Uniqe_widget/product_card_uniqe.dart';
@@ -47,6 +48,10 @@ class _FavpageState extends State<Favpage> {
                 break;
 
               case 2:
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (_) => Cartpage()),
+                );
                 break;
 
               case 3:

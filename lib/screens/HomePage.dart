@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:record/record.dart';
 import 'package:t_1app/FavoritePage.dart';
+import 'package:t_1app/screens/CartPage.dart';
 import 'package:t_1app/widgets/HomeWorld_all.dart';
 import 'package:t_1app/widgets/Home_widget/HomeBanner.dart';
 import 'package:t_1app/screens/FavPage.dart';
@@ -137,17 +138,24 @@ class _HomepageState extends State<Homepage> {
                 break;
 
               case 1:
-                Navigator.push(
+                Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(builder: (_) => Favpage()),
                 );
                 break;
 
               case 2:
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (_) => Cartpage()),
+                );
                 break;
 
               case 3:
-                MaterialPageRoute(builder: (_) => Department());
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (_) => Department()),
+                );
                 break;
 
               case 4:

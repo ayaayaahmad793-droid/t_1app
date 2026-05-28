@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:t_1app/models/Button_Model.dart';
+import 'package:t_1app/screens/AccountType.dart';
+import 'package:t_1app/screens/AddNewCardPage.dart';
+import 'package:t_1app/screens/track_location_page.dart';
 import 'package:t_1app/widgets/AddNewAddress_widget.dart';
 import 'package:t_1app/widgets/Button.dart';
 import 'package:t_1app/widgets/CouponWidget.dart';
@@ -9,7 +12,16 @@ import 'package:t_1app/widgets/PaymentMethodCard_widget.dart';
 import 'package:t_1app/widgets/header.dart';
 
 class ThecompleteOrderPage extends StatefulWidget {
-  const ThecompleteOrderPage({super.key});
+  final double subtotal;
+  final double deliveryFee;
+  final double total;
+
+  const ThecompleteOrderPage({
+    super.key,
+    required this.subtotal,
+    required this.deliveryFee,
+    required this.total,
+  });
 
   @override
   State<ThecompleteOrderPage> createState() => _ThecompleteOrderPageState();
@@ -123,7 +135,7 @@ class _ThecompleteOrderPageState extends State<ThecompleteOrderPage> {
                             ),
                           ),
                           Text(
-                            "2000\$",
+                            "${widget.subtotal.toStringAsFixed(2)}\$",
                             style: GoogleFonts.cairo(
                               fontWeight: FontWeight.w500,
                               fontSize: 16.sp,
@@ -145,7 +157,7 @@ class _ThecompleteOrderPageState extends State<ThecompleteOrderPage> {
                             ),
                           ),
                           Text(
-                            "30\$",
+                            "${widget.deliveryFee.toStringAsFixed(2)}\$",
                             style: GoogleFonts.cairo(
                               fontWeight: FontWeight.w500,
                               fontSize: 16.sp,
@@ -155,8 +167,11 @@ class _ThecompleteOrderPageState extends State<ThecompleteOrderPage> {
                         ],
                       ),
 
-                      Text(
-                        "______________________________________________________",
+                      Divider(
+                        thickness: 1,
+                        color: Color(0xff000000),
+                        indent: 15.w,
+                        endIndent: 15.w,
                       ),
                       SizedBox(height: 10.h),
                       Row(
@@ -171,7 +186,7 @@ class _ThecompleteOrderPageState extends State<ThecompleteOrderPage> {
                             ),
                           ),
                           Text(
-                            "2030\$",
+                            "${widget.total.toStringAsFixed(2)}\$",
                             style: GoogleFonts.cairo(
                               fontWeight: FontWeight.w700,
                               fontSize: 16.sp,
@@ -192,7 +207,7 @@ class _ThecompleteOrderPageState extends State<ThecompleteOrderPage> {
                               Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (_) => ThecompleteOrderPage(),
+                                  builder: (_) => TrackLocationPage(),
                                 ),
                               );
                             },

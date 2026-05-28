@@ -24,6 +24,18 @@ class Cartpage extends StatefulWidget {
 class _CartpageState extends State<Cartpage> {
   int _currentIndex = 2;
   final TextEditingController couponController = TextEditingController();
+  double get subtotal {
+    return cartProduct.fold(
+      0,
+      (sum, item) => sum + (item.productPrice * item.quantity),
+    );
+  }
+
+ final double deliveryFee = 30;
+
+  double get total {
+    return subtotal + deliveryFee;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,32 +52,48 @@ class _CartpageState extends State<Cartpage> {
 
               SizedBox(height: 20.h),
 
-              /// LIST
-              ListView.builder(
-                shrinkWrap: true,
-
-                physics: const NeverScrollableScrollPhysics(),
-
-                padding: EdgeInsets.zero,
-
-                itemCount: cartProduct.length,
-
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: EdgeInsets.only(bottom: 12.h),
-
-                    child: CartCard(
-                      product: cartProduct[index],
-
-                      onDelete: () {
-                        setState(() {
-                          cartProduct.removeAt(index);
-                        });
-                      },
+              cartProduct.isEmpty
+                  ? Center(
+                    child: Padding(
+                      padding: EdgeInsets.only(top: 100.h),
+                      child: Text(
+                        "السلة فارغة",
+                        style: GoogleFonts.cairo(
+                          fontSize: 18.sp,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
                     ),
-                  );
-                },
-              ),
+                  )
+                  : ListView.builder(
+                    shrinkWrap: true,
+
+                    physics: const NeverScrollableScrollPhysics(),
+
+                    padding: EdgeInsets.zero,
+
+                    itemCount: cartProduct.length,
+
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: EdgeInsets.only(bottom: 12.h),
+
+                        child: CartCard(
+                          product: cartProduct[index],
+
+                          onDelete: () {
+                            setState(() {
+                              cartProduct.removeAt(index);
+                            });
+                          },
+
+                          onQuantityChanged: () {
+                            setState(() {});
+                          },
+                        ),
+                      );
+                    },
+                  ),
 
               SizedBox(height: 5.h),
 
@@ -97,7 +125,7 @@ class _CartpageState extends State<Cartpage> {
                       ),
                     ),
                     Text(
-                      "2000\$",
+                      "${subtotal.toStringAsFixed(2)}\$",
                       style: GoogleFonts.cairo(
                         fontWeight: FontWeight.w500,
                         fontSize: 16.sp,
@@ -121,7 +149,7 @@ class _CartpageState extends State<Cartpage> {
                       ),
                     ),
                     Text(
-                      "30\$",
+                      "${deliveryFee.toStringAsFixed(2)}\$",
                       style: GoogleFonts.cairo(
                         fontWeight: FontWeight.w500,
                         fontSize: 16.sp,
@@ -131,7 +159,12 @@ class _CartpageState extends State<Cartpage> {
                   ],
                 ),
               ),
-              Text("______________________________________________________"),
+              Divider(
+                thickness: 1,
+                color: Color(0xff000000),
+                indent: 15.w,
+                endIndent: 15.w,
+              ),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 5.h),
                 child: Row(
@@ -146,7 +179,7 @@ class _CartpageState extends State<Cartpage> {
                       ),
                     ),
                     Text(
-                      "2030\$",
+                      "${total.toStringAsFixed(2)}\$",
                       style: GoogleFonts.cairo(
                         fontWeight: FontWeight.w700,
                         fontSize: 16.sp,
@@ -169,7 +202,11 @@ class _CartpageState extends State<Cartpage> {
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                            builder: (_) => ThecompleteOrderPage(),
+                            builder: (_) => ThecompleteOrderPage(
+  subtotal: subtotal,
+  deliveryFee: deliveryFee,
+  total: total,
+),
                           ),
                         );
                       },

@@ -2,16 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:record/record.dart';
-import 'package:t_1app/FavoritePage.dart';
 import 'package:t_1app/screens/CartPage.dart';
-import 'package:t_1app/widgets/HomeWorld_all.dart';
+import 'package:t_1app/screens/Notification_Page.dart';
+import 'package:t_1app/screens/OrderDetails_page.dart';
 import 'package:t_1app/widgets/Home_widget/HomeBanner.dart';
 import 'package:t_1app/screens/FavPage.dart';
 import 'package:t_1app/screens/department.dart';
-import 'package:t_1app/screens/exchangePage.dart';
 import 'package:t_1app/widgets/HtheAll.dart';
 import 'package:t_1app/SearchSett.dart';
-import 'package:t_1app/SelectedPage.dart';
+import 'package:t_1app/widgets/SelectedPage.dart';
 import 'package:t_1app/widgets/NavigationBar.dart';
 import 'package:t_1app/widgets/category_chip.dart';
 import 'package:t_1app/widgets/home_header.dart';
@@ -181,9 +180,9 @@ class _HomepageState extends State<Homepage> {
                   profileImage: widget.profileImage,
 
                   onNotificationTap: () {
-                    Navigator.push(
+                    Navigator.pushReplacement(
                       context,
-                      MaterialPageRoute(builder: (context) => HomeworldAll()),
+                      MaterialPageRoute(builder: (_) => NotificationsPage()),
                     );
                   },
                 ),
@@ -207,7 +206,9 @@ class _HomepageState extends State<Homepage> {
                   onFilterPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => Favpage()),
+                      MaterialPageRoute(
+                        builder: (context) => OrderDetailsPage(),
+                      ),
                     );
                   },
 

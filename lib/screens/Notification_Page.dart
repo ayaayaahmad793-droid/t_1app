@@ -1,45 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:t_1app/SearchSett.dart';
+import 'package:t_1app/widgets/Notification_All_widget.dart';
+import 'package:t_1app/widgets/Notification_Card.dart';
 import 'package:t_1app/widgets/SelectedPage.dart';
-import 'package:t_1app/widgets/HomeWorld_all.dart';
 import 'package:t_1app/widgets/header.dart';
 
-class Homeworld extends StatefulWidget {
-  const Homeworld({super.key});
+class NotificationsPage extends StatefulWidget {
+  const NotificationsPage({super.key});
 
   @override
-  State<Homeworld> createState() => _HomeworldState();
+  State<NotificationsPage> createState() => _NotificationsPageState();
 }
 
-class _HomeworldState extends State<Homeworld> {
-  /// الصفحات الديناميكية
-  final List<PageItem> myPages = [
-    PageItem(title: "الكل", page: const HomeworldAll()),
+class _NotificationsPageState extends State<NotificationsPage> {
+  int selectedIndex = 0;
+  late List<PageItem> myPages;
 
-    PageItem(
-      title: "ادوات منزلية",
-      page: const Center(child: Text("ادوات منزلية")),
-    ),
-
-    PageItem(
-      title: "اجهزة منزلية صغيرة",
-      page: const Center(child: Text("اجهزة منزلية صغيرة")),
-    ),
-
-    PageItem(title: "اثاث", page: const Center(child: Text("اثاث"))),
-
-    PageItem(title: "ديكور", page: const Center(child: Text("ديكور"))),
-
-    PageItem(
-      title: "مستلزمات التخزين",
-      page: const Center(child: Text("مستلزمات التخزين")),
-    ),
-  ];
-
-  /// القسم المختار
   String selectedText = "الكل";
+  void initState() {
+    super.initState();
+
+    myPages = [
+      PageItem(title: "الكل", page: NotificationAllWidget()),
+
+      PageItem(title: "بيع", page: Center(child: Text("بيع"))),
+
+      PageItem(title: "شراء", page: Center(child: Text("شراء"))),
+
+      PageItem(title: "تبادل", page: Center(child: Text("تبادل"))),
+      PageItem(title: "تبرع", page: Center(child: Text("تبرع"))),
+    ];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,45 +42,22 @@ class _HomeworldState extends State<Homeworld> {
         backgroundColor: const Color(0xffFFFFFF),
 
         body: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 10.w),
+          padding: EdgeInsets.symmetric(horizontal: 20.w),
 
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
 
             children: [
-              /// الهيدر
-              CustomHeader(title: "عالم البيت"),
+              /// Header
+              CustomHeader(title: "الاشعارات"),
 
-              SizedBox(height: 20.h),
-
-              /// البحث
-              Center(
-                child: CustomSearchBar(
-                  hintText: "ابحث عن المنتجات التي تريدها...",
-                  isRecording: false,
-                  onMicPressed: () {},
-                  onFilterPressed: () {},
-                ),
-              ),
-
-              SizedBox(height: 15.h),
-
-              /// عنوان الاقسام
-              Text(
-                "الاقسام",
-                style: GoogleFonts.cairo(
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-
-              SizedBox(height: 12.h),
+              SizedBox(height: 25.h),
 
               /// الازرار
               Wrap(
-                spacing: 10.w,
-                runSpacing: 10.h,
+                spacing: 5.w,
 
+                runSpacing: 10.h,
                 children:
                     myPages.map((item) {
                       bool isSelected = selectedText == item.title;
@@ -112,7 +81,7 @@ class _HomeworldState extends State<Homeworld> {
                                     ? const Color(0xffF57C00)
                                     : Colors.white,
 
-                            borderRadius: BorderRadius.circular(20.r),
+                            borderRadius: BorderRadius.circular(8.r),
 
                             border: Border.all(
                               color:
@@ -143,6 +112,8 @@ class _HomeworldState extends State<Homeworld> {
                   items: myPages,
                 ),
               ),
+
+              SizedBox(height: 25.h),
             ],
           ),
         ),

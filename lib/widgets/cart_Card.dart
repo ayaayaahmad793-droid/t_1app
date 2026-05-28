@@ -5,19 +5,20 @@ import 'package:t_1app/models/cart_model.dart';
 
 class CartCard extends StatefulWidget {
   final CartModel product;
+  final VoidCallback onQuantityChanged;
 
   /// delete function
   final VoidCallback onDelete;
 
-  const CartCard({super.key, required this.product, required this.onDelete});
+  const CartCard({super.key, required this.product, required this.onDelete,
+    required this.onQuantityChanged,
+  });
 
   @override
   State<CartCard> createState() => _CartCardState();
 }
 
 class _CartCardState extends State<CartCard> {
-  int quantity = 1;
-
   @override
   Widget build(BuildContext context) {
     return Dismissible(
@@ -114,7 +115,7 @@ class _CartCardState extends State<CartCard> {
                     children: [
                       /// PRICE
                       Text(
-                        "\$${widget.product.productPrice}",
+                        "\$${(widget.product.productPrice * widget.product.quantity).toStringAsFixed(2)}",
 
                         style: GoogleFonts.cairo(
                           fontSize: 16.sp,
@@ -140,32 +141,34 @@ class _CartCardState extends State<CartCard> {
                           children: [
                             /// PLUS
                             GestureDetector(
-                              onTap: () {
+                             onTap: () {
                                 setState(() {
-                                  quantity++;
+                                  widget.product.quantity++;
                                 });
-                              },
 
+                                widget.onQuantityChanged();
+                              },
                               child: Icon(Icons.add, size: 16.sp),
                             ),
 
                             /// NUMBER
                             Text(
-                              quantity.toString(),
+                              widget.product.quantity.toString(),
 
                               style: TextStyle(fontSize: 14.sp),
                             ),
 
                             /// MINUS
                             GestureDetector(
-                              onTap: () {
-                                if (quantity > 1) {
+                             onTap: () {
+                                if (widget.product.quantity > 1) {
                                   setState(() {
-                                    quantity--;
+                                    widget.product.quantity--;
                                   });
+
+                                  widget.onQuantityChanged();
                                 }
                               },
-
                               child: Icon(Icons.remove, size: 16.sp),
                             ),
                           ],

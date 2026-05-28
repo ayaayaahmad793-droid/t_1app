@@ -9,8 +9,10 @@ import 'package:t_1app/providers/product_provider.dart';
 import 'package:t_1app/providers/register_provider.dart';
 import 'package:t_1app/providers/reset_provider.dart';
 import 'package:t_1app/providers/shopData_provider.dart';
+import 'package:t_1app/screens/HomePage.dart';
 import 'package:t_1app/screens/OnboardingScreens/Onboarding1.dart';
 import 'package:provider/provider.dart';
+import 'package:t_1app/screens/ShopData.dart';
 import 'providers/login_provider.dart';
 
 void main() async {
@@ -30,7 +32,7 @@ void main() async {
         ChangeNotifierProvider(create: (_) => ResetProvider()),
         ChangeNotifierProvider(create: (_) => AccountTypeProvider()),
         ChangeNotifierProvider(create: (_) => ProductProvider()),
-    //    ChangeNotifierProvider(create: (_) => FavoriteProvider())
+        //    ChangeNotifierProvider(create: (_) => FavoriteProvider())
       ],
       child: MyApp(),
     ),
@@ -53,10 +55,13 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           locale: const Locale("ar"),
 
-          /// مهم: خلي الاتجاه من هون  
-          home: const Directionality(
+          /// مهم: خلي الاتجاه من هون
+          home: Directionality(
             textDirection: TextDirection.rtl,
-            child: Onboarding1(),
+            child:
+                accountType == null
+                    ? const Onboarding1()
+                    : (accountType == 0 ? Homepage() : ShopData()),
           ),
         );
       },

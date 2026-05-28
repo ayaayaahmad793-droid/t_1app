@@ -3,12 +3,14 @@ class CartModel {
   final String productName;
   final double productPrice;
   final String shopName;
+    int quantity;
 
   CartModel({
     required this.productImage,
     required this.productName,
     required this.productPrice,
     required this.shopName,
+    this.quantity=1,
   });
 }
 

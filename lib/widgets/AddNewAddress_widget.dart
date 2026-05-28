@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:t_1app/screens/Adress_page.dart';
 
 class AddnewaddressWidget extends StatefulWidget {
   const AddnewaddressWidget({super.key});
@@ -72,8 +73,10 @@ class _AddnewaddressWidgetState extends State<AddnewaddressWidget> {
           /// زر اضافة بطاقة
           InkWell(
             onTap: () {
-              /// الكود اللي بدك يشتغل عند الضغط
-              print("تم الضغط");
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (_) => AddressPage()),
+              );
             },
 
             borderRadius: BorderRadius.circular(10.r),

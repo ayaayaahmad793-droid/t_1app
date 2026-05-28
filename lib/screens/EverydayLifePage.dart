@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:t_1app/SearchSett.dart';
-import 'package:t_1app/SelectedPage.dart';
+import 'package:t_1app/widgets/SelectedPage.dart';
 import 'package:t_1app/widgets/EverydayLife_all.dart';
 import 'package:t_1app/widgets/MakeupAndClothes_all.dart';
 import 'package:t_1app/widgets/header.dart';

@@ -4,7 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:t_1app/models/Home_all_model/product_model.dart';
 import 'package:t_1app/screens/HomePage.dart';
 import 'package:t_1app/SearchSett.dart';
-import 'package:t_1app/SelectedPage.dart';
+import 'package:t_1app/widgets/SelectedPage.dart';
 import 'package:t_1app/widgets/UniqeAll.dart';
 import 'package:t_1app/widgets/header.dart';
 import 'package:record/record.dart';

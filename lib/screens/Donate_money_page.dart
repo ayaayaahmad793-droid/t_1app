@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import 'package:t_1app/providers/donate_page_provider.dart';
 import 'package:t_1app/screens/AccountType.dart';
 import 'package:t_1app/successDialog.dart';
 import 'package:t_1app/widgets/AmmountButton.dart';
@@ -15,9 +17,16 @@ class DonateMoneyPage extends StatefulWidget {
 }
 
 class _DonateMoneyPageState extends State<DonateMoneyPage> {
-  int selectedIndex = 0;
+  final TextEditingController amountController = TextEditingController();
+  @override
+  void dispose() {
+    amountController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<DonatePageProvider>(context);
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
@@ -57,10 +66,16 @@ class _DonateMoneyPageState extends State<DonateMoneyPage> {
               ),
             ),
             CharityCard(
-              charityName: "جمعية اليوسف",
+              charityName: "جمعية اليونيسيف",
               description: "مسؤولة عن استلام وتوزيع التبرعات المالية",
               buttonText: "اعرف المزيد",
               imagePath: "images/charity.png",
+
+              isSelected: provider.selectedCharity == "جمعية اليونيسيف",
+
+              onTap: () {
+                provider.selectCharity("جمعية اليونيسيف");
+              },
 
               onMorePressed: () {
                 Navigator.push(
@@ -74,7 +89,10 @@ class _DonateMoneyPageState extends State<DonateMoneyPage> {
               description: "من أكبر جهات العمل الإنساني في الشرق الأوسط",
               buttonText: "اعرف المزيد",
               imagePath: "images/charity.png",
-
+              isSelected: provider.selectedCharity == "جمعية العون المباشر",
+              onTap: () {
+                provider.selectCharity("جمعية العون المباشر");
+              },
               onMorePressed: () {
                 Navigator.push(
                   context,
@@ -99,11 +117,10 @@ class _DonateMoneyPageState extends State<DonateMoneyPage> {
                 DonationTypeCard(
                   title: "حالات عاجلة",
                   description: "مساعدة فورية\nوطارئة",
-                  isSelected: selectedIndex == 0,
+                  isSelected: provider.selectedDonationType == 0,
+
                   onTap: () {
-                    setState(() {
-                      selectedIndex = 0;
-                    });
+                    provider.selectDonationType(0);
                   },
                 ),
 
@@ -112,11 +129,10 @@ class _DonateMoneyPageState extends State<DonateMoneyPage> {
                 DonationTypeCard(
                   title: "تبرع عام",
                   description: "دعم المحتاجين\nبشكل شامل",
-                  isSelected: selectedIndex == 1,
+                  isSelected: provider.selectedDonationType == 1,
+
                   onTap: () {
-                    setState(() {
-                      selectedIndex = 1;
-                    });
+                    provider.selectDonationType(1);
                   },
                 ),
 
@@ -125,11 +141,10 @@ class _DonateMoneyPageState extends State<DonateMoneyPage> {
                 DonationTypeCard(
                   title: "مشاريع إنسانية",
                   description: "تمويل مبادرات\nتنموية",
-                  isSelected: selectedIndex == 2,
+                  isSelected: provider.selectedDonationType == 2,
+
                   onTap: () {
-                    setState(() {
-                      selectedIndex = 2;
-                    });
+                    provider.selectDonationType(2);
                   },
                 ),
               ],
@@ -152,8 +167,12 @@ class _DonateMoneyPageState extends State<DonateMoneyPage> {
                   width: 122.w,
                   height: 41.h,
                   child: TextField(
+                    controller: amountController,
                     keyboardType: TextInputType.number,
                     textAlign: TextAlign.right,
+                    onChanged: (value) {
+                      provider.setCustomAmount(value);
+                    },
                     decoration: InputDecoration(
                       hintText: "\$",
                       hintStyle: TextStyle(
@@ -191,6 +210,7 @@ class _DonateMoneyPageState extends State<DonateMoneyPage> {
                 ),
               ],
             ),
+
             SizedBox(height: 8.h),
             Padding(
               padding: EdgeInsets.only(right: 15.w),
@@ -210,11 +230,10 @@ class _DonateMoneyPageState extends State<DonateMoneyPage> {
                       children: [
                         AmountButton(
                           amount: "20",
-                          isSelected: selectedIndex == 3,
+                          isSelected: provider.selectedAmount == 20,
                           onTap: () {
-                            setState(() {
-                              selectedIndex = 3;
-                            });
+                            provider.selectAmount(20);
+                            amountController.text = "20";
                           },
                         ),
 
@@ -222,11 +241,10 @@ class _DonateMoneyPageState extends State<DonateMoneyPage> {
 
                         AmountButton(
                           amount: "30",
-                          isSelected: selectedIndex == 4,
+                          isSelected: provider.selectedAmount == 30,
                           onTap: () {
-                            setState(() {
-                              selectedIndex = 4;
-                            });
+                            provider.selectAmount(30);
+                            amountController.text = "30";
                           },
                         ),
 
@@ -234,11 +252,10 @@ class _DonateMoneyPageState extends State<DonateMoneyPage> {
 
                         AmountButton(
                           amount: "50",
-                          isSelected: selectedIndex == 5,
+                          isSelected: provider.selectedAmount == 50,
                           onTap: () {
-                            setState(() {
-                              selectedIndex = 5;
-                            });
+                            provider.selectAmount(50);
+                            amountController.text = "50";
                           },
                         ),
                       ],
@@ -254,19 +271,40 @@ class _DonateMoneyPageState extends State<DonateMoneyPage> {
                 width: double.infinity,
                 height: 50.h,
                 child: ElevatedButton(
-                  onPressed: () {
+                 onPressed: () {
+                    if (provider.customAmount.isEmpty) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text("يرجى إدخال مبلغ التبرع")),
+                      );
+                      return;
+                    }
+
+                    if (provider.selectedCharity.isEmpty) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text("يرجى اختيار جهة التبرع")),
+                      );
+                      return;
+                    }
+
+                    if (provider.selectedDonationType == -1) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text("يرجى اختيار نوع التبرع")),
+                      );
+                      return;
+                    }
+
                     showDialog(
                       context: context,
                       barrierDismissible: false,
                       builder:
                           (context) => Successdialog(
-                            message:
-                                "تمت عملية التبرع بنجاح شكراً لكرمك، ساهمت الآن في صناعة فرق حقيقي",
+                            message: "تمت عملية التبرع بنجاح",
                             nextPage: DonateMoneyPage(),
                           ),
                     );
+                    provider.resetDonationData();
+                    amountController.clear();
                   },
-
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF2E7D32),
                     elevation: 0,

@@ -1,35 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:provider/provider.dart';
 import 'package:t_1app/models/Home_all_model/product_model.dart';
+import 'package:t_1app/providers/favorite_provider.dart';
 
 class ProductCard extends StatefulWidget {
   final Product product;
+  final VoidCallback? onFavoriteTap;
 
-  const ProductCard({super.key, required this.product});
+  const ProductCard({super.key, required this.product, this.onFavoriteTap});
 
   @override
   State<ProductCard> createState() => _ProductCardState();
 }
 
 class _ProductCardState extends State<ProductCard> {
-  Future<void> saveFavorite() async {
-    final prefs = await SharedPreferences.getInstance();
-
-    await prefs.setBool(widget.product.productName, widget.product.isFavorite);
-  }
-
   @override
   Widget build(BuildContext context) {
+    final favoriteProvider = Provider.of<FavoriteProvider>(context);
+
+    final isFav = favoriteProvider.isFavorite(widget.product);
+
     return Container(
       width: 162.w,
-      height: 230.h,
+      height: 200.h,
       margin: EdgeInsets.only(left: 10.w),
 
       decoration: BoxDecoration(
         border: Border.all(color: const Color(0xff8D8D8D)),
+
         color: Colors.white,
+
         borderRadius: BorderRadius.circular(15.r),
       ),
 
@@ -44,8 +46,10 @@ class _ProductCardState extends State<ProductCard> {
 
                 child: Image.asset(
                   widget.product.productImage,
+
                   height: 118.h,
                   width: 162.w,
+
                   fit: BoxFit.fill,
                 ),
               ),
@@ -55,12 +59,12 @@ class _ProductCardState extends State<ProductCard> {
                 right: 8,
 
                 child: GestureDetector(
-                  onTap: () async {
-                    setState(() {
-                      widget.product.isFavorite = !widget.product.isFavorite;
-                    });
-
-                    await saveFavorite();
+                  onTap: () {
+                    if (isFav) {
+                      favoriteProvider.removeFromFavorite(widget.product);
+                    } else {
+                      favoriteProvider.addToFavorite(widget.product);
+                    }
                   },
 
                   child: CircleAvatar(
@@ -68,12 +72,9 @@ class _ProductCardState extends State<ProductCard> {
                     backgroundColor: Colors.white,
 
                     child: Icon(
-                      widget.product.isFavorite
-                          ? Icons.favorite
-                          : Icons.favorite_border,
+                      isFav ? Icons.favorite : Icons.favorite_border,
 
-                      color:
-                          widget.product.isFavorite ? Colors.red : Colors.grey,
+                      color: isFav ? Colors.red : Colors.grey,
 
                       size: 20.sp,
                     ),
@@ -127,6 +128,7 @@ class _ProductCardState extends State<ProductCard> {
 
                       style: GoogleFonts.cairo(
                         fontWeight: FontWeight.w400,
+
                         fontSize: 12.sp,
                       ),
                     ),
@@ -138,36 +140,37 @@ class _ProductCardState extends State<ProductCard> {
 
                       style: GoogleFonts.cairo(
                         color: const Color(0xff8D8D8D),
+
                         decoration: TextDecoration.lineThrough,
+
                         decorationColor: const Color(0xff8D8D8D),
+
                         fontWeight: FontWeight.w400,
+
                         fontSize: 10.sp,
                       ),
                     ),
-                  ],
-                ),
+                    Spacer(),
 
-                Padding(
-                  padding: EdgeInsets.only(right: 100.w),
+                    Row(
+                      children: [
+                        Text(
+                          widget.product.evaluation.toString(),
 
-                  child: Row(
-                    children: [
-                      Text(
-                        widget.product.evaluation.toString(),
-
-                        style: GoogleFonts.cairo(
-                          fontSize: 12.sp,
-                          fontWeight: FontWeight.w500,
+                          style: GoogleFonts.cairo(
+                            fontSize: 12.sp,
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
-                      ),
 
-                      const Icon(
-                        Icons.star,
-                        color: Color(0xffFFB800),
-                        size: 17,
-                      ),
-                    ],
-                  ),
+                        const Icon(
+                          Icons.star,
+                          color: Color(0xffFFB800),
+                          size: 17,
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
               ],
             ),

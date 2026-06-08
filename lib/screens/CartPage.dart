@@ -48,7 +48,14 @@ class _CartpageState extends State<Cartpage> {
         body: SingleChildScrollView(
           child: Column(
             children: [
-              CustomHeader(title: "السلة"),
+              CustomHeader(title: "السلة",
+                onBack: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (_) => Homepage()),
+                  );
+                },
+              ),
 
               SizedBox(height: 20.h),
 

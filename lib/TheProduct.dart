@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:t_1app/AddProduct.dart';
 import 'package:t_1app/screens/HomePage.dart';
-import 'package:record/record.dart';
 import 'package:t_1app/models/Button_Model.dart';
 import 'package:t_1app/widgets/Button.dart';
 import 'package:t_1app/widgets/greenHeader.dart';
@@ -36,36 +35,12 @@ class Theproduct extends StatefulWidget {
 }
 
 class _TheproductState extends State<Theproduct> {
-  final Record recorder = Record();
-  bool isRecording = false;
-  Future<void> startRecording() async {
-    if (await recorder.hasPermission()) {
-      await recorder.start(
-        path: 'recording.m4a',
-        encoder: AudioEncoder.aacLc,
-        bitRate: 128000,
-        samplingRate: 44100,
-      );
+ 
 
-      setState(() {
-        isRecording = true;
-      });
-    }
-  }
-
-  Future<void> stopRecording() async {
-    final path = await recorder.stop();
-
-    print("تم حفظ التسجيل في: $path");
-
-    setState(() {
-      isRecording = false;
-    });
-  }
-
+  
   @override
   void dispose() {
-    recorder.dispose();
+   
     super.dispose();
   }
 
@@ -169,23 +144,7 @@ class _TheproductState extends State<Theproduct> {
                             ),
                           ),
                         ),
-                        SizedBox(
-                          width: 24.w,
-                          height: 24.h,
-                          child: IconButton(
-                            icon: Icon(
-                              isRecording ? Icons.stop : Icons.mic,
-                              color: Color(0xff000000),
-                            ),
-                            onPressed: () async {
-                              if (isRecording) {
-                                await stopRecording();
-                              } else {
-                                await startRecording();
-                              }
-                            },
-                          ),
-                        ),
+                        
                       ],
                     ),
                   ),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:t_1app/uniqeProduct.dart';
+import 'package:t_1app/screens/uniqeProduct.dart';
 
 class HomeBanner extends StatefulWidget {
   const HomeBanner({super.key});

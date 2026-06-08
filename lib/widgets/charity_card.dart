@@ -8,6 +8,8 @@ class CharityCard extends StatelessWidget {
   final String buttonText;
   final VoidCallback onMorePressed;
   final String imagePath;
+  final bool isSelected;
+  final VoidCallback onTap;
 
   const CharityCard({
     super.key,
@@ -16,98 +18,112 @@ class CharityCard extends StatelessWidget {
     required this.buttonText,
     required this.onMorePressed,
     required this.imagePath,
+    required this.isSelected,
+    required this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
     return Directionality(
       textDirection: TextDirection.rtl,
-      child: Container(
-        height: 145.h,
-        margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
-        padding: const EdgeInsets.all(14),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(12.r),
-          border: Border.all(color: Color(0xff919191)),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            /// الصف العلوي
-            Row(
+      child: InkWell(
+        borderRadius: BorderRadius.circular(12.r),
+        onTap: onTap,
+        child: Container(
+          height: 145.h,
+          margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+          padding: const EdgeInsets.all(14),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12.r),
+            border: Border.all(
+              color:
+                  isSelected
+                      ? const Color(0xFF2E7D32)
+                      : const Color(0xff919191),
+              width: isSelected ? 2 : 1,
+            ),
+          ),
+          child: SingleChildScrollView(
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                /// صورة الجمعية
-                Image.asset(
-                  imagePath,
-                  fit: BoxFit.cover,
-                  width: 50.w,
-                  height: 50.h,
+                /// الصف العلوي
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    /// صورة الجمعية
+                    Image.asset(
+                      imagePath,
+                      fit: BoxFit.cover,
+                      width: 50.w,
+                      height: 50.h,
+                    ),
+
+                    const SizedBox(width: 10),
+
+                    /// الاسم والوصف
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            charityName,
+                            textAlign: TextAlign.right,
+                            style: GoogleFonts.cairo(
+                              fontSize: 16.sp,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+
+                          SizedBox(height: 8.h),
+
+                          Text(
+                            description,
+                            textAlign: TextAlign.right,
+                            style: GoogleFonts.cairo(
+                              fontSize: 16.sp,
+                              fontWeight: FontWeight.w600,
+                              color: Color(0xff000000),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
 
-                const SizedBox(width: 10),
+                const SizedBox(height: 16),
 
-                /// الاسم والوصف
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        charityName,
-                        textAlign: TextAlign.right,
-                        style: GoogleFonts.cairo(
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.w600,
+                /// زر اعرف المزيد
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: SizedBox(
+                    width: 136.w,
+                    height: 28.h,
+                    child: ElevatedButton(
+                      onPressed: onMorePressed,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Color(0xffF57C00),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12.r),
                         ),
+                        elevation: 0,
                       ),
-
-                      SizedBox(height: 8.h),
-
-                      Text(
-                        description,
-                        textAlign: TextAlign.right,
+                      child: Text(
+                        buttonText,
                         style: GoogleFonts.cairo(
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.w600,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 12.sp,
                           color: Color(0xff000000),
                         ),
                       ),
-                    ],
+                    ),
                   ),
                 ),
               ],
             ),
-
-            const SizedBox(height: 16),
-
-            /// زر اعرف المزيد
-            Align(
-              alignment: Alignment.centerRight,
-              child: SizedBox(
-                width: 136.w,
-                height: 28.h,
-                child: ElevatedButton(
-                  onPressed: onMorePressed,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0xffF57C00),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12.r),
-                    ),
-                    elevation: 0,
-                  ),
-                  child: Text(
-                    buttonText,
-                    style: GoogleFonts.cairo(
-                      fontWeight: FontWeight.w500,
-                      fontSize: 12.sp,
-                      color: Color(0xff000000),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );

@@ -2,9 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:t_1app/SearchSett.dart';
+import 'package:t_1app/screens/HomePage.dart';
+import 'package:t_1app/screens/department.dart';
 import 'package:t_1app/widgets/SelectedPage.dart';
 import 'package:t_1app/widgets/HomeWorld_all.dart';
 import 'package:t_1app/widgets/header.dart';
+import 'package:provider/provider.dart';
+import 'package:t_1app/providers/homeworld_provider.dart';
 
 class Homeworld extends StatefulWidget {
   const Homeworld({super.key});
@@ -14,35 +18,26 @@ class Homeworld extends StatefulWidget {
 }
 
 class _HomeworldState extends State<Homeworld> {
+  final TextEditingController searchController = TextEditingController();
+
   /// الصفحات الديناميكية
   final List<PageItem> myPages = [
     PageItem(title: "الكل", page: const HomeworldAll()),
 
-    PageItem(
-      title: "ادوات منزلية",
-      page: const Center(child: Text("ادوات منزلية")),
-    ),
+    PageItem(title: "ادوات منزلية", page: const HomeworldAll()),
 
-    PageItem(
-      title: "اجهزة منزلية صغيرة",
-      page: const Center(child: Text("اجهزة منزلية صغيرة")),
-    ),
+    PageItem(title: "اجهزة منزلية صغيرة", page: const HomeworldAll()),
 
-    PageItem(title: "اثاث", page: const Center(child: Text("اثاث"))),
+    PageItem(title: "اثاث", page: const HomeworldAll()),
 
-    PageItem(title: "ديكور", page: const Center(child: Text("ديكور"))),
+    PageItem(title: "ديكور", page: const HomeworldAll()),
 
-    PageItem(
-      title: "مستلزمات التخزين",
-      page: const Center(child: Text("مستلزمات التخزين")),
-    ),
+    PageItem(title: "مستلزمات التخزين", page: const HomeworldAll()),
   ];
-
-  /// القسم المختار
-  String selectedText = "الكل";
 
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<HomeworldProvider>(context);
     return Directionality(
       textDirection: TextDirection.rtl,
 
@@ -57,16 +52,27 @@ class _HomeworldState extends State<Homeworld> {
 
             children: [
               /// الهيدر
-              CustomHeader(title: "عالم البيت"),
+              CustomHeader(
+                title: "عالم البيت",
+                onBack: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (_) => Department()),
+                  );
+                },
+              ),
 
               SizedBox(height: 20.h),
 
               /// البحث
               Center(
                 child: CustomSearchBar(
+                  controller: searchController,
                   hintText: "ابحث عن المنتجات التي تريدها...",
-                  isRecording: false,
-                  onMicPressed: () {},
+                  onChanged: (value) {
+                    provider.updateSearch(value);
+                  },
+                 
                   onFilterPressed: () {},
                 ),
               ),
@@ -81,7 +87,6 @@ class _HomeworldState extends State<Homeworld> {
                   fontWeight: FontWeight.w500,
                 ),
               ),
-
               SizedBox(height: 12.h),
 
               /// الازرار
@@ -91,13 +96,11 @@ class _HomeworldState extends State<Homeworld> {
 
                 children:
                     myPages.map((item) {
-                      bool isSelected = selectedText == item.title;
+                      bool isSelected = provider.selectedText == item.title;
 
                       return GestureDetector(
                         onTap: () {
-                          setState(() {
-                            selectedText = item.title;
-                          });
+                          provider.selectCategory(item.title);
                         },
 
                         child: Container(
@@ -137,9 +140,10 @@ class _HomeworldState extends State<Homeworld> {
               ),
 
               SizedBox(height: 20.h),
+
               Expanded(
                 child: DynamicSelectedPage(
-                  selectedText: selectedText,
+                  selectedText: provider.selectedText,
                   items: myPages,
                 ),
               ),

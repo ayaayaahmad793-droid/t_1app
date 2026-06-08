@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:t_1app/SearchSett.dart';
+import 'package:t_1app/screens/department.dart';
 import 'package:t_1app/widgets/SelectedPage.dart';
 import 'package:t_1app/widgets/EverydayLife_all.dart';
-import 'package:t_1app/widgets/MakeupAndClothes_all.dart';
 import 'package:t_1app/widgets/header.dart';
+import 'package:provider/provider.dart';
+import 'package:t_1app/providers/daily_life_provider.dart';
 
 class Everydaylifepage extends StatefulWidget {
   const Everydaylifepage({super.key});
@@ -15,40 +17,27 @@ class Everydaylifepage extends StatefulWidget {
 }
 
 class _EverydaylifepageState extends State<Everydaylifepage> {
+    final TextEditingController searchController = TextEditingController();
+
   /// الصفحات الديناميكية
-  final List<PageItem> myPages = [
+ final List<PageItem> myPages = [
     PageItem(title: "الكل", page: EverydaylifeAll()),
 
-    PageItem(
-      title: "مأكولات ومشروبات",
-      page: const Center(child: Text("مأكولات ومشروبات")),
-    ),
+    PageItem(title: "مأكولات ومشروبات", page: EverydaylifeAll()),
 
-    PageItem(
-      title: "الصحة والدواء",
-      page: const Center(child: Text("الصحة والدواء")),
-    ),
+    PageItem(title: "الصحة والدواء", page: EverydaylifeAll()),
 
-    PageItem(
-      title: "منتجات العناية",
-      page: const Center(child: Text("منتجات العناية")),
-    ),
+    PageItem(title: "منتجات العناية", page: EverydaylifeAll()),
 
-    PageItem(
-      title: "منتجات التنظيف",
-      page: const Center(child: Text("منتجات التنظيف")),
-    ),
+    PageItem(title: "منتجات التنظيف", page: EverydaylifeAll()),
 
-    PageItem(
-      title: "أدوات مكتبية ",
-      page: const Center(child: Text("أدوات مكتبية وقرطاسية")),
-    ),
+    PageItem(title: "أدوات مكتبية ", page: EverydaylifeAll()),
   ];
 
-  /// القسم المختار
-  String selectedText = "الكل";
+
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<DailyLifeProvider>(context);
     return Directionality(
       textDirection: TextDirection.rtl,
 
@@ -63,16 +52,23 @@ class _EverydaylifepageState extends State<Everydaylifepage> {
 
             children: [
               /// الهيدر
-              CustomHeader(title: "الحياة اليومية"),
+              CustomHeader(title: "الحياة اليومية",
+                onBack: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (_) => Department()),
+                  );
+                },
+              ),
 
               SizedBox(height: 20.h),
 
               /// البحث
               Center(
                 child: CustomSearchBar(
+                  controller: searchController,
                   hintText: "ابحث عن المنتجات التي تريدها...",
-                  isRecording: false,
-                  onMicPressed: () {},
+                  
                   onFilterPressed: () {},
                 ),
               ),
@@ -99,13 +95,11 @@ class _EverydaylifepageState extends State<Everydaylifepage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children:
                         myPages.take(3).map((item) {
-                          bool isSelected = selectedText == item.title;
+                         bool isSelected = provider.selectedText == item.title;
 
                           return GestureDetector(
                             onTap: () {
-                              setState(() {
-                                selectedText = item.title;
-                              });
+                              provider.selectCategory(item.title);
                             },
 
                             child: Container(
@@ -151,13 +145,11 @@ class _EverydaylifepageState extends State<Everydaylifepage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children:
                         myPages.skip(3).take(3).map((item) {
-                          bool isSelected = selectedText == item.title;
+                          bool isSelected = provider.selectedText == item.title;
 
                           return GestureDetector(
                             onTap: () {
-                              setState(() {
-                                selectedText = item.title;
-                              });
+                             provider.selectCategory(item.title);
                             },
 
                             child: Container(
@@ -200,7 +192,7 @@ class _EverydaylifepageState extends State<Everydaylifepage> {
               SizedBox(height: 20.h),
               Expanded(
                 child: DynamicSelectedPage(
-                  selectedText: selectedText,
+                  selectedText: provider.selectedText,
                   items: myPages,
                 ),
               ),

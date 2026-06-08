@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:t_1app/SearchSett.dart';
+import 'package:t_1app/screens/department.dart';
 import 'package:t_1app/widgets/SelectedPage.dart';
-import 'package:t_1app/widgets/MakeupAndClothes_all.dart';
 import 'package:t_1app/widgets/Technology_all.dart';
 import 'package:t_1app/widgets/header.dart';
+import 'package:provider/provider.dart';
+import 'package:t_1app/providers/technology_provider.dart';
 
 class Technologypage extends StatefulWidget {
   const Technologypage({super.key});
@@ -15,40 +17,41 @@ class Technologypage extends StatefulWidget {
 }
 
 class _TechnologypageState extends State<Technologypage> {
+    final TextEditingController searchController = TextEditingController();
+
   /// الصفحات الديناميكية
   final List<PageItem> myPages = [
     PageItem(title: "الكل", page: TechnologyAll()),
 
     PageItem(
       title: "هواتف ذكية",
-      page: const Center(child: Text("هواتف ذكية")),
+     page: TechnologyAll(),
     ),
 
     PageItem(
       title: "اجهزة كمبيوتر ولابتوب",
-      page: const Center(child: Text("اجهزة كمبيوتر ولابتوب")),
+      page: TechnologyAll(),
     ),
 
     PageItem(
-      title: "اجهزة لوحية",
-      page: const Center(child: Text("اجهزة لوحية")),
+      title: "اجهزة لوحية", page: TechnologyAll(),
     ),
 
     PageItem(
       title: "اجهزة صوت وصورة",
-      page: const Center(child: Text("اجهزة صوت وصورة")),
+      page: TechnologyAll(),
     ),
 
     PageItem(
       title: "ملحقات واكسسوارات",
-      page: const Center(child: Text("ملحقات واكسسوارات")),
+      page: TechnologyAll(),
     ),
   ];
 
-  /// القسم المختار
-  String selectedText = "الكل";
+
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<TechnologyProvider>(context);
     return Directionality(
       textDirection: TextDirection.rtl,
 
@@ -63,16 +66,26 @@ class _TechnologypageState extends State<Technologypage> {
 
             children: [
               /// الهيدر
-              CustomHeader(title: "التكنولوجيا"),
+              CustomHeader(title: "التكنولوجيا",
+                onBack: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (_) => Department()),
+                  );
+                },
+              ),
 
               SizedBox(height: 20.h),
 
               /// البحث
               Center(
                 child: CustomSearchBar(
+                  controller: searchController,
                   hintText: "ابحث عن المنتجات التي تريدها...",
-                  isRecording: false,
-                  onMicPressed: () {},
+                  onChanged: (value) {
+                    provider.updateSearch(value);
+                  },
+                 
                   onFilterPressed: () {},
                 ),
               ),
@@ -99,13 +112,11 @@ class _TechnologypageState extends State<Technologypage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children:
                         myPages.take(3).map((item) {
-                          bool isSelected = selectedText == item.title;
+                         bool isSelected = provider.selectedText == item.title;
 
                           return GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                selectedText = item.title;
-                              });
+                           onTap: () {
+                              provider.selectCategory(item.title);
                             },
 
                             child: Container(
@@ -151,13 +162,11 @@ class _TechnologypageState extends State<Technologypage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children:
                         myPages.skip(3).take(3).map((item) {
-                          bool isSelected = selectedText == item.title;
+                          bool isSelected = provider.selectedText == item.title;
 
                           return GestureDetector(
                             onTap: () {
-                              setState(() {
-                                selectedText = item.title;
-                              });
+                              provider.selectCategory(item.title);
                             },
 
                             child: Container(
@@ -200,9 +209,9 @@ class _TechnologypageState extends State<Technologypage> {
               SizedBox(height: 20.h),
               Expanded(
                 child: DynamicSelectedPage(
-                  selectedText: selectedText,
+                  selectedText: provider.selectedText,
                   items: myPages,
-                ),
+                )
               ),
             ],
           ),

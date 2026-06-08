@@ -5,16 +5,17 @@ import 'package:google_fonts/google_fonts.dart';
 class CustomSearchBar extends StatelessWidget {
   final String hintText;
   final Function(String)? onChanged;
-  final bool isRecording;
-  final VoidCallback onMicPressed;
+  final TextEditingController controller;
+  
   final VoidCallback onFilterPressed;
+
 
   const CustomSearchBar({
     super.key,
     required this.hintText,
     this.onChanged,
-    required this.isRecording,
-    required this.onMicPressed,
+    required this.controller,
+   
     required this.onFilterPressed,
   });
 
@@ -42,6 +43,7 @@ class CustomSearchBar extends StatelessWidget {
                 SizedBox(width: 8.w),
                 Expanded(
                   child: TextField(
+                    controller: controller,
                     onChanged: onChanged,
                     decoration: InputDecoration(
                       hintText: hintText, //  صار متغير
@@ -54,17 +56,7 @@ class CustomSearchBar extends StatelessWidget {
                     ),
                   ),
                 ),
-                SizedBox(
-                  width: 24.w,
-                  height: 24.h,
-                  child: IconButton(
-                    icon: Icon(
-                      isRecording ? Icons.stop : Icons.mic,
-                      color: const Color(0xff000000),
-                    ),
-                    onPressed: onMicPressed,
-                  ),
-                ),
+                
               ],
             ),
           ),

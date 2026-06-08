@@ -7,7 +7,8 @@ import 'package:t_1app/SearchSett.dart';
 import 'package:t_1app/widgets/SelectedPage.dart';
 import 'package:t_1app/widgets/UniqeAll.dart';
 import 'package:t_1app/widgets/header.dart';
-import 'package:record/record.dart';
+import 'package:provider/provider.dart';
+import 'package:t_1app/providers/uniqe_product_provider.dart';
 
 class Uniqeproduct extends StatefulWidget {
   const Uniqeproduct({super.key});
@@ -16,49 +17,23 @@ class Uniqeproduct extends StatefulWidget {
   State<Uniqeproduct> createState() => _UniqeproductState();
 }
 
-
-
 class _UniqeproductState extends State<Uniqeproduct> {
+  final TextEditingController searchController = TextEditingController();
+
   ///  الصفحات الديناميكية
   final List<PageItem> myPages = [
     PageItem(title: "الكل", page: Uniqeall()),
-    PageItem(title: "كوزمتكس", page: Center(child: Text("كوزمتكس"))),
-    PageItem(
-      title: "ادوات الكترونية",
-      page: Center(child: Text("دوات الكترونية")),
-    ),
-    PageItem(title: "ملابس", page: Center(child: Text("ملابس"))),
+    PageItem(title: "كوزمتكس", page: Uniqeall()),
+    PageItem(title: "ادوات الكترونية", page: Uniqeall()),
+    PageItem(title: "ملابس", page: Uniqeall()),
   ];
-  final Record recorder = Record();
-  bool isRecording = false;
-  Future<void> startRecording() async {
-    if (await recorder.hasPermission()) {
-      await recorder.start(
-        path: 'recording.m4a',
-        encoder: AudioEncoder.aacLc,
-        bitRate: 128000,
-        samplingRate: 44100,
-      );
+  
 
-      setState(() {
-        isRecording = true;
-      });
-    }
-  }
-
-  Future<void> stopRecording() async {
-    final path = await recorder.stop();
-
-    print("تم حفظ التسجيل في: $path");
-
-    setState(() {
-      isRecording = false;
-    });
-  }
+ 
 
   @override
   void dispose() {
-    recorder.dispose();
+    
     super.dispose();
   }
 
@@ -68,11 +43,13 @@ class _UniqeproductState extends State<Uniqeproduct> {
     super.initState();
   }
 
-  String selectedText = "الكل";
+
 
   @override
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<UniqeProductProvider>(context, listen: false);
+    
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
@@ -88,7 +65,7 @@ class _UniqeproductState extends State<Uniqeproduct> {
                 onBack: () {
                   Navigator.of(
                     context,
-                  ).push(MaterialPageRoute(builder: (context) => Homepage()));
+                  ).pushReplacement(MaterialPageRoute(builder: (context) => Homepage()));
                 },
               ),
 
@@ -96,22 +73,18 @@ class _UniqeproductState extends State<Uniqeproduct> {
 
               /// SEARCH
               CustomSearchBar(
+                controller: searchController,
                 hintText: "ابحث عن المنتجات التي تريدها...",
-                isRecording: isRecording,
-                onMicPressed: () async {
-                  if (isRecording) {
-                    await stopRecording();
-                  } else {
-                    await startRecording();
-                  }
-                },
+                
                 onFilterPressed: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => Uniqeproduct()),
                   );
                 },
-                onChanged: (value) {},
+                onChanged: (value) {
+                  provider.searchProducts(value);
+                },
               ),
 
               SizedBox(height: 20.h),
@@ -155,7 +128,7 @@ class _UniqeproductState extends State<Uniqeproduct> {
               /// الصفحات
               Expanded(
                 child: DynamicSelectedPage(
-                  selectedText: selectedText,
+                  selectedText: provider.selectedText,
                   items: myPages,
                 ),
               ),
@@ -168,12 +141,12 @@ class _UniqeproductState extends State<Uniqeproduct> {
 
   ///  CHIP
   Widget chip(String text) {
+    final provider = Provider.of<UniqeProductProvider>(context);
+
     return InkWell(
       borderRadius: BorderRadius.circular(18.r),
       onTap: () {
-        setState(() {
-          selectedText = text;
-        });
+        provider.selectCategory(text);
       },
       child: Container(
         width: 100.w,
@@ -181,9 +154,15 @@ class _UniqeproductState extends State<Uniqeproduct> {
         margin: EdgeInsets.only(left: 8.w),
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          color: selectedText == text ? Color(0xffF57C00) : Colors.transparent,
+          color:
+              provider.selectedText == text
+                  ? const Color(0xffF57C00)
+                  : Colors.transparent,
           border: Border.all(
-            color: selectedText == text ? Color(0xffF57C00) : Color(0xff919191),
+            color:
+                provider.selectedText == text
+                    ? const Color(0xffF57C00)
+                    : const Color(0xff919191),
           ),
           borderRadius: BorderRadius.circular(18.r),
         ),

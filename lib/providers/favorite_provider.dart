@@ -1,18 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:t_1app/models/UniqeProduct_model.dart';
 
 class FavoriteProvider extends ChangeNotifier {
-  List<ProductU1> favorites = [];
+  final List<dynamic> _favoriteProducts = [];
 
-  void toggleFavorite(ProductU1 product) {
-    if (favorites.contains(product)) {
-      favorites.remove(product);
-      product.isFavorite = false;
-    } else {
-      favorites.add(product);
-      product.isFavorite = true;
+  List<dynamic> get favoriteProducts => _favoriteProducts;
+
+  void addToFavorite(dynamic product) {
+    if (!_favoriteProducts.contains(product)) {
+      _favoriteProducts.add(product);
+
+      notifyListeners();
     }
+  }
+
+  void removeFromFavorite(dynamic product) {
+    _favoriteProducts.remove(product);
 
     notifyListeners();
+  }
+
+  bool isFavorite(dynamic product) {
+    return _favoriteProducts.contains(product);
   }
 }

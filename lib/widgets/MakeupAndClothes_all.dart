@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:t_1app/models/home_world_model.dart';
 import 'package:t_1app/models/makeupandclothes_model.dart';
 import 'package:t_1app/screens/productDetails.dart';
 import 'package:t_1app/widgets/Home_widget/product_card_widget.dart';
+import 'package:provider/provider.dart';
+import 'package:t_1app/providers/fashion_provider.dart';
 
 class MakeupandclothesAll extends StatefulWidget {
   const MakeupandclothesAll({super.key});
@@ -14,13 +15,29 @@ class MakeupandclothesAll extends StatefulWidget {
 
 class _MakeupandclothesAllState extends State<MakeupandclothesAll> {
   @override
+  @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<FashionProvider>(context);
+
+    final filteredProducts =
+        Makeupandclothes.where((item) {
+          final matchesCategory =
+              provider.selectedText == "الكل" ||
+              item.category == provider.selectedText;
+
+          final matchesSearch =
+              provider.searchText.isEmpty ||
+              item.product.productName.contains(provider.searchText);
+
+          return matchesCategory && matchesSearch;
+        }).toList();
+
     return Directionality(
       textDirection: TextDirection.rtl,
 
       child: ListView.builder(
         padding: EdgeInsets.zero,
-        itemCount: (Makeupandclothes.length / 2).ceil(),
+        itemCount: (filteredProducts.length / 2).ceil(),
 
         itemBuilder: (context, rowIndex) {
           int firstIndex = rowIndex * 2;
@@ -31,7 +48,6 @@ class _MakeupandclothesAllState extends State<MakeupandclothesAll> {
 
             child: Row(
               children: [
-                /// الكارد الاول
                 Expanded(
                   child: GestureDetector(
                     onTap: () {
@@ -43,14 +59,15 @@ class _MakeupandclothesAllState extends State<MakeupandclothesAll> {
                       );
                     },
 
-                    child: ProductCard(product: Makeupandclothes[firstIndex]),
+                    child: ProductCard(
+                      product: filteredProducts[firstIndex].product,
+                    ),
                   ),
                 ),
 
                 SizedBox(width: 10.w),
 
-                /// الكارد الثاني
-                if (secondIndex < Makeupandclothes.length)
+                if (secondIndex < filteredProducts.length)
                   Expanded(
                     child: GestureDetector(
                       onTap: () {
@@ -63,7 +80,7 @@ class _MakeupandclothesAllState extends State<MakeupandclothesAll> {
                       },
 
                       child: ProductCard(
-                        product: Makeupandclothes[secondIndex],
+                        product: filteredProducts[secondIndex].product,
                       ),
                     ),
                   ),

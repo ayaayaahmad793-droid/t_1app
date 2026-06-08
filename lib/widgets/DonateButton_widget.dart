@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'package:t_1app/models/goodnees_model.dart';
+import 'package:t_1app/providers/donation_provider.dart';
 import 'package:t_1app/screens/AccountType.dart';
 import 'package:t_1app/screens/Donate_money_page.dart';
 import 'package:t_1app/widgets/AddExchangeItem.dart';
 
 class DonateButton extends StatefulWidget {
-  final Function(DonateCardModel) onAddDonation;
-
-  const DonateButton({super.key, required this.onAddDonation});
+  const DonateButton({super.key});
 
   @override
   State<DonateButton> createState() => _DonateButtonState();
@@ -65,6 +65,7 @@ class _DonateButtonState extends State<DonateButton> {
                     InkWell(
                       onTap: () {
                         overlayEntry?.remove();
+                        overlayEntry = null;
 
                         setState(() {
                           isOpen = false;
@@ -72,11 +73,13 @@ class _DonateButtonState extends State<DonateButton> {
 
                         Navigator.pushReplacement(
                           context,
-                          MaterialPageRoute(builder: (_) => DonateMoneyPage()),
+                          MaterialPageRoute(
+                            builder: (_) => const DonateMoneyPage(),
+                          ),
                         );
                       },
                       child: Padding(
-                        padding: EdgeInsets.symmetric(vertical: 16),
+                        padding: const EdgeInsets.symmetric(vertical: 16),
                         child: Center(
                           child: Text(
                             "التبرع بالمال",
@@ -89,7 +92,7 @@ class _DonateButtonState extends State<DonateButton> {
                       ),
                     ),
 
-                    Divider(height: 1, color: Colors.grey),
+                    const Divider(height: 1, color: Colors.grey),
 
                     InkWell(
                       onTap: () {
@@ -100,12 +103,17 @@ class _DonateButtonState extends State<DonateButton> {
                           isOpen = false;
                         });
 
+                        final donationProvider =
+                            context.read<DonationProvider>();
+
                         showDialog(
                           context: context,
                           builder:
                               (_) => AddProductDialog(
+                                title1: "قم بإضافة البيانات المطلوبة لتتم",
+                                title2: "إضافة منتجك للتبرع",
                                 onAdd: (item) {
-                                  widget.onAddDonation(
+                                  donationProvider.addDonation(
                                     DonateCardModel(
                                       title: item.title,
                                       subTitle: item.description,
@@ -113,17 +121,12 @@ class _DonateButtonState extends State<DonateButton> {
                                       page: Accounttype(),
                                     ),
                                   );
-
-                                  //   Navigator.pop(context);
                                 },
-
-                                title1: "قم بإضافة البيانات المطلوبة لتتم",
-                                title2: "إضافة منتجك للتبرع",
                               ),
                         );
                       },
                       child: Padding(
-                        padding: EdgeInsets.symmetric(vertical: 16),
+                        padding: const EdgeInsets.symmetric(vertical: 16),
                         child: Center(
                           child: Text(
                             "التبرع بالمنتجات",

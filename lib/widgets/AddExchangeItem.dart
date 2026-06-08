@@ -236,7 +236,9 @@ class _AddProductDialogState extends State<AddProductDialog> {
                             descController.text.isEmpty ||
                             selectedImage == null) {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text("يرجى تعبئة جميع الحقول")),
+                            const SnackBar(
+                              content: Text("يرجى تعبئة جميع الحقول"),
+                            ),
                           );
                           return;
                         }
@@ -247,26 +249,32 @@ class _AddProductDialogState extends State<AddProductDialog> {
                           image: selectedImage!.path,
                         );
 
-                        widget.onAdd(newItem);
-
-                        final navigator = Navigator.of(
-                          context,
-                          rootNavigator: true,
-                        );
-
-                        Navigator.pop(context);
-
-                        await Future.delayed(Duration(milliseconds: 200));
+                       widget.onAdd(newItem);
 
                         showDialog(
-                          context: navigator.context,
+                          context: context,
                           barrierDismissible: false,
-                          builder: (context) => buildSuccessDialog(),
+                          builder: (_) => buildSuccessDialog(),
                         );
 
-                        await Future.delayed(Duration(seconds: 2));
+                        await Future.delayed(const Duration(seconds: 2));
 
-                        navigator.pop();
+                        if (mounted) {
+                          Navigator.of(
+                            context,
+                            rootNavigator: true,
+                          ).pop(); // يغلق النجاح
+                          Navigator.of(
+                            context,
+                            rootNavigator: true,
+                          ).pop(); // يغلق الإضافة
+                        }
+
+                        await Future.delayed(const Duration(seconds: 2));
+
+                        if (mounted) {
+                          Navigator.of(context, rootNavigator: true).pop();
+                        }
                       },
                       child: Text(
                         "تأكيد الطلب",

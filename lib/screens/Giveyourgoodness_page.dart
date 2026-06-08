@@ -1,43 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:t_1app/models/goodnees_model.dart';
+import 'package:provider/provider.dart';
+import 'package:t_1app/providers/donation_provider.dart';
+import 'package:t_1app/screens/department.dart';
 import 'package:t_1app/widgets/DonateButton_widget.dart';
 import 'package:t_1app/widgets/goodness_card_widget.dart';
 import 'package:t_1app/widgets/header.dart';
 
-class GiveyourgoodnessPage extends StatefulWidget {
+class GiveyourgoodnessPage extends StatelessWidget {
   const GiveyourgoodnessPage({super.key});
 
   @override
-  State<GiveyourgoodnessPage> createState() => _GiveyourgoodnessPageState();
-}
-
-class _GiveyourgoodnessPageState extends State<GiveyourgoodnessPage> {
-  List<DonateCardModel> donateList = [];
-
-  @override
-  void initState() {
-    super.initState();
-
-    donateList = List.from(donateCards);
-  }
-
-  void addNewDonation(DonateCardModel item) {
-    setState(() {
-      donateList.insert(0, item);
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final donationProvider = context.watch<DonationProvider>();
+
+    print("LIST LENGTH = ${donationProvider.donateList.length}");
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
         backgroundColor: const Color(0xffFFFFFF),
         body: Column(
           children: [
-            CustomHeader(title: "قدم خيرك"),
+            CustomHeader(title: "قدم خيرك",
+              onBack: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (_) => Department()),
+                );
+              },
+            ),
 
             SizedBox(height: 20.h),
 
@@ -50,6 +42,7 @@ class _GiveyourgoodnessPageState extends State<GiveyourgoodnessPage> {
                 ),
               ),
             ),
+
             SizedBox(height: 5.h),
 
             Center(
@@ -61,18 +54,20 @@ class _GiveyourgoodnessPageState extends State<GiveyourgoodnessPage> {
                 ),
               ),
             ),
+
             SizedBox(height: 15.h),
 
-            DonateButton(onAddDonation: addNewDonation),
+            DonateButton(),
+           
 
             SizedBox(height: 15.h),
 
             Expanded(
               child: ListView.builder(
                 padding: EdgeInsets.zero,
-                itemCount: donateList.length,
+                itemCount: donationProvider.donateList.length,
                 itemBuilder: (context, index) {
-                  final card = donateList[index];
+                  final card = donationProvider.donateList[index];
 
                   return Padding(
                     padding: EdgeInsets.only(bottom: 10.h),

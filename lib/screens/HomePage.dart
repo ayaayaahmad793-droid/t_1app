@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:record/record.dart';
+import 'package:t_1app/providers/homeworld_provider.dart';
 import 'package:t_1app/screens/CartPage.dart';
 import 'package:t_1app/screens/Notification_Page.dart';
-import 'package:t_1app/screens/OrderDetails_page.dart';
+import 'package:t_1app/screens/exchangePage.dart';
+import 'package:t_1app/widgets/EverydayLife_all.dart';
+import 'package:t_1app/widgets/HomeWorld_all.dart';
 import 'package:t_1app/widgets/Home_widget/HomeBanner.dart';
 import 'package:t_1app/screens/FavPage.dart';
 import 'package:t_1app/screens/department.dart';
@@ -14,7 +16,9 @@ import 'package:t_1app/widgets/SelectedPage.dart';
 import 'package:t_1app/widgets/NavigationBar.dart';
 import 'package:t_1app/widgets/category_chip.dart';
 import 'package:t_1app/widgets/home_header.dart';
-import 'package:t_1app/models/Home_all_model/product_model.dart';
+import 'package:provider/provider.dart';
+import 'package:t_1app/providers/home_product_provider.dart';
+import 'package:t_1app/providers/daily_life_provider.dart';
 
 class Homepage extends StatefulWidget {
   final String userName;
@@ -37,86 +41,41 @@ class _HomepageState extends State<Homepage> {
 
   String selectedText = "الكل";
 
-  final Record recorder = Record();
-
-  bool isRecording = false;
-
-  /// المفضلة
-  List<Product> favoriteProducts = [];
-
-  /// المنتجات
-  List<Product> products = [
-    Product(
-      productName: "product name",
-      price: 4.999,
-      oldPrice: 9.999,
-      productImage: "images/hp1.png",
-      evaluation: 4.3,
-      shopName: "shop name",
-    ),
-
-    Product(
-      productName: "product name",
-      price: 4.999,
-      oldPrice: 9.999,
-      productImage: "images/hp1.png",
-      evaluation: 4.3,
-      shopName: "shop name",
-    ),
-  ];
-
-  List<Product> filteredProducts = [];
+ 
+  final TextEditingController searchController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
 
-    filteredProducts = products;
-
     myPages = [
       PageItem(title: "الكل", page: Htheall()),
 
-      PageItem(title: "عالم البيت", page: Center(child: Text("عالم البيت"))),
+      PageItem(title: "عالم البيت", page: HomeworldAll()),
 
       PageItem(title: "عالم الخير", page: Center(child: Text("عالم الخير"))),
 
-      PageItem(title: "الحياة", page: Center(child: Text("الحياة"))),
+      PageItem(title: "الحياة اليومية", page: EverydaylifeAll()),
     ];
   }
 
-  Future<void> startRecording() async {
-    if (await recorder.hasPermission()) {
-      await recorder.start(
-        path: 'recording.m4a',
-        encoder: AudioEncoder.aacLc,
-        bitRate: 128000,
-        samplingRate: 44100,
-      );
+ 
 
-      setState(() {
-        isRecording = true;
-      });
-    }
-  }
-
-  Future<void> stopRecording() async {
-    final path = await recorder.stop();
-
-    print("تم حفظ التسجيل في: $path");
-
-    setState(() {
-      isRecording = false;
-    });
-  }
+ 
 
   @override
   void dispose() {
-    recorder.dispose();
+   
+    searchController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final productProvider = Provider.of<HomeProductProvider>(
+      context,
+      listen: false,
+    );
     return Directionality(
       textDirection: TextDirection.rtl,
 
@@ -192,35 +151,28 @@ class _HomepageState extends State<Homepage> {
                 /// SEARCH
                 CustomSearchBar(
                   hintText: "ابحث عن منتجات...",
-
-                  isRecording: isRecording,
-
-                  onMicPressed: () async {
-                    if (isRecording) {
-                      await stopRecording();
-                    } else {
-                      await startRecording();
-                    }
-                  },
+                  controller: searchController,
+                 
 
                   onFilterPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(
-                        builder: (context) => OrderDetailsPage(),
-                      ),
+                      MaterialPageRoute(builder: (context) => Exchange()),
                     );
                   },
 
-                  onChanged: (value) {
-                    setState(() {
-                      filteredProducts =
-                          products.where((product) {
-                            return product.productName.toLowerCase().contains(
-                              value.toLowerCase(),
-                            );
-                          }).toList();
-                    });
+                 onChanged: (value) {
+                    if (selectedText == "الكل") {
+                      context.read<HomeProductProvider>().searchProducts(value);
+                    }
+
+                    if (selectedText == "عالم البيت") {
+                      context.read<HomeworldProvider>().updateSearch(value);
+                    }
+
+                    if (selectedText == "الحياة اليومية") {
+                      context.read<DailyLifeProvider>().updateSearch(value);
+                    }
                   },
                 ),
 

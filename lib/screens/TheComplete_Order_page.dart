@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:t_1app/models/Button_Model.dart';
 import 'package:t_1app/screens/AccountType.dart';
 import 'package:t_1app/screens/AddNewCardPage.dart';
+import 'package:t_1app/screens/CartPage.dart';
 import 'package:t_1app/screens/track_location_page.dart';
 import 'package:t_1app/widgets/AddNewAddress_widget.dart';
 import 'package:t_1app/widgets/Button.dart';
@@ -42,7 +43,14 @@ class _ThecompleteOrderPageState extends State<ThecompleteOrderPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             /// الهيدر
-            CustomHeader(title: "اتمام الطلب"),
+            CustomHeader(title: "اتمام الطلب",
+              onBack: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (_) => Cartpage()),
+                );
+              },
+            ),
 
             SizedBox(height: 20.h),
 

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:t_1app/Rest_App_Screens/Pesron.dart';
 import 'package:t_1app/screens/CartPage.dart';
 import 'package:t_1app/screens/HomePage.dart';
 import 'package:t_1app/screens/FavPage.dart';
@@ -112,9 +113,17 @@ class _DepartmentState extends State<Department> {
                 break;
 
               case 3:
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (_) => Department()),
+                );
                 break;
 
               case 4:
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (_) => ProfileScreen()),
+                );
                 break;
             }
           },

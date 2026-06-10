@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:t_1app/Rest_App_Screens/Pesron.dart';
 import 'package:t_1app/providers/homeworld_provider.dart';
 import 'package:t_1app/screens/CartPage.dart';
 import 'package:t_1app/screens/Notification_Page.dart';
@@ -117,6 +118,10 @@ class _HomepageState extends State<Homepage> {
                 break;
 
               case 4:
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (_) => ProfileScreen()),
+                );
                 break;
             }
           },

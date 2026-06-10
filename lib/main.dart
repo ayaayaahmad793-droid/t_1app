@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:get/get.dart';
 import 'package:t_1app/providers/daily_life_provider.dart';
 import 'package:t_1app/providers/donate_page_provider.dart';
 import 'package:t_1app/providers/donation_provider.dart';
@@ -69,7 +69,7 @@ class MyApp extends StatelessWidget {
       minTextAdapt: true,
       splitScreenMode: true,
       builder: (context, child) {
-        return MaterialApp(
+        return GetMaterialApp(
           debugShowCheckedModeBanner: false,
           locale: const Locale("ar"),
 

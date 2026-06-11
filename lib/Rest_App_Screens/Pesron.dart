@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:t_1app/Rest_App_Screens/Person_Controller.dart';
 import 'package:t_1app/screens/CartPage.dart';
 import 'package:t_1app/screens/FavPage.dart';
@@ -26,14 +28,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
-        leading: const IconButton(
-            onPressed: null,
-            icon: Icon(Icons.arrow_back_ios, color: Colors.black)
-        ),
-        title: const Text(
+        automaticallyImplyLeading: false,
+        // leading: const IconButton(
+        //     onPressed: null,
+        //     icon: Icon(Icons.arrow_back_ios, color: Colors.black)
+        // ),
+        actions: [
+          IconButton(
+            icon: Directionality(
+              textDirection: TextDirection.ltr,
+                child: Icon(Icons.arrow_back_ios)),
+            onPressed: () => Get.back(),
+          ),
+        ],
+        title:  Text(
           "الحساب الشخصي",
-          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 30),
-        ),
+          style: GoogleFonts.cairo(
+            fontWeight: FontWeight.w600,
+            fontSize: 22.sp,
+          ),        ),
         centerTitle: true,
       ),
       body: Padding(
@@ -55,7 +68,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(controller.userName.value, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                        Text(controller.userName.value,
+                          style: GoogleFonts.cairo(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 16.sp,
+                    ),
+                        ),
                         Text(controller.userEmail.value, style: const TextStyle(color: Colors.grey)),
                         Text(controller.userPhone.value, style: const TextStyle(color: Colors.grey)),
                       ],
@@ -85,7 +103,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         children: [
                           const Icon(Icons.notifications_none),
                           const SizedBox(width: 10),
-                          const Text("الاشعارات"),
+                           Text("الاشعارات" ,
+                            style: GoogleFonts.cairo(
+                          fontWeight: FontWeight.w600,
+                            fontSize: 16.sp,
+                          ),),
                           const Spacer(),
                           Text(controller.isNotificationsEnabled.value ? "مفعلة" : "غير مفعلة", style: const TextStyle(color: Colors.grey)),
                           Switch(
@@ -170,7 +192,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         onTap: onTap,
         child: Row(
           children: [
-            Expanded(child: Text(title, style: TextStyle(fontWeight: FontWeight.bold, color: color, fontSize: 18))),
+            Expanded(child: Text(title, style: GoogleFonts.cairo(fontWeight: FontWeight.bold, color: color, fontSize: 16))),
             Directionality(
                 textDirection: TextDirection.ltr,
                 child: Icon(icon, size: 23, color: color)),

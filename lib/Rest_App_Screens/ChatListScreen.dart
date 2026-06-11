@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:t_1app/Rest_App_Screens/ChatController.dart';
 import 'package:t_1app/Rest_App_Screens/ChatDetailsScreen.dart';
 
@@ -23,10 +25,9 @@ class ChatListScreen extends StatelessWidget {
         ),
         title: Text(
           "الرسائل",
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-            fontSize: 30,
+          style: GoogleFonts.cairo(
+            fontWeight: FontWeight.w600,
+            fontSize: 22.sp,
           ),
         ),
         centerTitle: true,
@@ -67,15 +68,15 @@ class ChatListScreen extends StatelessWidget {
                   ),
                   title: Text(
                     chat["name"].toString(),
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    style: GoogleFonts.cairo(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                   subtitle: Text(
                     chat["message"].toString(),
-                    style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+                    style: GoogleFonts.cairo(fontSize: 13, color: Colors.grey[600]),
                   ),
                   trailing: Text(
                     chat["time"].toString(),
-                    style: TextStyle(fontSize: 12, color: Colors.grey),
+                    style: GoogleFonts.cairo(fontSize: 11, color: Colors.grey),
                   ),
                   onTap: () => Get.to(() => ChatDetailsScreen(
                     chatId: chat["id"].toString(),

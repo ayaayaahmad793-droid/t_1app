@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:t_1app/Rest_App_Screens/ChatController.dart';
 
 class ChatDetailsScreen extends StatelessWidget {
@@ -29,8 +30,8 @@ class ChatDetailsScreen extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(name, style: TextStyle(color: Colors.black, fontSize: 16)),
-                Text("نشط الآن", style: TextStyle(color: Colors.grey, fontSize: 12)),
+                Text(name, style: GoogleFonts.cairo(color: Colors.black, fontSize: 16)),
+                Text("نشط الآن", style: GoogleFonts.cairo(color: Colors.grey, fontSize: 12)),
               ],
             ),
           ],

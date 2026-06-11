@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:t_1app/screens/Log.dart';
 
 class PersonController extends GetxController {
   // بيانات المستخدم (يمكن استبدالها ببيانات حقيقية من API لاحقاً)
@@ -16,7 +17,6 @@ class PersonController extends GetxController {
 
   // دالة تسجيل الخروج
   void logout() {
-    // ضعي هنا كود تسجيل الخروج (مثل حذف التوكن أو الانتقال لصفحة الدخول)
-    Get.offAllNamed('/login'); // مثال
+    Get.off(()=>Log());
   }
 }

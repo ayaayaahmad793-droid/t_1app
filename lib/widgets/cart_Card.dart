@@ -2,16 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:t_1app/models/cart_model.dart';
+import 'package:provider/provider.dart';
+import 'package:t_1app/providers/cart_provider.dart';
 
 class CartCard extends StatefulWidget {
   final CartModel product;
-  final VoidCallback onQuantityChanged;
+  
 
   /// delete function
   final VoidCallback onDelete;
 
   const CartCard({super.key, required this.product, required this.onDelete,
-    required this.onQuantityChanged,
+   
   });
 
   @override
@@ -21,6 +23,7 @@ class CartCard extends StatefulWidget {
 class _CartCardState extends State<CartCard> {
   @override
   Widget build(BuildContext context) {
+    final cartProvider = Provider.of<CartProvider>(context, listen: false);
     return Dismissible(
       key: Key(widget.product.productName),
 
@@ -141,12 +144,8 @@ class _CartCardState extends State<CartCard> {
                           children: [
                             /// PLUS
                             GestureDetector(
-                             onTap: () {
-                                setState(() {
-                                  widget.product.quantity++;
-                                });
-
-                                widget.onQuantityChanged();
+                            onTap: () {
+                                cartProvider.increaseQuantity(widget.product);
                               },
                               child: Icon(Icons.add, size: 16.sp),
                             ),
@@ -161,13 +160,7 @@ class _CartCardState extends State<CartCard> {
                             /// MINUS
                             GestureDetector(
                              onTap: () {
-                                if (widget.product.quantity > 1) {
-                                  setState(() {
-                                    widget.product.quantity--;
-                                  });
-
-                                  widget.onQuantityChanged();
-                                }
+                                cartProvider.decreaseQuantity(widget.product);
                               },
                               child: Icon(Icons.remove, size: 16.sp),
                             ),

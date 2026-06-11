@@ -5,6 +5,8 @@ import 'package:t_1app/widgets/Notification_All_widget.dart';
 import 'package:t_1app/widgets/Notification_Card.dart';
 import 'package:t_1app/widgets/SelectedPage.dart';
 import 'package:t_1app/widgets/header.dart';
+import 'package:provider/provider.dart';
+import 'package:t_1app/providers/notification_provider.dart';
 
 class NotificationsPage extends StatefulWidget {
   const NotificationsPage({super.key});
@@ -17,24 +19,25 @@ class _NotificationsPageState extends State<NotificationsPage> {
   int selectedIndex = 0;
   late List<PageItem> myPages;
 
-  String selectedText = "الكل";
+ 
   void initState() {
     super.initState();
 
     myPages = [
       PageItem(title: "الكل", page: NotificationAllWidget()),
 
-      PageItem(title: "بيع", page: Center(child: Text("بيع"))),
+      PageItem(title: "بيع", page: NotificationAllWidget()),
 
-      PageItem(title: "شراء", page: Center(child: Text("شراء"))),
+      PageItem(title: "شراء", page: NotificationAllWidget()),
 
-      PageItem(title: "تبادل", page: Center(child: Text("تبادل"))),
-      PageItem(title: "تبرع", page: Center(child: Text("تبرع"))),
+      PageItem(title: "تبادل", page: NotificationAllWidget()),
+      PageItem(title: "تبرع", page: NotificationAllWidget()),
     ];
   }
 
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<NotificationProvider>(context);
     return Directionality(
       textDirection: TextDirection.rtl,
 
@@ -60,15 +63,12 @@ class _NotificationsPageState extends State<NotificationsPage> {
                 runSpacing: 10.h,
                 children:
                     myPages.map((item) {
-                      bool isSelected = selectedText == item.title;
+                      bool isSelected = provider.selectedCategory == item.title;
 
                       return GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            selectedText = item.title;
-                          });
+                       onTap: () {
+                          provider.selectCategory(item.title);
                         },
-
                         child: Container(
                           padding: EdgeInsets.symmetric(
                             horizontal: 18.w,
@@ -108,9 +108,9 @@ class _NotificationsPageState extends State<NotificationsPage> {
               SizedBox(height: 20.h),
               Expanded(
                 child: DynamicSelectedPage(
-                  selectedText: selectedText,
+                  selectedText: provider.selectedCategory,
                   items: myPages,
-                ),
+                )
               ),
 
               SizedBox(height: 25.h),

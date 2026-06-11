@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:t_1app/models/Button_Model.dart';
 import 'package:t_1app/models/cart_model.dart';
-import 'package:t_1app/screens/AccountType.dart';
 import 'package:t_1app/screens/FavPage.dart';
 import 'package:t_1app/screens/HomePage.dart';
 import 'package:t_1app/screens/TheComplete_Order_page.dart';
@@ -13,7 +12,8 @@ import 'package:t_1app/widgets/CouponWidget.dart';
 import 'package:t_1app/widgets/NavigationBar.dart';
 import 'package:t_1app/widgets/cart_Card.dart';
 import 'package:t_1app/widgets/header.dart';
-
+import 'package:provider/provider.dart';
+import 'package:t_1app/providers/cart_provider.dart';
 class Cartpage extends StatefulWidget {
   const Cartpage({super.key});
 
@@ -24,21 +24,13 @@ class Cartpage extends StatefulWidget {
 class _CartpageState extends State<Cartpage> {
   int _currentIndex = 2;
   final TextEditingController couponController = TextEditingController();
-  double get subtotal {
-    return cartProduct.fold(
-      0,
-      (sum, item) => sum + (item.productPrice * item.quantity),
-    );
-  }
+  
 
- final double deliveryFee = 30;
-
-  double get total {
-    return subtotal + deliveryFee;
-  }
+ 
 
   @override
   Widget build(BuildContext context) {
+    final cartProvider = Provider.of<CartProvider>(context);
     return Directionality(
       textDirection: TextDirection.rtl,
 
@@ -59,7 +51,7 @@ class _CartpageState extends State<Cartpage> {
 
               SizedBox(height: 20.h),
 
-              cartProduct.isEmpty
+              cartProvider.cartItems.isEmpty
                   ? Center(
                     child: Padding(
                       padding: EdgeInsets.only(top: 100.h),
@@ -79,24 +71,21 @@ class _CartpageState extends State<Cartpage> {
 
                     padding: EdgeInsets.zero,
 
-                    itemCount: cartProduct.length,
-
+                    itemCount: cartProvider.cartItems.length,
                     itemBuilder: (context, index) {
                       return Padding(
                         padding: EdgeInsets.only(bottom: 12.h),
 
                         child: CartCard(
-                          product: cartProduct[index],
+                          product: cartProvider.cartItems[index],
 
-                          onDelete: () {
-                            setState(() {
-                              cartProduct.removeAt(index);
-                            });
+                         onDelete: () {
+                            cartProvider.removeItem(
+                              cartProvider.cartItems[index],
+                            );
                           },
 
-                          onQuantityChanged: () {
-                            setState(() {});
-                          },
+                         
                         ),
                       );
                     },
@@ -132,7 +121,7 @@ class _CartpageState extends State<Cartpage> {
                       ),
                     ),
                     Text(
-                      "${subtotal.toStringAsFixed(2)}\$",
+                      "${cartProvider.subtotal.toStringAsFixed(2)}\$",
                       style: GoogleFonts.cairo(
                         fontWeight: FontWeight.w500,
                         fontSize: 16.sp,
@@ -156,7 +145,7 @@ class _CartpageState extends State<Cartpage> {
                       ),
                     ),
                     Text(
-                      "${deliveryFee.toStringAsFixed(2)}\$",
+                      "${cartProvider.deliveryFee.toStringAsFixed(2)}\$",
                       style: GoogleFonts.cairo(
                         fontWeight: FontWeight.w500,
                         fontSize: 16.sp,
@@ -186,7 +175,7 @@ class _CartpageState extends State<Cartpage> {
                       ),
                     ),
                     Text(
-                      "${total.toStringAsFixed(2)}\$",
+                      "${cartProvider.total.toStringAsFixed(2)}\$",
                       style: GoogleFonts.cairo(
                         fontWeight: FontWeight.w700,
                         fontSize: 16.sp,
@@ -210,9 +199,9 @@ class _CartpageState extends State<Cartpage> {
                           context,
                           MaterialPageRoute(
                             builder: (_) => ThecompleteOrderPage(
-  subtotal: subtotal,
-  deliveryFee: deliveryFee,
-  total: total,
+ subtotal: cartProvider.subtotal,
+                                  deliveryFee: cartProvider.deliveryFee,
+                                  total: cartProvider.total,
 ),
                           ),
                         );

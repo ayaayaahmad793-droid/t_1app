@@ -16,15 +16,6 @@ class _SearchBoxState extends State<SearchBox> {
 
   final TextEditingController controller = TextEditingController();
 
-  void onMicPressed() {
-    setState(() {
-      isRecording = !isRecording;
-    });
-
-    // لاحقاً يمكن إضافة voice recognition
-    print(isRecording ? "Recording..." : "Stopped");
-  }
-
   @override
   void dispose() {
     controller.dispose();
@@ -75,19 +66,6 @@ class _SearchBoxState extends State<SearchBox> {
                       color: const Color(0xff9A9A9A),
                       fontWeight: FontWeight.w400,
                     ),
-                  ),
-                ),
-              ),
-
-              // أيقونة المايك
-              Padding(
-                padding: EdgeInsets.only(left: 10.w),
-                child: GestureDetector(
-                  onTap: onMicPressed,
-                  child: Icon(
-                    isRecording ? Icons.stop : Icons.mic_none,
-                    size: 24.sp,
-                    color: Colors.black,
                   ),
                 ),
               ),

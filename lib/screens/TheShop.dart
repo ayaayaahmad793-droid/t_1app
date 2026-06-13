@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:t_1app/Rest_App_Screens/ChatListScreen.dart';
 import 'package:t_1app/TheProduct.dart';
 import 'package:t_1app/providers/shopData_provider.dart';
 import 'package:t_1app/widgets/stat_card.dart';
@@ -17,10 +18,9 @@ class Theshop extends StatefulWidget {
 }
 
 class _TheshopState extends State<Theshop> {
- 
   @override
   Widget build(BuildContext context) {
-     final provider =context.watch<ShopProvider>();
+    final provider = context.watch<ShopProvider>();
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
@@ -32,7 +32,7 @@ class _TheshopState extends State<Theshop> {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 /// 🔹 Header
-               ShopHeader(name: provider.name, image: provider.image),
+                ShopHeader(name: provider.name, image: provider.image),
                 SizedBox(height: 20.h),
 
                 /// 🔹 Statistics
@@ -87,7 +87,12 @@ class _TheshopState extends State<Theshop> {
                     GridItem(
                       title: "الرسائل",
                       icon: Icons.message,
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (_) => ChatListScreen()),
+                        );
+                      },
                     ),
                     GridItem(
                       title: "الاحصائيات",

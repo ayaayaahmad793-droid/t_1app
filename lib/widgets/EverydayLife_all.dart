@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:t_1app/models/Everydaylife_model.dart';
+import 'package:t_1app/screens/home_product_details.dart';
 import 'package:t_1app/screens/productDetails.dart';
 import 'package:t_1app/widgets/Home_widget/product_card_widget.dart';
 import 'package:provider/provider.dart';
@@ -14,7 +15,7 @@ class EverydaylifeAll extends StatefulWidget {
 }
 
 class _EverydaylifeAllState extends State<EverydaylifeAll> {
- @override
+  @override
   Widget build(BuildContext context) {
     final provider = Provider.of<DailyLifeProvider>(context);
 
@@ -54,7 +55,10 @@ class _EverydaylifeAllState extends State<EverydaylifeAll> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => ProductSliderPage(),
+                          builder:
+                              (context) => HomeProductDetails(
+                                product: filteredProducts[firstIndex].product,
+                              ),
                         ),
                       );
                     },
@@ -75,7 +79,11 @@ class _EverydaylifeAllState extends State<EverydaylifeAll> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => ProductSliderPage(),
+                            builder:
+                                (context) => HomeProductDetails(
+                                  product:
+                                      filteredProducts[secondIndex].product,
+                                ),
                           ),
                         );
                       },

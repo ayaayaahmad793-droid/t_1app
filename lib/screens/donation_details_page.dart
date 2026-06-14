@@ -1,28 +1,21 @@
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:t_1app/successDialog.dart';
-import 'package:t_1app/widgets/header.dart';
 
-class ProductDetailsPage extends StatefulWidget {
+class DonationDetailsPage extends StatelessWidget {
   final String title;
   final String description;
-  final List<String> images;
+  final String image;
 
-  const ProductDetailsPage({
+  const DonationDetailsPage({
     super.key,
     required this.title,
     required this.description,
-    required this.images,
+    required this.image,
   });
-
-  @override
-  State<ProductDetailsPage> createState() => _ProductDetailsPageState();
-}
-
-class _ProductDetailsPageState extends State<ProductDetailsPage> {
-  int currentIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -30,164 +23,126 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
       textDirection: TextDirection.rtl,
       child: Scaffold(
         backgroundColor: Colors.white,
-
-        body: Column(
-          children: [
-            CustomHeader(title: "تفاصيل المنتج"),
-            SizedBox(height: 15.h),
-            Expanded(
-              child: SingleChildScrollView(
-                child: Padding(
-                  padding: EdgeInsets.all(16.w),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      ///  Slider  (3 صور + الصورة بالنص بارزة)
-                      SizedBox(
-                        height: 260.h,
-                        child: PageView.builder(
-                          controller: PageController(viewportFraction: 0.65),
-                          itemCount: widget.images.length,
-                          onPageChanged: (index) {
-                            setState(() => currentIndex = index);
-                          },
-                          itemBuilder: (context, index) {
-                            final img = widget.images[index];
-                            final isActive = index == currentIndex;
-
-                            return AnimatedContainer(
-                              duration: Duration(milliseconds: 300),
-                              margin: EdgeInsets.symmetric(
-                                horizontal: 6.w,
-                                vertical: isActive ? 0 : 20.h,
-                              ),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(15.r),
-                                child:
-                                    img.startsWith('/')
-                                        ? Image.file(
-                                          File(img),
-                                          width: double.infinity,
-                                          fit: BoxFit.cover,
-                                        )
-                                        : Image.asset(
-                                          img,
-                                          width: double.infinity,
-                                          fit: BoxFit.cover,
-                                        ),
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-
-                      SizedBox(height: 35.h),
-
-                      /// العنوان + التعليقات
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            widget.title,
-                            style: GoogleFonts.cairo(
-                              fontSize: 16.sp,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                          Text(
-                            "(20 من التعليقات)",
-                            style: GoogleFonts.cairo(
-                              fontSize: 12.sp,
-                              color: Color(0xff4B4B4B),
-                            ),
-                          ),
-                        ],
-                      ),
-
-                      SizedBox(height: 20.h),
-
-                      /// الوصف
-                      Text(
-                        "الوصف",
-                        style: GoogleFonts.cairo(
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      SizedBox(height: 10.h),
-                      Text(
-                        "صندل مناسبات مزخرف وأنيق، استعملت مرة واحدة فقط، مقاس 38، وجاهز للاستخدام في أي مناسبة خاصة",
-                        style: GoogleFonts.cairo(
-                          fontSize: 14.sp,
-                          color: Color(0xff2B2B2B),
-                        ),
-                      ),
-
-                      SizedBox(height: 50.h),
-
-                      /// معلومات إضافية
-                      Row(
-                        children: [
-                          Image.asset("images/اشارة التبادل.png"),
-                          SizedBox(width: 5.w),
-                          Text(
-                            "اريد تبادله مع حذاء مريح بمقاس مشابه",
-                            style: GoogleFonts.cairo(fontSize: 16.sp),
-                          ),
-                        ],
-                      ),
-
-                      SizedBox(height: 10.h),
-
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.location_on_outlined,
-                            color: Color(0xff2E7D32),
-                            size: 25.sp,
-                          ),
-                          SizedBox(width: 5.w),
-                          Expanded(
-                            child: Text(
-                              "مكان التبادل : قطاع غزة _ دير البلح",
-                              style: GoogleFonts.cairo(fontSize: 16.sp),
-                            ),
-                          ),
-                        ],
-                      ),
-
-                      SizedBox(height: 110.h),
-
-                      /// زر
-                      SizedBox(
-                        width: double.infinity,
-                        height: 45.h,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            showExchangeDialog(context);
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Color(0xffF57C00),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8.r),
-                            ),
-                          ),
-                          child: Text(
-                            "أرغب بالتبادل",
-                            style: GoogleFonts.cairo(
-                              fontSize: 16.sp,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.black,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
+        body: SafeArea(
+          child: Padding(
+            padding: EdgeInsets.all(16.w),
+            child: Column(
+              children: [
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: IconButton(
+                    onPressed: () => Navigator.pop(context),
+                    icon: const Icon(Icons.arrow_forward_ios),
                   ),
                 ),
-              ),
+
+                SizedBox(height: 10.h),
+
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(20.r),
+                  child:
+                      image.startsWith('images/')
+                          ? Image.asset(
+                            image,
+                            width: 220.w,
+                            height: 220.h,
+                            fit: BoxFit.cover,
+                          )
+                          : Image.file(
+                            File(image),
+                            width: 220.w,
+                            height: 220.h,
+                            fit: BoxFit.cover,
+                          ),
+                ),
+
+                SizedBox(height: 25.h),
+
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: Text(
+                    title,
+                    style: GoogleFonts.cairo(
+                      fontSize: 18.sp,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+
+                SizedBox(height: 15.h),
+
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: Text(
+                    "الوصف",
+                    style: GoogleFonts.cairo(
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ),
+
+                SizedBox(height: 10.h),
+
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: Text(
+                    description,
+                    style: GoogleFonts.cairo(
+                      fontSize: 13.sp,
+                      color: const Color(0xff555555),
+                    ),
+                  ),
+                ),
+
+                SizedBox(height: 20.h),
+
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: Text(
+                    "ملاحظة: يرجى التواصل مع المتبرع للحصول على المنتج.",
+                    style: GoogleFonts.cairo(
+                      fontSize: 12.sp,
+                      color: Colors.grey,
+                    ),
+                  ),
+                ),
+
+                const Spacer(),
+
+                SizedBox(
+                  width: double.infinity,
+                  height: 50.h,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xffF27C00),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12.r),
+                      ),
+                    ),
+                    onPressed: () {
+                      showExchangeDialog(context);
+                    },
+                    child: Text(
+                      "طلب الحصول عليه",
+                      style: GoogleFonts.cairo(
+                        color: Colors.black,
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                ),
+
+                SizedBox(height: 10.h),
+
+                Text(
+                  "يتم استلام المنتج بعد موافقة المتبرع",
+                  style: GoogleFonts.cairo(fontSize: 11.sp, color: Colors.grey),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );
@@ -374,10 +329,10 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                               (_) => Successdialog(
                                 message:
                                     "تم إرسال طلبك بنجاح، سيتم التواصل معك قريبًا",
-                                nextPage: ProductDetailsPage(
-                                  title: widget.title,
-                                  description: widget.description,
-                                  images: widget.images,
+                                nextPage: DonationDetailsPage(
+                                  title: title,
+                                  description: description,
+                                  image: image,
                                 ),
                               ),
                         );

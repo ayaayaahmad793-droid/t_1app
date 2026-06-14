@@ -3,7 +3,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:t_1app/screens/Exchange_details_screen.dart';
+import 'package:t_1app/models/exchangeItem.dart';
+import 'package:t_1app/screens/exchange_details_page.dart';
 
 class ExchangeCard extends StatelessWidget {
   final String title;
@@ -114,19 +115,17 @@ class ExchangeCard extends StatelessWidget {
                 width: 87.w,
                 height: 22.h,
                 child: ElevatedButton(
-                  onPressed: () {
+                 onPressed: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder:
-                            (context) => ProductDetailsPage(
-                              title: title,
-                              description: description,
-                              images: [
-                                image,
-                                image,
-                                image, // مؤقتاً نفس الصورة (تقدري تغيريهم لاحقاً)
-                              ],
+                            (context) => ExchangeDetailsPage(
+                              item: ExchangeItem(
+                                title: title,
+                                description: description,
+                                image: image,
+                              ),
                             ),
                       ),
                     );

@@ -6,15 +6,26 @@ import 'package:t_1app/models/Button_Model.dart';
 import 'package:t_1app/providers/forgot_provider.dart';
 import 'package:t_1app/screens/AddNewCardPage.dart';
 import 'package:t_1app/screens/CartPage.dart';
+import 'package:t_1app/screens/TheComplete_Order_page.dart';
 import 'package:t_1app/successDialog.dart';
 import 'package:t_1app/widgets/Button.dart';
 import 'package:t_1app/widgets/CityDropdownWidget.dart';
 import 'package:t_1app/widgets/CountryDropdownWidget.dart';
 import 'package:t_1app/widgets/Phone_Widget.dart';
+import 'package:t_1app/providers/address_provider.dart';
+import 'package:t_1app/models/address_model.dart';
 
-class AddressPage extends StatelessWidget {
+class AddressPage extends StatefulWidget {
   const AddressPage({super.key});
 
+  @override
+  State<AddressPage> createState() => _AddressPageState();
+}
+
+class _AddressPageState extends State<AddressPage> {
+  final TextEditingController fullNameController = TextEditingController();
+
+  final TextEditingController streetController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Directionality(
@@ -62,7 +73,12 @@ class AddressPage extends StatelessWidget {
                   buildLabel("الاسم كامل"),
                   SizedBox(height: 10.h),
 
-                  buildTextField(hint: "ادخل اسمك الكامل"),
+                  buildTextField(
+                    hint: "ادخل اسمك الكامل",
+                    onChanged: (value) {
+                      context.read<AddressProvider>().setFullName(value);
+                    },
+                  ),
 
                   SizedBox(height: 25.h),
 
@@ -86,14 +102,18 @@ class AddressPage extends StatelessWidget {
                   buildLabel("الشارع"),
                   SizedBox(height: 10.h),
 
-                  buildTextField(),
+                  buildTextField(
+                    onChanged: (value) {
+                      context.read<AddressProvider>().setStreet(value);
+                    },
+                  ),
 
                   SizedBox(height: 25.h),
 
                   PhoneWidget(
                     errorText: context.watch<ForgotProvider>().phoneError,
                     onChanged: (val) {
-                      context.read<ForgotProvider>().setPhone(val);
+                      context.read<AddressProvider>().setPhone(val);
                     },
                   ),
 
@@ -108,14 +128,25 @@ class AddressPage extends StatelessWidget {
                         text: "تم",
                         color: const Color(0xffF57C00),
                         onPressed: () {
+                          final provider = context.read<AddressProvider>();
+
+                          provider.saveAddress(
+                            AddressModel(
+                              fullName: provider.fullName,
+                              country: provider.country,
+                              city: provider.city,
+                              street: provider.street,
+                              phone: provider.phone,
+                            ),
+                          );
+
                           showDialog(
                             context: context,
                             barrierDismissible: false,
-
                             builder: (context) {
                               return Successdialog(
                                 message: "تمت اضافة العنوان بنجاح",
-                                nextPage: Cartpage(),
+                                nextPage: ThecompleteOrderPage(),
                               );
                             },
                           );
@@ -146,10 +177,11 @@ class AddressPage extends StatelessWidget {
   }
 
   /// TextField
-  Widget buildTextField({String? hint}) {
+  Widget buildTextField({String? hint, Function(String)? onChanged}) {
     return SizedBox(
       child: TextField(
         textAlign: TextAlign.right,
+        onChanged: onChanged,
         decoration: InputDecoration(
           hintText: hint,
           hintStyle: TextStyle(fontSize: 14.sp, color: Colors.grey),

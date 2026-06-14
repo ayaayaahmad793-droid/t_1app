@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:t_1app/providers/donation_provider.dart';
 import 'package:t_1app/screens/department.dart';
+import 'package:t_1app/screens/donation_details_page.dart';
 import 'package:t_1app/widgets/DonateButton_widget.dart';
 import 'package:t_1app/widgets/goodness_card_widget.dart';
 import 'package:t_1app/widgets/header.dart';
@@ -22,7 +23,8 @@ class GiveyourgoodnessPage extends StatelessWidget {
         backgroundColor: const Color(0xffFFFFFF),
         body: Column(
           children: [
-            CustomHeader(title: "قدم خيرك",
+            CustomHeader(
+              title: "قدم خيرك",
               onBack: () {
                 Navigator.pushReplacement(
                   context,
@@ -58,7 +60,6 @@ class GiveyourgoodnessPage extends StatelessWidget {
             SizedBox(height: 15.h),
 
             DonateButton(),
-           
 
             SizedBox(height: 15.h),
 
@@ -76,9 +77,16 @@ class GiveyourgoodnessPage extends StatelessWidget {
                       subTitle: card.subTitle,
                       image: card.image,
                       onTap: () {
-                        Navigator.pushReplacement(
+                        Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (_) => card.page),
+                          MaterialPageRoute(
+                            builder:
+                                (context) => DonationDetailsPage(
+                                  title: card.title,
+                                  description: card.subTitle,
+                                  image: card.image,
+                                ),
+                          ),
                         );
                       },
                     ),

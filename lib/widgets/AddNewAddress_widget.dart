@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:t_1app/screens/Adress_page.dart';
+import 'package:provider/provider.dart';
+import 'package:t_1app/providers/address_provider.dart';
 
 class AddnewaddressWidget extends StatefulWidget {
   const AddnewaddressWidget({super.key});
@@ -11,17 +13,17 @@ class AddnewaddressWidget extends StatefulWidget {
 }
 
 class _AddnewaddressWidgetState extends State<AddnewaddressWidget> {
-  @override
+ @override
   Widget build(BuildContext context) {
+    final addressProvider = context.watch<AddressProvider>();
+    final address = addressProvider.address;
+
     return Container(
       width: double.infinity,
-
       padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 14.h),
       decoration: BoxDecoration(
         color: const Color(0xffFFFFFF),
-
         borderRadius: BorderRadius.circular(15.r),
-
         border: Border.all(color: const Color(0xff919191), width: 1.w),
       ),
 
@@ -35,7 +37,9 @@ class _AddnewaddressWidgetState extends State<AddnewaddressWidget> {
               fontWeight: FontWeight.w500,
             ),
           ),
+
           SizedBox(height: 8.h),
+
           Row(
             children: [
               Icon(
@@ -43,34 +47,42 @@ class _AddnewaddressWidgetState extends State<AddnewaddressWidget> {
                 size: 40.r,
                 color: Color(0xff2E7D32),
               ),
-              Column(
-                children: [
-                  Text(
-                    "قطاع غزة _ دير البلح ",
-                    style: GoogleFonts.cairo(
-                      fontWeight: FontWeight.w400,
-                      fontSize: 12.sp,
-                      color: Color(0xff727272),
+
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      address == null
+                          ? "لم يتم إضافة عنوان بعد"
+                          : "${address.country} - ${address.city}",
+                      style: GoogleFonts.cairo(
+                        fontWeight: FontWeight.w400,
+                        fontSize: 12.sp,
+                        color: Color(0xff727272),
+                      ),
                     ),
-                  ),
-                  SizedBox(height: 4.h),
-                  Text(
-                    "شارع السلام",
-                    style: GoogleFonts.cairo(
-                      fontWeight: FontWeight.w400,
-                      fontSize: 12.sp,
-                      color: Color(0xff727272),
+
+                    SizedBox(height: 4.h),
+
+                    Text(
+                      address?.street ?? "",
+                      style: GoogleFonts.cairo(
+                        fontWeight: FontWeight.w400,
+                        fontSize: 12.sp,
+                        color: Color(0xff727272),
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-              SizedBox(width: 125.w),
+
               Icon(Icons.arrow_forward_ios, size: 30.r),
             ],
           ),
+
           SizedBox(height: 8.h),
 
-          /// زر اضافة بطاقة
           InkWell(
             onTap: () {
               Navigator.pushReplacement(
@@ -87,16 +99,13 @@ class _AddnewaddressWidgetState extends State<AddnewaddressWidget> {
 
               decoration: BoxDecoration(
                 color: Colors.white,
-
                 borderRadius: BorderRadius.circular(12.r),
-
                 border: Border.all(color: const Color(0xff919191), width: 1.w),
               ),
 
               child: Center(
                 child: Text(
                   "+ اضافة عنوان جديد",
-
                   style: GoogleFonts.cairo(
                     fontSize: 16.sp,
                     fontWeight: FontWeight.w500,

@@ -2,12 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:t_1app/widgets/header.dart';
+import 'package:provider/provider.dart';
+import 'package:t_1app/providers/address_provider.dart';
 
 class TrackLocationPage extends StatelessWidget {
   const TrackLocationPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final addressProvider = Provider.of<AddressProvider>(context);
+    final address = addressProvider.address;
     return Directionality(
       textDirection: TextDirection.rtl,
 
@@ -70,7 +74,7 @@ class TrackLocationPage extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                "اية ابو حطب",
+                                address?.fullName ?? "لا يوجد اسم",
                                 style: GoogleFonts.cairo(
                                   fontSize: 16.sp,
                                   fontWeight: FontWeight.w500,
@@ -80,7 +84,7 @@ class TrackLocationPage extends StatelessWidget {
                               SizedBox(height: 4.h),
 
                               Text(
-                                "غزة- دير -البلح -شارع السلام",
+                                "${address?.country ?? ""} - ${address?.city ?? ""} - ${address?.street ?? ""}",
                                 textAlign: TextAlign.right,
                                 style: GoogleFonts.cairo(
                                   fontSize: 12.sp,

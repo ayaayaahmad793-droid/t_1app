@@ -51,9 +51,14 @@ class _UniqeallState extends State<Uniqeall> {
                       onTap: () {
                         Navigator.push(
                           context,
-
                           MaterialPageRoute(
-                            builder: (context) => ProductSliderPage(),
+                            builder:
+                                (context) => ProductSliderPage(
+                                  product:
+                                      provider
+                                          .filteredProducts[firstIndex]
+                                          .product,
+                                ),
                           ),
                         );
                       },
@@ -81,16 +86,20 @@ class _UniqeallState extends State<Uniqeall> {
 
                         isFavPage: widget.isFavPage,
 
-                        onTap: () {
+                       onTap: () {
                           Navigator.push(
                             context,
-
                             MaterialPageRoute(
-                              builder: (context) => ProductSliderPage(),
+                              builder:
+                                  (context) => ProductSliderPage(
+                                    product:
+                                        provider
+                                            .filteredProducts[secondIndex]
+                                            .product,
+                                  ),
                             ),
                           );
                         },
-
                        onFavoriteTap: () {
                           final product =
                               provider.filteredProducts[secondIndex].product;

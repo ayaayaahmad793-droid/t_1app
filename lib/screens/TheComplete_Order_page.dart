@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:t_1app/models/Button_Model.dart';
-import 'package:t_1app/screens/AccountType.dart';
-import 'package:t_1app/screens/AddNewCardPage.dart';
 import 'package:t_1app/screens/CartPage.dart';
 import 'package:t_1app/screens/track_location_page.dart';
 import 'package:t_1app/widgets/AddNewAddress_widget.dart';
@@ -11,17 +9,17 @@ import 'package:t_1app/widgets/Button.dart';
 import 'package:t_1app/widgets/CouponWidget.dart';
 import 'package:t_1app/widgets/PaymentMethodCard_widget.dart';
 import 'package:t_1app/widgets/header.dart';
+import 'package:provider/provider.dart';
+import 'package:t_1app/providers/cart_provider.dart';
+import 'package:provider/provider.dart';
+import 'package:t_1app/providers/cart_provider.dart';
 
 class ThecompleteOrderPage extends StatefulWidget {
-  final double subtotal;
-  final double deliveryFee;
-  final double total;
+  
 
   const ThecompleteOrderPage({
     super.key,
-    required this.subtotal,
-    required this.deliveryFee,
-    required this.total,
+   
   });
 
   @override
@@ -33,6 +31,7 @@ class _ThecompleteOrderPageState extends State<ThecompleteOrderPage> {
 
   @override
   Widget build(BuildContext context) {
+    final cartProvider = Provider.of<CartProvider>(context);
     return Directionality(
       textDirection: TextDirection.rtl,
 
@@ -143,7 +142,7 @@ class _ThecompleteOrderPageState extends State<ThecompleteOrderPage> {
                             ),
                           ),
                           Text(
-                            "${widget.subtotal.toStringAsFixed(2)}\$",
+                            "${cartProvider.subtotal.toStringAsFixed(2)}\$",
                             style: GoogleFonts.cairo(
                               fontWeight: FontWeight.w500,
                               fontSize: 16.sp,
@@ -165,7 +164,7 @@ class _ThecompleteOrderPageState extends State<ThecompleteOrderPage> {
                             ),
                           ),
                           Text(
-                            "${widget.deliveryFee.toStringAsFixed(2)}\$",
+                            "${cartProvider.deliveryFee.toStringAsFixed(2)}\$",
                             style: GoogleFonts.cairo(
                               fontWeight: FontWeight.w500,
                               fontSize: 16.sp,
@@ -194,7 +193,7 @@ class _ThecompleteOrderPageState extends State<ThecompleteOrderPage> {
                             ),
                           ),
                           Text(
-                            "${widget.total.toStringAsFixed(2)}\$",
+                            "${cartProvider.total.toStringAsFixed(2)}\$",
                             style: GoogleFonts.cairo(
                               fontWeight: FontWeight.w700,
                               fontSize: 16.sp,
@@ -211,7 +210,12 @@ class _ThecompleteOrderPageState extends State<ThecompleteOrderPage> {
                           button: ButtonModel(
                             text: "ادفع الان",
                             color: Color(0xffF57C00),
-                            onPressed: () {
+                           onPressed: () {
+                              Provider.of<CartProvider>(
+                                context,
+                                listen: false,
+                              ).clearCart();
+
                               Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(

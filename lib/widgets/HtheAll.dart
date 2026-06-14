@@ -8,6 +8,7 @@ import 'package:t_1app/providers/favorite_provider.dart';
 import 'package:t_1app/providers/home_product_provider.dart';
 import 'package:t_1app/widgets/Home_widget/product_card_widget.dart';
 import 'package:t_1app/widgets/exchangeCard.dart';
+import 'package:t_1app/screens/home_product_details.dart';
 
 class Htheall extends StatefulWidget {
   const Htheall({super.key});
@@ -138,7 +139,17 @@ class _HtheallState extends State<Htheall> {
                     children: [
                       ProductCard(
                         product: products[firstIndex],
-
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder:
+                                  (context) => HomeProductDetails(
+                                    product: products[firstIndex],
+                                  ),
+                            ),
+                          );
+                        },
                         onFavoriteTap: () {
                           final product = products[firstIndex];
 
@@ -155,7 +166,17 @@ class _HtheallState extends State<Htheall> {
                       if (secondIndex < products.length)
                         ProductCard(
                           product: products[secondIndex],
-
+                           onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder:
+                                    (context) => HomeProductDetails(
+                                      product: products[secondIndex],
+                                    ),
+                              ),
+                            );
+                          },
                           onFavoriteTap: () {
                             final product = products[secondIndex];
 

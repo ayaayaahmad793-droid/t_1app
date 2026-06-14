@@ -8,8 +8,14 @@ import 'package:t_1app/providers/favorite_provider.dart';
 class ProductCard extends StatefulWidget {
   final Product product;
   final VoidCallback? onFavoriteTap;
+  final VoidCallback? onTap;
 
-  const ProductCard({super.key, required this.product, this.onFavoriteTap});
+  const ProductCard({
+    super.key,
+    required this.product,
+    this.onFavoriteTap,
+    this.onTap,
+  });
 
   @override
   State<ProductCard> createState() => _ProductCardState();
@@ -22,7 +28,9 @@ class _ProductCardState extends State<ProductCard> {
 
     final isFav = favoriteProvider.isFavorite(widget.product);
 
-    return Container(
+     return GestureDetector(
+  onTap: widget.onTap,
+  child: Container(
       width: 162.w,
       height: 200.h,
       margin: EdgeInsets.only(left: 10.w),
@@ -177,6 +185,6 @@ class _ProductCardState extends State<ProductCard> {
           ),
         ],
       ),
-    );
+      ) );
   }
 }

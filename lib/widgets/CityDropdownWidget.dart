@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
+import 'package:t_1app/providers/address_provider.dart';
 
 class CityDropdownWidget extends StatefulWidget {
   const CityDropdownWidget({super.key});
@@ -9,7 +11,7 @@ class CityDropdownWidget extends StatefulWidget {
 }
 
 class _CityDropdownWidgetState extends State<CityDropdownWidget> {
-  String? selectedCity;
+  
 
   final List<String> cities = [
     "غزة",
@@ -23,6 +25,7 @@ class _CityDropdownWidgetState extends State<CityDropdownWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<AddressProvider>(context);
     return Container(
       height: 55.h,
       width: double.infinity,
@@ -36,7 +39,7 @@ class _CityDropdownWidgetState extends State<CityDropdownWidget> {
 
       child: DropdownButtonHideUnderline(
         child: DropdownButton<String>(
-          value: selectedCity,
+         value: provider.city.isEmpty ? null : provider.city,
 
           isExpanded: true,
 
@@ -76,9 +79,9 @@ class _CityDropdownWidgetState extends State<CityDropdownWidget> {
               }).toList(),
 
           onChanged: (value) {
-            setState(() {
-              selectedCity = value;
-            });
+            if (value != null) {
+              provider.setCity(value);
+            }
           },
         ),
       ),

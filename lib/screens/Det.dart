@@ -2,53 +2,111 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:t_1app/models/productDetails.dart';
-import 'package:t_1app/models/UniqeProduct_model.dart';
-import 'package:provider/provider.dart';
-import 'package:t_1app/providers/cart_provider.dart';
-import 'package:t_1app/models/cart_model.dart';
+import 'package:t_1app/widgets/categoryRadio.dart';
 
 class ProductSliderPage extends StatefulWidget {
-  final ProductU1 product;
-
-  const ProductSliderPage({super.key, required this.product});
+  const ProductSliderPage({super.key});
 
   @override
   State<ProductSliderPage> createState() => _ProductSliderPageState();
 }
 
 class _ProductSliderPageState extends State<ProductSliderPage> {
+  final PageController _controller = PageController(viewportFraction: 0.7);
+
+  double currentPage = 0;
   int quantity = 1;
+
+  final List<DetProduct> products = [
+    DetProduct(
+      image: 'images/uniqeProductAll2.png',
+      name: 'Skin Proad كريم',
+      longDescription:
+          "منتجات Skin Proud تمنح بشرتك ترطيباً عميقاً، تغذية وحماية يومية، مع مكونات طبيعية مناسبة لجميع أنواع البشرة ونتائج واضحة مع الاستخدام المنتظم.",
+      price: 200,
+    ),
+    DetProduct(
+      image: 'images/uniqeProductAll1.png',
+      name: 'كريم العناية بالبشرة',
+      longDescription: 'يعمل على ترطيب البشرة والعناية بها ولمعانها',
+      price: 180,
+    ),
+    DetProduct(
+      image: 'images/uniqeProductAll3.png',
+      name: 'ايفون 17',
+      longDescription:
+          'هاتف يعمل بالعديد من التقنيات المدعومة بالذكاء الاصطناعي',
+      price: 1500,
+    ),
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+    _controller.addListener(() {
+      setState(() {
+        currentPage = _controller.page!;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    final cartProvider = Provider.of<CartProvider>(context, listen: false);
+    int currentIndex = currentPage.round();
+
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
         body: SafeArea(
           child: Column(
             children: [
-              Align(
-                alignment: Alignment.centerLeft,
-                child: IconButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  icon: const Icon(Icons.arrow_forward_ios),
-                ),
-              ),
               SizedBox(height: 20.h),
-              Center(
-                child: Container(
-                  width: 250.w,
-                  height: 220.h,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(25.r),
-                    image: DecorationImage(
-                      image: AssetImage(widget.product.productImage),
-                      fit: BoxFit.cover,
-                    ),
-                  ),
+
+              ///  السلايدر
+              SizedBox(
+                height: 280.h,
+                child: PageView.builder(
+                  controller: _controller,
+                  itemCount: products.length,
+                  itemBuilder: (context, index) {
+                    double scale = (1 - (currentPage - index).abs()).clamp(
+                      0.7,
+                      1,
+                    );
+
+                    return GestureDetector(
+                      onTap: () {
+                        _controller.animateToPage(
+                          index,
+                          duration: const Duration(milliseconds: 300),
+                          curve: Curves.easeInOut,
+                        );
+                      },
+                      child: Transform.scale(
+                        scale: scale,
+                        child: Container(
+                          width: 230.w, //  العرض
+                          height: 263.h, //  الطول
+                          margin: EdgeInsets.symmetric(horizontal: 2.w),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(40.r),
+                            image: DecorationImage(
+                              image: AssetImage(products[index].image),
+                              fit: BoxFit.cover,
+                            ),
+                            boxShadow: [
+                              if (index == currentIndex)
+                                BoxShadow(
+                                  color: Colors.black26,
+                                  blurRadius: 10.r,
+                                  offset: const Offset(0, 5),
+                                ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    );
+                  },
                 ),
               ),
 
@@ -72,14 +130,14 @@ class _ProductSliderPageState extends State<ProductSliderPage> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            widget.product.productName,
+                            products[currentIndex].name,
                             style: GoogleFonts.cairo(
                               fontSize: 16.sp,
                               fontWeight: FontWeight.w500,
                             ),
                           ),
                           Text(
-                            "\$${widget.product.price}",
+                            "\$${products[currentIndex].price}",
                             style: TextStyle(
                               fontSize: 18.sp,
                               fontWeight: FontWeight.bold,
@@ -115,7 +173,7 @@ class _ProductSliderPageState extends State<ProductSliderPage> {
 
                       /// الوصف
                       Text(
-                        widget.product.productDescription,
+                        products[currentIndex].longDescription,
                         style: GoogleFonts.cairo(
                           fontSize: 12.sp,
                           color: Color(0xff2B2B2B),
@@ -141,23 +199,7 @@ class _ProductSliderPageState extends State<ProductSliderPage> {
                                   borderRadius: BorderRadius.circular(20.r),
                                 ),
                               ),
-                             onPressed: () {
-                                cartProvider.addToCart(
-                                  CartModel(
-                                    productImage: widget.product.productImage,
-                                    productName: widget.product.productName,
-                                    productPrice: widget.product.price,
-                                    shopName: "منتجات مميزة",
-                                    quantity: quantity,
-                                  ),
-                                );
-
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text("تمت إضافة المنتج إلى السلة"),
-                                  ),
-                                );
-                              },
+                              onPressed: () {},
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
@@ -236,3 +278,96 @@ class _ProductSliderPageState extends State<ProductSliderPage> {
   }
 }
 
+/*
+                    /// 🔹 الكمية + زر
+                    Row(
+                      children: [
+                        /// زر السلة
+                        Expanded(
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Color(0xffF57C00),
+                              padding: const EdgeInsets.symmetric(vertical: 15),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20.r),
+                              ),
+                            ),
+                            onPressed: () {},
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Container(
+                                  child: Icon(Icons.shopping_cart_outlined),
+                                ),
+                                Container(
+                                  child: Text(
+                                    "الاضافة إلى السلة",
+                                    style: GoogleFonts.cairo(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 16.sp,
+                                      color: Color(0xff000000),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+
+                        SizedBox(width: 10.w),
+
+                        /// الكمية
+                        Container(
+                          width: 117.w,
+                          height: 34.h,
+                          decoration: BoxDecoration(
+                            color: Color(0xff2E7D32),
+                            borderRadius: BorderRadius.circular(15.r),
+                          ),
+                          child: Row(
+                            children: [
+                              IconButton(
+                                onPressed: () {
+                                  setState(() {
+                                    if (quantity > 1) quantity--;
+                                  });
+                                },
+                                icon: const Icon(
+                                  Icons.remove,
+                                  color: Colors.white,
+                                  size: 24,
+                                ),
+                              ),
+                              Text(
+                                quantity.toString(),
+                                style: const TextStyle(color: Colors.white),
+                              ),
+                              IconButton(
+                                onPressed: () {
+                                  setState(() {
+                                    quantity++;
+                                  });
+                                },
+                                icon: const Icon(
+                                  Icons.add,
+                                  color: Colors.white,
+                                  size: 24,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+
+                    const SizedBox(height: 10),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+} */

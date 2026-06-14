@@ -198,11 +198,7 @@ class _CartpageState extends State<Cartpage> {
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                            builder: (_) => ThecompleteOrderPage(
- subtotal: cartProvider.subtotal,
-                                  deliveryFee: cartProvider.deliveryFee,
-                                  total: cartProvider.total,
-),
+                            builder: (_) => const ThecompleteOrderPage(),
                           ),
                         );
                       },

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
+import 'package:t_1app/providers/address_provider.dart';
 
 class CountryDropdownWidget extends StatefulWidget {
   const CountryDropdownWidget({super.key});
@@ -9,7 +11,7 @@ class CountryDropdownWidget extends StatefulWidget {
 }
 
 class _CountryDropdownWidgetState extends State<CountryDropdownWidget> {
-  String? selectedCountry;
+  
 
   final List<String> countries = [
     "فلسطين",
@@ -21,6 +23,8 @@ class _CountryDropdownWidgetState extends State<CountryDropdownWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<AddressProvider>(context);
+
     return Container(
       height: 55.h,
       width: double.infinity,
@@ -34,7 +38,7 @@ class _CountryDropdownWidgetState extends State<CountryDropdownWidget> {
 
       child: DropdownButtonHideUnderline(
         child: DropdownButton<String>(
-          value: selectedCountry,
+          value: provider.country.isEmpty ? null : provider.country,
 
           isExpanded: true,
 
@@ -59,14 +63,11 @@ class _CountryDropdownWidgetState extends State<CountryDropdownWidget> {
               countries.map((country) {
                 return DropdownMenuItem<String>(
                   value: country,
-
                   child: Align(
                     alignment: Alignment.centerRight,
-
                     child: Text(
                       country,
                       textAlign: TextAlign.right,
-
                       style: TextStyle(fontSize: 14.sp),
                     ),
                   ),
@@ -74,9 +75,9 @@ class _CountryDropdownWidgetState extends State<CountryDropdownWidget> {
               }).toList(),
 
           onChanged: (value) {
-            setState(() {
-              selectedCountry = value;
-            });
+            if (value != null) {
+              provider.setCountry(value);
+            }
           },
         ),
       ),

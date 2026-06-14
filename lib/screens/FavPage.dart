@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:t_1app/models/Home_all_model/product_model.dart';
 import 'package:t_1app/models/UniqeProduct_model.dart';
-import 'package:t_1app/models/exchangeItem.dart';
 import 'package:t_1app/providers/favorite_provider.dart';
 import 'package:t_1app/screens/CartPage.dart';
 import 'package:t_1app/screens/HomePage.dart';

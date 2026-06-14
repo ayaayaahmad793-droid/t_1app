@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:t_1app/models/exchangeItem.dart';
 import 'package:t_1app/widgets/AddExchangeItem.dart';
 import 'package:t_1app/widgets/exchangeCard.dart';
 import 'package:t_1app/widgets/greenHeader.dart';

@@ -26,9 +26,17 @@ import 'package:provider/provider.dart';
 import 'package:t_1app/screens/ShopData.dart';
 import 'providers/login_provider.dart';
 import 'package:t_1app/providers/uniqe_product_provider.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+
+final supabase = Supabase.instance.client;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  await Supabase.initialize(
+    url: 'https://azxsryrryrdwxuuzlnqq.supabase.co',
+    publishableKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF6eHNyeXJyeXJkd3h1dXpsbnFxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE0NDExNTAsImV4cCI6MjA5NzAxNzE1MH0.-OcjQYx4tJzTXvszDdnfEqUM9eQ39d-9f5wBfQBrR78',
+  );
 
   final shopProvider = ShopProvider();
   await shopProvider.loadData(); //  مهم جداً

@@ -1,6 +1,44 @@
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class RegisterProvider extends ChangeNotifier {
+
+
+  bool isLoading = false;
+
+  Future<bool> signUpUser(BuildContext context) async {
+    // 1. التأكد من الـ Validation أولاً
+    if (!validate()) return false;
+
+    isLoading = true;
+    notifyListeners();
+
+    try {
+      final supabase = Supabase.instance.client;
+
+      // 2. إرسال طلب التسجيل لـ Supabase
+      await supabase.auth.signUp(
+        email: email,
+        password: password,
+        data: {'full_name': name, 'phone': phone}, // إرسال بيانات إضافية
+      );
+
+      isLoading = false;
+      notifyListeners();
+      return true; // تم التسجيل بنجاح
+    } on AuthException catch (e) {
+      // 3. معالجة الأخطاء (مثلاً: الإيميل مسجل مسبقاً)
+      emailError = e.message;
+      isLoading = false;
+      notifyListeners();
+      return false;
+    } catch (e) {
+      isLoading = false;
+      notifyListeners();
+      return false;
+    }
+  }
+  //////////////////////////////////////////////////////////////////////////////
   String name = '';
   String email = '';
   String phone = '';

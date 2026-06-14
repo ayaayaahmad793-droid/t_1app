@@ -152,14 +152,22 @@ class _Create_AccountState extends State<Create_Account> {
                           button: ButtonModel(
                             text: "انشاء حساب",
                             color: Color(0xffF57C00),
-                            onPressed: () {
+                            // داخل الـ onPressed في CustomButton:
+                            onPressed: () async {
                               final provider = context.read<RegisterProvider>();
 
-                              if (provider.validate()) {
+                              // تنفيذ عملية التسجيل
+                              bool success = await provider.signUpUser(context);
+
+                              if (success) {
+                                // إذا نجح التسجيل، ننتقل لصفحة اختيار نوع الحساب
                                 Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (context) => Accounttype(),
-                                  ),
+                                  MaterialPageRoute(builder: (context) => Accounttype()),
+                                );
+                              } else {
+                                // اختيارياً: إظهار رسالة خطأ للمستخدم
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(content: Text("حدث خطأ أثناء إنشاء الحساب، تأكد من البيانات")),
                                 );
                               }
                             },

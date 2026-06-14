@@ -1,17 +1,49 @@
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class LoginProvider extends ChangeNotifier {
   String email = '';
   String password = '';
   bool rememberMe = false;
+  bool isLoading = false;
 
   String? emailError;
   String? passwordError;
-  bool login() {
-    if (validate()) {
-      return true;
+
+  Future<bool> loginUser() async {
+    // 1. التحقق من البيانات محلياً أولاً
+    if (!validate()) return false;
+
+    isLoading = true;
+    notifyListeners();
+
+    try {
+      final supabase = Supabase.instance.client;
+
+      // 2. إرسال الطلب لـ Supabase
+      await supabase.auth.signInWithPassword(
+        email: email,
+        password: password,
+      );
+
+      isLoading = false;
+      notifyListeners();
+      return true; // نجاح العملية
+    } on AuthException catch (e) {
+      // 3. التعامل مع أخطاء Supabase
+      if (e.message.contains("Invalid login credentials")) {
+        emailError = "البريد أو كلمة المرور غير صحيحة";
+      } else {
+        emailError = e.message;
+      }
+      isLoading = false;
+      notifyListeners();
+      return false;
+    } catch (e) {
+      isLoading = false;
+      notifyListeners();
+      return false;
     }
-    return false;
   }
 
   void setEmail(String val) {

@@ -103,11 +103,13 @@ class _LogState extends State<Log> {
                           button: ButtonModel(
                             text: "تسجيل الدخول",
                             color: Color(0xffF57C00),
-                            onPressed: () {
+                            onPressed: () async {
                               final provider = context.read<LoginProvider>();
 
-                              if (provider.login()) {
-                                Navigator.push(
+                              bool success = await provider.loginUser();
+
+                              if (success) {
+                                Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(builder: (_) => Homepage()),
                                 );

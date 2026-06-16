@@ -98,7 +98,7 @@ class _TheproductState extends State<Theproduct> {
         backgroundColor: const Color(0xffFFFFFF),
         body: Column(
           children: [
-            GreenHeader(title: "المنتجات"),
+            GreenHeader(title: "المنتجات",onBack: (){},),
             SizedBox(height: 15.h),
 
             Row(

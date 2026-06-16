@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:t_1app/models/Button_Model.dart';
+import 'package:t_1app/models/notification_model.dart';
+import 'package:t_1app/models/order_model.dart';
+import 'package:t_1app/providers/notification_provider.dart';
+import 'package:t_1app/providers/order_provider.dart';
 import 'package:t_1app/screens/CartPage.dart';
 import 'package:t_1app/screens/track_location_page.dart';
 import 'package:t_1app/widgets/AddNewAddress_widget.dart';
@@ -15,12 +19,7 @@ import 'package:provider/provider.dart';
 import 'package:t_1app/providers/cart_provider.dart';
 
 class ThecompleteOrderPage extends StatefulWidget {
-  
-
-  const ThecompleteOrderPage({
-    super.key,
-   
-  });
+  const ThecompleteOrderPage({super.key});
 
   @override
   State<ThecompleteOrderPage> createState() => _ThecompleteOrderPageState();
@@ -42,7 +41,8 @@ class _ThecompleteOrderPageState extends State<ThecompleteOrderPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             /// الهيدر
-            CustomHeader(title: "اتمام الطلب",
+            CustomHeader(
+              title: "اتمام الطلب",
               onBack: () {
                 Navigator.pushReplacement(
                   context,
@@ -210,19 +210,40 @@ class _ThecompleteOrderPageState extends State<ThecompleteOrderPage> {
                           button: ButtonModel(
                             text: "ادفع الان",
                             color: Color(0xffF57C00),
-                           onPressed: () {
-                              Provider.of<CartProvider>(
-                                context,
-                                listen: false,
-                              ).clearCart();
+                            onPressed: () {
+                              final cartProvider = context.read<CartProvider>();
+
+                              context.read<OrderProvider>().createOrder(
+                                OrderModel(
+                                  orderNumber: "#123",
+                                  deliveryMethod: "التوصيل للمنزل",
+                                  products: List.from(cartProvider.cartItems),
+                                  subtotal: cartProvider.subtotal,
+                                  deliveryFee: cartProvider.deliveryFee,
+                                  total: cartProvider.total,
+                                ),
+                              );
+
+                              cartProvider.clearCart();
+
+                              context
+                                  .read<NotificationProvider>()
+                                  .addNotification(
+                                    NotificationItem(
+                                      icon: "🛒",
+                                      title: "تمت عملية الدفع بنجاح",
+                                      time: "الآن",
+                                      category: "شراء",
+                                    ),
+                                  );
 
                               Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (_) => TrackLocationPage(),
+                                  builder: (_) => const TrackLocationPage(),
                                 ),
                               );
-                            },
+                            }
                           ),
                         ),
                       ),

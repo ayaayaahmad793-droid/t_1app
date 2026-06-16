@@ -3,7 +3,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:t_1app/models/Button_Model.dart';
+import 'package:t_1app/models/notification_model.dart';
 import 'package:t_1app/providers/forgot_provider.dart';
+import 'package:t_1app/providers/notification_provider.dart';
 import 'package:t_1app/screens/AddNewCardPage.dart';
 import 'package:t_1app/screens/CartPage.dart';
 import 'package:t_1app/screens/TheComplete_Order_page.dart';
@@ -60,7 +62,10 @@ class _AddressPageState extends State<AddressPage> {
 
                       IconButton(
                         onPressed: () {
-                          Navigator.pop(context);
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(builder: (_) => ThecompleteOrderPage()),
+                          );
                         },
                         icon: Icon(Icons.arrow_forward_ios, size: 20.sp),
                       ),
@@ -139,7 +144,14 @@ class _AddressPageState extends State<AddressPage> {
                               phone: provider.phone,
                             ),
                           );
-
+context.read<NotificationProvider>().addNotification(
+                            NotificationItem(
+                              icon: "📍",
+                              title: "تمت إضافة عنوان جديد بنجاح",
+                              time: "الآن",
+                              category: "شراء",
+                            ),
+                          );
                           showDialog(
                             context: context,
                             barrierDismissible: false,

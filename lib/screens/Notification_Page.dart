@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:t_1app/screens/HomePage.dart';
 import 'package:t_1app/widgets/Notification_All_widget.dart';
-import 'package:t_1app/widgets/Notification_Card.dart';
 import 'package:t_1app/widgets/SelectedPage.dart';
 import 'package:t_1app/widgets/header.dart';
 import 'package:provider/provider.dart';
@@ -19,7 +19,6 @@ class _NotificationsPageState extends State<NotificationsPage> {
   int selectedIndex = 0;
   late List<PageItem> myPages;
 
- 
   void initState() {
     super.initState();
 
@@ -52,7 +51,15 @@ class _NotificationsPageState extends State<NotificationsPage> {
 
             children: [
               /// Header
-              CustomHeader(title: "الاشعارات"),
+              CustomHeader(
+                title: "الاشعارات",
+                onBack: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (_) => Homepage()),
+                  );
+                },
+              ),
 
               SizedBox(height: 25.h),
 
@@ -66,7 +73,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
                       bool isSelected = provider.selectedCategory == item.title;
 
                       return GestureDetector(
-                       onTap: () {
+                        onTap: () {
                           provider.selectCategory(item.title);
                         },
                         child: Container(
@@ -110,7 +117,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
                 child: DynamicSelectedPage(
                   selectedText: provider.selectedCategory,
                   items: myPages,
-                )
+                ),
               ),
 
               SizedBox(height: 25.h),

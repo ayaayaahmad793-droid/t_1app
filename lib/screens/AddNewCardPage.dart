@@ -2,10 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:t_1app/models/Button_Model.dart';
+import 'package:t_1app/models/notification_model.dart';
+import 'package:t_1app/providers/notification_provider.dart';
 import 'package:t_1app/screens/CartPage.dart';
+import 'package:t_1app/screens/TheComplete_Order_page.dart';
 import 'package:t_1app/successDialog.dart';
 import 'package:t_1app/widgets/Button.dart';
 import 'package:t_1app/widgets/header.dart';
+import 'package:provider/provider.dart';
+import 'package:t_1app/providers/card_provider.dart';
+import 'package:t_1app/models/card_model.dart';
 
 class AddNewCardPage extends StatefulWidget {
   const AddNewCardPage({super.key});
@@ -59,7 +65,15 @@ class _AddNewCardPageState extends State<AddNewCardPage> {
 
             children: [
               /// HEADER
-              CustomHeader(title: "اضافة بطاقة جديدة"),
+              CustomHeader(
+                title: "اضافة بطاقة جديدة",
+                onBack: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (_) => ThecompleteOrderPage()),
+                  );
+                },
+              ),
               SizedBox(height: 30.h),
               Expanded(
                 child: ListView(
@@ -360,14 +374,39 @@ class _AddNewCardPageState extends State<AddNewCardPage> {
                           text: "اضافة البطاقة",
                           color: Color(0xffF57C00),
                           onPressed: () {
+                            if (nameController.text.isEmpty ||
+                                cardController.text.isEmpty ||
+                                selectedMonth == null ||
+                                selectedYear == null) {
+                              return;
+                            }
+
+                            context.read<CardProvider>().addCard(
+                              CardModel(
+                                cardHolderName: nameController.text,
+                                cardNumber: cardController.text,
+                                expiryMonth: selectedMonth!,
+                                expiryYear: selectedYear!,
+                              ),
+                            );
+                            context
+                                .read<NotificationProvider>()
+                                .addNotification(
+                                  NotificationItem(
+                                    icon: "💳",
+                                    title: "تمت إضافة بطاقة دفع جديدة بنجاح",
+                                    time: "الآن",
+                                    category: "شراء",
+                                  ),
+                                );
+
                             showDialog(
                               context: context,
                               barrierDismissible: false,
-
                               builder: (context) {
                                 return Successdialog(
                                   message: "تمت اضافة البطاقة بنجاح",
-                                  nextPage: Cartpage(),
+                                  nextPage: ThecompleteOrderPage(),
                                 );
                               },
                             );

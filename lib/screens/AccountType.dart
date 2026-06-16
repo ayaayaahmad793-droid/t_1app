@@ -33,7 +33,7 @@ class _AccounttypeState extends State<Accounttype> {
         backgroundColor: Color(0xffFFFFFF),
         body: Column(
           children: [
-            GreenHeader(title: "اختر نوع حسابك"),
+            GreenHeader(title: "اختر نوع حسابك",onBack: (){},),
 
             SizedBox(height: 35.h),
 

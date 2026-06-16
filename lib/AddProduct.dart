@@ -145,7 +145,7 @@ class _AddproductState extends State<Addproduct> {
         body: SingleChildScrollView(
           child: Column(
             children: [
-              GreenHeader(title: "اضافة المنتجات"),
+              GreenHeader(title: "اضافة المنتجات",onBack: (){},),
 
               Padding(
                 padding: EdgeInsets.only(right: 20.w, top: 15.h),

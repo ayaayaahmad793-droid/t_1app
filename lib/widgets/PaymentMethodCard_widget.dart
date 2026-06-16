@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:t_1app/screens/AddNewCardPage.dart';
+import 'package:provider/provider.dart';
+import 'package:t_1app/providers/card_provider.dart';
 
 class PaymentMethodCard extends StatefulWidget {
   const PaymentMethodCard({super.key});
@@ -13,7 +15,7 @@ class PaymentMethodCard extends StatefulWidget {
 class _PaymentMethodCardState extends State<PaymentMethodCard> {
   int selectedIndex = 0;
 
-  final List<Map<String, dynamic>> paymentMethods = [
+ /* final List<Map<String, dynamic>> paymentMethods = [
     {
       "title": "visa",
       "subtitle": "******3256",
@@ -31,10 +33,11 @@ class _PaymentMethodCardState extends State<PaymentMethodCard> {
       "subtitle": "re******@gmail.com",
       "image": "images/Completetheorder3.png",
     },
-  ];
+  ]; */
 
   @override
   Widget build(BuildContext context) {
+    final cards = context.watch<CardProvider>().cards;
     return Container(
       width: double.infinity,
 
@@ -51,8 +54,8 @@ class _PaymentMethodCardState extends State<PaymentMethodCard> {
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           /// قائمة طرق الدفع
-          ...List.generate(paymentMethods.length, (index) {
-            final item = paymentMethods[index];
+          ...List.generate(cards.length, (index) {
+            final item = cards[index];
 
             return Padding(
               padding: EdgeInsets.only(bottom: 16.h),
@@ -69,8 +72,8 @@ class _PaymentMethodCardState extends State<PaymentMethodCard> {
 
                   children: [
                     /// اللوجو
-                    Image.asset(
-                      item["image"],
+                   Image.asset(
+                      "images/Completetheorder1.png",
                       width: 61.w,
                       height: 57.h,
                       fit: BoxFit.contain,
@@ -84,7 +87,7 @@ class _PaymentMethodCardState extends State<PaymentMethodCard> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            item["title"],
+                            item.cardHolderName,
 
                             style: GoogleFonts.cairo(
                               fontSize: 16.sp,
@@ -96,7 +99,9 @@ class _PaymentMethodCardState extends State<PaymentMethodCard> {
                           SizedBox(height: 2.h),
 
                           Text(
-                            item["subtitle"],
+                            item.cardNumber.length >= 4
+                                ? "******${item.cardNumber.substring(item.cardNumber.length - 4)}"
+                                : item.cardNumber,
 
                             style: GoogleFonts.cairo(
                               fontSize: 12.sp,

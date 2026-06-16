@@ -5,6 +5,7 @@ import 'package:t_1app/screens/HomePage.dart';
 import 'package:t_1app/screens/HomeWorld.dart';
 import 'package:t_1app/screens/MakeupAndClothesPage.dart';
 import 'package:t_1app/screens/TechnologyPage.dart';
+import 'package:t_1app/screens/exchangePage.dart';
 
 class CategoryModel {
   final String title;
@@ -50,5 +51,11 @@ final List<CategoryModel> categories = [
     subtitle: "التبرع للناس المحتاجة",
     image: "images/dep5.png",
     page: GiveyourgoodnessPage(), //
+  ),
+  CategoryModel(
+    title: " عالم التبادل ",
+    subtitle: "تبادل الاغراض",
+    image: "images/dep6.png",
+    page: Exchange(), //
   ),
 ];

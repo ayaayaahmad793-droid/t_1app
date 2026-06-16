@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:t_1app/Rest_App_Screens/Pesron.dart';
 import 'package:t_1app/models/Button_Model.dart';
 import 'package:t_1app/models/cart_model.dart';
 import 'package:t_1app/screens/FavPage.dart';
@@ -14,6 +15,7 @@ import 'package:t_1app/widgets/cart_Card.dart';
 import 'package:t_1app/widgets/header.dart';
 import 'package:provider/provider.dart';
 import 'package:t_1app/providers/cart_provider.dart';
+
 class Cartpage extends StatefulWidget {
   const Cartpage({super.key});
 
@@ -24,9 +26,6 @@ class Cartpage extends StatefulWidget {
 class _CartpageState extends State<Cartpage> {
   int _currentIndex = 2;
   final TextEditingController couponController = TextEditingController();
-  
-
- 
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +39,8 @@ class _CartpageState extends State<Cartpage> {
         body: SingleChildScrollView(
           child: Column(
             children: [
-              CustomHeader(title: "السلة",
+              CustomHeader(
+                title: "السلة",
                 onBack: () {
                   Navigator.pushReplacement(
                     context,
@@ -79,13 +79,11 @@ class _CartpageState extends State<Cartpage> {
                         child: CartCard(
                           product: cartProvider.cartItems[index],
 
-                         onDelete: () {
+                          onDelete: () {
                             cartProvider.removeItem(
                               cartProvider.cartItems[index],
                             );
                           },
-
-                         
                         ),
                       );
                     },
@@ -248,6 +246,11 @@ class _CartpageState extends State<Cartpage> {
                 break;
 
               case 4:
+                Navigator.pushReplacement(
+                  context,
+
+                  MaterialPageRoute(builder: (_) => ProfileScreen()),
+                );
                 break;
             }
           },

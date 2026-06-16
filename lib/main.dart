@@ -15,7 +15,9 @@ import 'package:t_1app/providers/forgot_provider.dart';
 import 'package:t_1app/providers/home_product_provider.dart';
 import 'package:t_1app/providers/homeworld_provider.dart';
 import 'package:t_1app/providers/notification_provider.dart';
+import 'package:t_1app/providers/order_provider.dart';
 import 'package:t_1app/providers/otp_provider.dart';
+import 'package:t_1app/providers/card_provider.dart';
 import 'package:t_1app/providers/product_provider.dart';
 import 'package:t_1app/providers/register_provider.dart';
 import 'package:t_1app/providers/reset_provider.dart';
@@ -66,6 +68,8 @@ void main() async {
         ChangeNotifierProvider(create: (_) => NotificationProvider()),
         ChangeNotifierProvider(create: (_) => CartProvider()),
         ChangeNotifierProvider(create: (_) => AddressProvider()),
+       ChangeNotifierProvider(create: (_) => CardProvider()),
+       ChangeNotifierProvider(create: (_) => OrderProvider()),
       ],
       child: MyApp(),
     ),

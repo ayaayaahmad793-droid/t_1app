@@ -4,8 +4,9 @@ import 'package:google_fonts/google_fonts.dart';
 
 class GreenHeader extends StatelessWidget {
   final String title;
+  final VoidCallback? onBack;
 
-  const GreenHeader({super.key, required this.title});
+  const GreenHeader({super.key, required this.title,required this.onBack});
 
   @override
   Widget build(BuildContext context) {
@@ -37,9 +38,11 @@ class GreenHeader extends StatelessWidget {
           left: 10.w,
           child: IconButton(
             icon: const Icon(Icons.arrow_forward_ios, color: Color(0xff000000)),
-            onPressed: () {
-              Navigator.pop(context);
-            },
+            onPressed:
+                onBack ??
+                () {
+                  Navigator.pop(context);
+                },
           ),
         ),
       ],

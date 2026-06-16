@@ -94,7 +94,9 @@ class _ShopDataState extends State<ShopData> {
             key: _formKey,
             child: Column(
               children: [
-                GreenHeader(title: "اكمال بيانات المحل"),
+                GreenHeader(title: "اكمال بيانات المحل",onBack: () {
+                  
+                },),
 
                 SizedBox(height: 10.h),
                 Padding(

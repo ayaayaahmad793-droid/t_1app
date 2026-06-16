@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:t_1app/screens/HomePage.dart';
+import 'package:t_1app/screens/department.dart';
 import 'package:t_1app/widgets/AddExchangeItem.dart';
 import 'package:t_1app/widgets/exchangeCard.dart';
 import 'package:t_1app/widgets/greenHeader.dart';
@@ -33,7 +35,14 @@ class _ExchangeState extends State<Exchange> {
         backgroundColor: Color(0xffFFFFFF),
         body: Column(
           children: [
-            GreenHeader(title: "بدل بفائدة"),
+            GreenHeader(title: "بدل بفائدة",
+              onBack: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (_) => Department()),
+                );
+              },
+            ),
             SizedBox(height: 15.h),
           SearchBox(
               onChanged: (value) {

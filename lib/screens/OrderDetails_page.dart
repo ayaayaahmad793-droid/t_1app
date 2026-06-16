@@ -1,15 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:t_1app/Rest_App_Screens/ChatListScreen.dart';
+import 'package:t_1app/Rest_App_Screens/Pesron.dart';
 import 'package:t_1app/models/Button_Model.dart';
+import 'package:t_1app/providers/cart_provider.dart';
+import 'package:t_1app/providers/order_provider.dart';
 import 'package:t_1app/widgets/Button.dart';
 import 'package:t_1app/widgets/greenHeader.dart';
+import 'package:provider/provider.dart';
+import 'package:t_1app/providers/address_provider.dart';
 
 class OrderDetailsPage extends StatelessWidget {
   const OrderDetailsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final address = context.watch<AddressProvider>().address;
+    final order = context.watch<OrderProvider>().order;
+    if (order == null) {
+      return const Scaffold(body: Center(child: Text("لا يوجد طلب")));
+    }
+    final cartProvider = context.watch<CartProvider>();
+    
+    
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
@@ -18,7 +32,12 @@ class OrderDetailsPage extends StatelessWidget {
         body: Column(
           children: [
             /// Header
-            GreenHeader(title: "تفاصيل الطلب"),
+            GreenHeader(title: "تفاصيل الطلب",onBack: (){
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (_) => ProfileScreen()),
+                );
+              },),
 
             Expanded(
               child: SingleChildScrollView(
@@ -82,7 +101,14 @@ class OrderDetailsPage extends StatelessWidget {
                               button: ButtonModel(
                                 text: " مراسلة المتجر بخصوص الطلب",
                                 color: Color(0xffF57C00),
-                                onPressed: () {},
+                                onPressed: () {
+                                  Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (_) => ChatListScreen(),
+                                    ),
+                                  );
+                                },
                               ),
                             ),
                           ),
@@ -106,13 +132,18 @@ class OrderDetailsPage extends StatelessWidget {
                           ),
 
                           SizedBox(height: 18.h),
-                          buildInfoRow("#123", "رقم الطلب:"),
+                         buildInfoRow(order.orderNumber, "رقم الطلب:"),
 
                           SizedBox(height: 10.h),
-                          buildInfoRow("التوصيل للمنزل", "طريقة الاستلام:"),
+                         buildInfoRow(order.deliveryMethod, "طريقة الاستلام:"),
 
                           SizedBox(height: 10.h),
-                          buildInfoRow("غزة _ دير البلح", "العنوان:"),
+                          buildInfoRow(
+                            address != null
+                                ? "${address.country} - ${address.city} - ${address.street}"
+                                : "لم يتم إضافة عنوان",
+                            "العنوان:",
+                          ),
                         ],
                       ),
                     ),
@@ -133,40 +164,53 @@ class OrderDetailsPage extends StatelessWidget {
                           ),
 
                           SizedBox(height: 18.h),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              buildCard(
-                                child: Row(
-                                  children: [
-                                    Image.asset("images/orderdetails1.png"),
-                                    SizedBox(width: 5.w),
-                                    Text(
-                                      "Apple\nMacBook Air",
-                                      style: GoogleFonts.cairo(
-                                        fontSize: 12.sp,
-                                        fontWeight: FontWeight.w500,
-                                      ),
+                          Wrap(
+                            spacing: 10.w,
+                            runSpacing: 10.h,
+                            children:
+                                order.products.map((product) {
+                                  return buildCard(
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Image.asset(
+                                          product.productImage,
+                                          width: 50.w,
+                                          height: 50.h,
+                                          fit: BoxFit.cover,
+                                        ),
+
+                                        SizedBox(width: 8.w),
+
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            SizedBox(
+                                              width: 90.w,
+                                              child: Text(
+                                                product.productName,
+                                                maxLines: 2,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: GoogleFonts.cairo(
+                                                  fontSize: 12.sp,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
+                                              ),
+                                            ),
+
+                                            Text(
+                                              "الكمية: ${product.quantity}",
+                                              style: GoogleFonts.cairo(
+                                                fontSize: 11.sp,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
                                     ),
-                                  ],
-                                ),
-                              ),
-                              buildCard(
-                                child: Row(
-                                  children: [
-                                    Image.asset("images/orderdetails2.png"),
-                                    SizedBox(width: 5.w),
-                                    Text(
-                                      "Apple\nAirPods Pro",
-                                      style: GoogleFonts.cairo(
-                                        fontSize: 12.sp,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
+                                  );
+                                }).toList(),
                           ),
 
                           SizedBox(height: 18.h),
@@ -180,13 +224,24 @@ class OrderDetailsPage extends StatelessWidget {
                           SizedBox(height: 10.h),
                           Divider(thickness: 1, color: Color(0xffB7B7B7)),
                           SizedBox(height: 10.h),
-                          buildPriceRow("\$998.00", "السعر"),
+                          buildPriceRow(
+                            "\$${order.subtotal.toStringAsFixed(2)}",
+                            "السعر",
+                          ),
 
                           SizedBox(height: 10.h),
-                          buildPriceRow("\$25.00", "الخصم"),
+
+                          buildPriceRow(
+                            "\$${order.deliveryFee.toStringAsFixed(2)}",
+                            "التوصيل",
+                          ),
 
                           SizedBox(height: 10.h),
-                          buildPriceRow("\$995.00", "السعر الكلي"),
+
+                          buildPriceRow(
+                            "\$${order.total.toStringAsFixed(2)}",
+                            "السعر الكلي",
+                          ),
                         ],
                       ),
                     ),

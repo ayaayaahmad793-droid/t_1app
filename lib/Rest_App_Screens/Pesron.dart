@@ -5,12 +5,12 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:t_1app/Rest_App_Screens/Person_Controller.dart';
 import 'package:t_1app/screens/CartPage.dart';
 import 'package:t_1app/screens/FavPage.dart';
+import 'package:t_1app/screens/OrderDetails_page.dart';
 import 'package:t_1app/screens/department.dart';
 import 'package:t_1app/widgets/NavigationBar.dart'; // تأكدي من استيراد الـ NavBar
 import 'package:t_1app/screens/HomePage.dart'; // تأكدي من استيراد الصفحة الرئيسية
 
 class ProfileScreen extends StatefulWidget {
-
   ProfileScreen({super.key});
 
   @override
@@ -37,16 +37,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
           IconButton(
             icon: Directionality(
               textDirection: TextDirection.ltr,
-                child: Icon(Icons.arrow_back_ios)),
+              child: Icon(Icons.arrow_back_ios),
+            ),
             onPressed: () => Get.back(),
           ),
         ],
-        title:  Text(
+        title: Text(
           "الحساب الشخصي",
           style: GoogleFonts.cairo(
             fontWeight: FontWeight.w600,
             fontSize: 22.sp,
-          ),        ),
+          ),
+        ),
         centerTitle: true,
       ),
       body: Padding(
@@ -62,24 +64,38 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
               child: Row(
                 children: [
-                  const CircleAvatar(radius: 30, backgroundColor: Colors.green, child: Icon(Icons.person, size: 40, color: Colors.white)),
+                  const CircleAvatar(
+                    radius: 30,
+                    backgroundColor: Colors.green,
+                    child: Icon(Icons.person, size: 40, color: Colors.white),
+                  ),
                   const SizedBox(width: 15),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(controller.userName.value,
+                        Text(
+                          controller.userName.value,
                           style: GoogleFonts.cairo(
-                              fontWeight: FontWeight.w600,
-                              fontSize: 16.sp,
-                    ),
+                            fontWeight: FontWeight.w600,
+                            fontSize: 16.sp,
+                          ),
                         ),
-                        Text(controller.userEmail.value, style: const TextStyle(color: Colors.grey)),
-                        Text(controller.userPhone.value, style: const TextStyle(color: Colors.grey)),
+                        Text(
+                          controller.userEmail.value,
+                          style: const TextStyle(color: Colors.grey),
+                        ),
+                        Text(
+                          controller.userPhone.value,
+                          style: const TextStyle(color: Colors.grey),
+                        ),
                       ],
                     ),
                   ),
-                  IconButton(onPressed: () {}, icon: const Icon(Icons.edit, color: Colors.green)),
+                  IconButton(
+                    onPressed: () {},
+                    icon: const Icon(Icons.edit, color: Colors.green),
+                  ),
                 ],
               ),
             ),
@@ -87,42 +103,78 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
             // Menu Items
             Directionality(
-                textDirection: TextDirection.rtl,
-                child: Column(
-                  children: [
-                    _buildMenuItem("طلباتي", Icons.arrow_back_ios, onTap: () => Get.to(() => const EmptyResultsScreen())),
-                    _buildMenuItem("طلبات التبادل", Icons.arrow_back_ios, onTap: () => Get.to(() => const EmptyResultsScreen())),
-                    _buildMenuItem("طلبات التبرع", Icons.arrow_back_ios, onTap: () => Get.to(() => const EmptyResultsScreen())),
-                    _buildMenuItem("اللغة", Icons.language),
+              textDirection: TextDirection.rtl,
+              child: Column(
+                children: [
+                  _buildMenuItem(
+                    "طلباتي",
+                    Icons.arrow_back_ios,
+                    onTap: () => Get.to(() => OrderDetailsPage()),
+                  ),
+                  _buildMenuItem(
+                    "طلبات التبادل",
+                    Icons.arrow_back_ios,
+                    onTap: () => Get.to(() => const EmptyResultsScreen()),
+                  ),
+                  _buildMenuItem(
+                    "طلبات التبرع",
+                    Icons.arrow_back_ios,
+                    onTap: () => Get.to(() => const EmptyResultsScreen()),
+                  ),
+                  _buildMenuItem("اللغة", Icons.language),
 
-                    Obx(() => Container(
+                  Obx(
+                    () => Container(
                       margin: const EdgeInsets.only(bottom: 15),
-                      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-                      decoration: BoxDecoration(border: Border.all(color: Colors.grey, width: 2), borderRadius: BorderRadius.circular(10)),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 15,
+                        vertical: 5,
+                      ),
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.grey, width: 2),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
                       child: Row(
                         children: [
                           const Icon(Icons.notifications_none),
                           const SizedBox(width: 10),
-                           Text("الاشعارات" ,
+                          Text(
+                            "الاشعارات",
                             style: GoogleFonts.cairo(
-                          fontWeight: FontWeight.w600,
-                            fontSize: 16.sp,
-                          ),),
+                              fontWeight: FontWeight.w600,
+                              fontSize: 16.sp,
+                            ),
+                          ),
                           const Spacer(),
-                          Text(controller.isNotificationsEnabled.value ? "مفعلة" : "غير مفعلة", style: const TextStyle(color: Colors.grey)),
+                          Text(
+                            controller.isNotificationsEnabled.value
+                                ? "مفعلة"
+                                : "غير مفعلة",
+                            style: const TextStyle(color: Colors.grey),
+                          ),
                           Switch(
                             value: controller.isNotificationsEnabled.value,
-                            onChanged: (val) => controller.toggleNotifications(val),
+                            onChanged:
+                                (val) => controller.toggleNotifications(val),
                             activeColor: Colors.orange,
                           ),
                         ],
                       ),
-                    )),
+                    ),
+                  ),
 
-                    _buildMenuItem("عن التطبيق (سياسة الخصوصية، الشروط والأحكام)", Icons.arrow_back_ios),
-                    _buildMenuItem("تسجيل الخروج", Icons.logout, color: Colors.orange),
-                  ],
-                ))
+                  _buildMenuItem(
+                    "عن التطبيق (سياسة الخصوصية، الشروط والأحكام)",
+                    Icons.arrow_back_ios,
+                  ),
+                  _buildMenuItem(
+                    "تسجيل الخروج",
+                    Icons.logout,
+                    color: Colors.orange,
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),
@@ -175,11 +227,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
           }
         },
       ),
-
     );
   }
 
-  Widget _buildMenuItem(String title, IconData icon, {Color color = Colors.black, VoidCallback? onTap}) {
+  Widget _buildMenuItem(
+    String title,
+    IconData icon, {
+    Color color = Colors.black,
+    VoidCallback? onTap,
+  }) {
     return Container(
       height: 65,
       margin: const EdgeInsets.only(bottom: 15),
@@ -192,10 +248,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
         onTap: onTap,
         child: Row(
           children: [
-            Expanded(child: Text(title, style: GoogleFonts.cairo(fontWeight: FontWeight.bold, color: color, fontSize: 16))),
+            Expanded(
+              child: Text(
+                title,
+                style: GoogleFonts.cairo(
+                  fontWeight: FontWeight.bold,
+                  color: color,
+                  fontSize: 16,
+                ),
+              ),
+            ),
             Directionality(
-                textDirection: TextDirection.ltr,
-                child: Icon(icon, size: 23, color: color)),
+              textDirection: TextDirection.ltr,
+              child: Icon(icon, size: 23, color: color),
+            ),
           ],
         ),
       ),
@@ -211,11 +277,19 @@ class EmptyResultsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(backgroundColor: Colors.white, elevation: 0, iconTheme: const IconThemeData(color: Colors.black)),
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        iconTheme: const IconThemeData(color: Colors.black),
+      ),
       body: const Center(
         child: Text(
           "لا يوجد نتائج حالياً",
-          style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.grey),
+          style: TextStyle(
+            fontSize: 22,
+            fontWeight: FontWeight.bold,
+            color: Colors.grey,
+          ),
         ),
       ),
     );

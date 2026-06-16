@@ -30,7 +30,12 @@ class _DepartmentState extends State<Department> {
 
         body: Column(
           children: [
-            GreenHeader(title: "الاقسام"),
+            GreenHeader(title: "الاقسام",onBack: () {
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (_) => Homepage()),
+                );
+            },),
 
             SizedBox(height: 20.h),
 

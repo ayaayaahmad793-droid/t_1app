@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:t_1app/screens/HomePage.dart';
 import 'package:t_1app/widgets/header.dart';
 import 'package:provider/provider.dart';
 import 'package:t_1app/providers/address_provider.dart';
@@ -32,7 +33,12 @@ class TrackLocationPage extends StatelessWidget {
               top: 0.h,
               right: 0,
               left: 0,
-              child: CustomHeader(title: "تتبع الموقع"),
+              child: CustomHeader(title: "تتبع الموقع",onBack: (){
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (_) => Homepage()),
+                  );
+                },),
             ),
 
             /// البطاقة السفلية

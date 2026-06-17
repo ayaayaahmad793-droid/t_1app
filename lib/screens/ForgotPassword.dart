@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:t_1app/Rest_App_Screens/Services/Auth_Supa.dart';
 import 'package:t_1app/screens/AuthCode.dart';
 import 'package:t_1app/models/Button_Model.dart';
 import 'package:t_1app/providers/forgot_provider.dart';
@@ -100,10 +101,15 @@ class _ForgotpasswordState extends State<Forgotpassword> {
                           button: ButtonModel(
                             text: " ارسال رمز التحقق",
                             color: Color(0xffF57C00),
-                           onPressed: () {
+                            // داخل زر "ارسال رمز التحقق" في Forgotpassword.dart
+                            onPressed: () async {
                               final provider = context.read<ForgotProvider>();
 
                               if (provider.validate()) {
+                                // 1. إرسال الإيميل لسوبابيس
+                                await AuthService().sendResetEmail(provider.email);
+
+                                // 2. الانتقال لصفحة الكود
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(builder: (_) => AuthCode()),

@@ -20,9 +20,9 @@ class OtpFields extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: List.generate(4, (index) {
+      children: List.generate(6, (index) {
         return Container(
-          width: 70.w,
+          width: 40.w,
           height: 50.h,
           margin: EdgeInsets.symmetric(horizontal: 10.w),
           child: TextField(

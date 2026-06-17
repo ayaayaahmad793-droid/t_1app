@@ -29,22 +29,29 @@ class AuthService extends ChangeNotifier {
   }
 
   // ملاحظة: بما أننا نستخدم signInWithOtp، نوع الـ OTP هنا سيكون verify
+// في ملف AuthService.dart
+// في ملف AuthService.dart - استبدلي الدالة الحالية بهذه الدالة
   Future<bool> verifyOTP(String email, String token) async {
     try {
+      // التغيير الجوهري هنا: استخدام OtpType.email بدلاً من magiclink
       final response = await _client.auth.verifyOTP(
-        type: OtpType.magiclink, // استخدمي email
+        type: OtpType.magiclink,
         token: token,
         email: email,
       );
-      // التأكد من أن الجلسة قد فُتحت
+
+      // طباعة النتيجة للـ Debugging
+      print("نتيجة التحقق: ${response.session != null}");
       return response.session != null;
     } catch (e) {
-      print("خطأ التحقق: $e");
+      print("خطأ التحقق في سوبابيس: $e");
       return false;
     }
   }
 
   Future<void> updatePassword(String newPassword) async {
-    await _client.auth.updateUser(UserAttributes(password: newPassword));
+    await _client.auth.updateUser(
+      UserAttributes(password: newPassword),
+    );
   }
 }

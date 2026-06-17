@@ -33,7 +33,7 @@ class _AccounttypeState extends State<Accounttype> {
         backgroundColor: Color(0xffFFFFFF),
         body: Column(
           children: [
-            GreenHeader(title: "اختر نوع حسابك",onBack: (){},),
+            GreenHeader(title: "اختر نوع حسابك", onBack: () {}),
 
             SizedBox(height: 35.h),
 
@@ -76,14 +76,16 @@ class _AccounttypeState extends State<Accounttype> {
                   button: ButtonModel(
                     text: "المتابعة",
                     color: Color(0xffF57C00),
-                    onPressed: () {
+                    onPressed: () async {
                       if (provider.selectedIndex == -1) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(content: Text("يرجى اختيار نوع الحساب")),
                         );
                         return;
                       }
+                      final prefs = await SharedPreferences.getInstance();
 
+                      await prefs.setInt("accountType", provider.selectedIndex);
                       final pages = [Homepage(), ShopData()];
 
                       Navigator.push(

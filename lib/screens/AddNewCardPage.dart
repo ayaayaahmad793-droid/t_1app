@@ -4,7 +4,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:t_1app/models/Button_Model.dart';
 import 'package:t_1app/models/notification_model.dart';
 import 'package:t_1app/providers/notification_provider.dart';
-import 'package:t_1app/screens/CartPage.dart';
 import 'package:t_1app/screens/TheComplete_Order_page.dart';
 import 'package:t_1app/successDialog.dart';
 import 'package:t_1app/widgets/Button.dart';

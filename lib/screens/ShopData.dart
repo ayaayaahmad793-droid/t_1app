@@ -6,6 +6,7 @@ import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
+import 'package:t_1app/screens/AccountType.dart';
 import 'package:t_1app/screens/TheShop.dart';
 import 'package:t_1app/models/Button_Model.dart';
 import 'package:t_1app/providers/shopData_provider.dart';
@@ -35,8 +36,9 @@ class _ShopDataState extends State<ShopData> {
       var status = await Permission.camera.request();
       if (!status.isGranted) return;
     } else {
-      var status = await Permission.storage.request(); //  الصح
-      if (!status.isGranted) return;
+      if (Platform.isAndroid) {
+        await Permission.photos.request();
+      }
     }
 
     final XFile? pickedFile = await _picker.pickImage(source: source);
@@ -94,9 +96,15 @@ class _ShopDataState extends State<ShopData> {
             key: _formKey,
             child: Column(
               children: [
-                GreenHeader(title: "اكمال بيانات المحل",onBack: () {
-                  
-                },),
+                GreenHeader(
+                  title: "اكمال بيانات المحل",
+                  onBack: () {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (_) => Accounttype()),
+                    );
+                  },
+                ),
 
                 SizedBox(height: 10.h),
                 Padding(
@@ -250,7 +258,7 @@ class _ShopDataState extends State<ShopData> {
                       text: "انهاء التسجيل كصاحب محل",
                       color: Color(0xffF57C00),
                       onPressed: () {
-                       if (!_formKey.currentState!.validate()) return;
+                        if (!_formKey.currentState!.validate()) return;
 
                         //  خذي القيم مباشرة من الـ controllers
                         provider.setName(nameController.text);

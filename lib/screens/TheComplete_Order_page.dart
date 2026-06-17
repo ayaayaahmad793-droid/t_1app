@@ -15,8 +15,6 @@ import 'package:t_1app/widgets/PaymentMethodCard_widget.dart';
 import 'package:t_1app/widgets/header.dart';
 import 'package:provider/provider.dart';
 import 'package:t_1app/providers/cart_provider.dart';
-import 'package:provider/provider.dart';
-import 'package:t_1app/providers/cart_provider.dart';
 
 class ThecompleteOrderPage extends StatefulWidget {
   const ThecompleteOrderPage({super.key});

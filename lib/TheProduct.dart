@@ -1,9 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:t_1app/AddProduct.dart';
-import 'package:t_1app/screens/HomePage.dart';
 import 'package:t_1app/models/Button_Model.dart';
+import 'package:t_1app/screens/TheShop.dart';
 import 'package:t_1app/widgets/Button.dart';
 import 'package:t_1app/widgets/greenHeader.dart';
 
@@ -12,7 +14,7 @@ class Product {
   final String code;
   final String price;
   final String oldPrice;
-  final String image;
+  final String? image;
   final bool available;
   final String amount;
 
@@ -35,12 +37,8 @@ class Theproduct extends StatefulWidget {
 }
 
 class _TheproductState extends State<Theproduct> {
- 
-
-  
   @override
   void dispose() {
-   
     super.dispose();
   }
 
@@ -98,7 +96,13 @@ class _TheproductState extends State<Theproduct> {
         backgroundColor: const Color(0xffFFFFFF),
         body: Column(
           children: [
-            GreenHeader(title: "المنتجات",onBack: (){},),
+            GreenHeader(title: "المنتجات", onBack: () {
+               Navigator.pushReplacement(
+                  context,
+
+                  MaterialPageRoute(builder: (_) => Theshop()),
+                );
+            }),
             SizedBox(height: 15.h),
 
             Row(
@@ -144,7 +148,6 @@ class _TheproductState extends State<Theproduct> {
                             ),
                           ),
                         ),
-                        
                       ],
                     ),
                   ),
@@ -314,10 +317,28 @@ class _TheproductState extends State<Theproduct> {
                   button: ButtonModel(
                     text: "اضافة المنتج",
                     color: Color(0xffF57C00),
-                    onPressed: () {
-                      Navigator.of(context).push(
+                    onPressed: () async {
+                      final result = await Navigator.of(context).push(
                         MaterialPageRoute(builder: (context) => Addproduct()),
                       );
+
+                      if (result != null) {
+                        setState(() {
+                          products.add(
+                            Product(
+                              name: result["name"],
+                              code: "الكود: جديد",
+                              price: result["price"],
+                              oldPrice: result["oldPrice"],
+                              image: result["image"],
+                              available: result["available"],
+                              amount: result["amount"],
+                            ),
+                          );
+
+                          filteredProducts = products;
+                        });
+                      }
                     },
                   ),
                 ),
@@ -334,7 +355,7 @@ class ProductCard extends StatelessWidget {
   final String name;
   final String price;
   final String oldPrice;
-  final String image;
+  final String? image;
   final bool available;
   final String code;
   final String amount;
@@ -372,13 +393,15 @@ class ProductCard extends StatelessWidget {
           children: [
             Container(
               width: 102.w,
-              height: 119.w,
-              decoration: BoxDecoration(
+              height: 119.h,
+              child: ClipRRect(
                 borderRadius: BorderRadius.circular(16.r),
-                image: DecorationImage(
-                  image: AssetImage(image),
-                  fit: BoxFit.cover,
-                ),
+                child:
+                    image == null
+                        ? Image.asset("images/product1.png", fit: BoxFit.cover)
+                        : image!.startsWith("images/")
+                        ? Image.asset(image!, fit: BoxFit.cover)
+                        : Image.file(File(image!), fit: BoxFit.cover),
               ),
             ),
             SizedBox(width: 10.w),

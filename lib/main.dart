@@ -26,6 +26,7 @@ import 'package:t_1app/screens/HomePage.dart';
 import 'package:t_1app/screens/OnboardingScreens/Onboarding1.dart';
 import 'package:provider/provider.dart';
 import 'package:t_1app/screens/ShopData.dart';
+import 'Rest_App_Screens/Services/Auth_Supa.dart';
 import 'providers/login_provider.dart';
 import 'package:t_1app/providers/uniqe_product_provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -46,6 +47,7 @@ void main() async {
   runApp(
     MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (_) => AuthService()),
         ChangeNotifierProvider<ShopProvider>.value(value: shopProvider),
         ChangeNotifierProvider(create: (_) => LoginProvider()),
         ChangeNotifierProvider(create: (_) => RegisterProvider()),

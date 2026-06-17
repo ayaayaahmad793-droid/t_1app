@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:t_1app/screens/EverydayLifePage.dart';
 import 'package:t_1app/screens/Giveyourgoodness_page.dart';
-import 'package:t_1app/screens/HomePage.dart';
 import 'package:t_1app/screens/HomeWorld.dart';
 import 'package:t_1app/screens/MakeupAndClothesPage.dart';
 import 'package:t_1app/screens/TechnologyPage.dart';

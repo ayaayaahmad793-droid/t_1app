@@ -11,6 +11,8 @@ import 'package:t_1app/widgets/Social1_button.dart';
 import 'package:t_1app/widgets/TextFiled.dart';
 import 'package:provider/provider.dart';
 import 'package:t_1app/providers/login_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:t_1app/screens/TheShop.dart';
 
 class Log extends StatefulWidget {
   const Log({super.key});
@@ -109,10 +111,27 @@ class _LogState extends State<Log> {
                               bool success = await provider.loginUser();
 
                               if (success) {
-                                Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(builder: (_) => Homepage()),
-                                );
+                                final prefs =
+                                    await SharedPreferences.getInstance();
+
+                                int accountType =
+                                    prefs.getInt("accountType") ?? 0;
+
+                                if (accountType == 0) {
+                                  Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (_) => Homepage(),
+                                    ),
+                                  );
+                                } else {
+                                  Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (_) => Theshop(),
+                                    ),
+                                  );
+                                }
                               }
                             },
                           ),

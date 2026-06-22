@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:t_1app/screens/AccountType.dart';
-import 'package:t_1app/screens/HomePage.dart';
 import 'package:t_1app/models/Button_Model.dart';
 import 'package:t_1app/widgets/Button.dart';
 import 'package:t_1app/widgets/CurveHeader.dart';

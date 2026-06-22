@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:t_1app/TheProduct.dart';
 import 'package:t_1app/models/Button_Model.dart';
 import 'package:t_1app/widgets/Button.dart';
 import 'dart:io';
@@ -31,8 +32,10 @@ class _AddproductState extends State<Addproduct> {
       var status = await Permission.camera.request();
       if (!status.isGranted) return;
     } else {
-      var status = await Permission.storage.request();
-      if (!status.isGranted) return;
+      if (Platform.isAndroid) {
+        var status = await Permission.photos.request();
+        if (!status.isGranted) return;
+      }
     }
 
     final XFile? pickedFile = await _picker.pickImage(source: source);
@@ -145,7 +148,16 @@ class _AddproductState extends State<Addproduct> {
         body: SingleChildScrollView(
           child: Column(
             children: [
-              GreenHeader(title: "اضافة المنتجات",onBack: (){},),
+              GreenHeader(
+                title: "اضافة المنتجات",
+                onBack: () {
+                  Navigator.pushReplacement(
+                    context,
+
+                    MaterialPageRoute(builder: (_) => Theproduct()),
+                  );
+                },
+              ),
 
               Padding(
                 padding: EdgeInsets.only(right: 20.w, top: 15.h),
@@ -181,7 +193,7 @@ class _AddproductState extends State<Addproduct> {
                     child: TextField(
                       controller: nameController,
                       keyboardType: TextInputType.text,
-
+                      controller: nameController,
                       decoration: InputDecoration(
                         hintText: "",
                         fillColor: Color(0xffF5F5F5),
@@ -213,6 +225,7 @@ class _AddproductState extends State<Addproduct> {
                 child: TextField(
                   controller: descController,
                   keyboardType: TextInputType.text,
+                  controller: descController,
                   decoration: InputDecoration(
                     hintText: "",
                     fillColor: Color(0xffF5F5F5),
@@ -410,7 +423,7 @@ class _AddproductState extends State<Addproduct> {
                     child: TextField(
                       controller: quantityController,
                       keyboardType: TextInputType.number,
-
+                      controller: quantityController,
                       decoration: InputDecoration(
                         hintText: "",
                         fillColor: Color(0xffF5F5F5),
@@ -489,22 +502,20 @@ class _AddproductState extends State<Addproduct> {
                       text: "تاكيد اضافة المنتج",
                       color: Color(0xffF57C00),
                       onPressed: () {
-                        if (nameController.text.isEmpty) {
-                          return;
-                        }
-                        final product = {
-                          "name": nameController.text,
-                          "desc": descController.text,
-                          "price": priceController.text,
-                          "discount": discountController.text,
-                          "quantity": quantityController.text,
-                          "available": available,
-                          "image": _image?.path,
-                        };
-
-                        print(product); // جاهز للـ Firebase
-
                         showSuccessDialog(context);
+
+                        Future.delayed(Duration(seconds: 2), () {
+                          Navigator.pop(context);
+
+                          Navigator.pop(context, {
+                            "name": nameController.text,
+                            "price": priceController.text,
+                            "oldPrice": discountController.text,
+                            "available": available == "متوفر",
+                            "amount": "الكمية: ${quantityController.text}",
+                            "image": _image?.path,
+                          });
+                        });
                       },
                     ),
                   ),

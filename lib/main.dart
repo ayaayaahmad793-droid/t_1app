@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:t_1app/providers/address_provider.dart';
 import 'package:t_1app/providers/cart_provider.dart';
 import 'package:t_1app/providers/daily_life_provider.dart';

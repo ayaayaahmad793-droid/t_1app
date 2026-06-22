@@ -10,7 +10,6 @@ import 'package:t_1app/providers/account_type_provider.dart';
 import 'package:t_1app/widgets/Button.dart';
 import 'package:t_1app/widgets/greenHeader.dart';
 import 'package:t_1app/widgets/account_type_card.dart';
-
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class Accounttype extends StatefulWidget {
@@ -32,90 +31,96 @@ class _AccounttypeState extends State<Accounttype> {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
-        backgroundColor: Color(0xffFFFFFF),
-        body: Column(
-          children: [
-            GreenHeader(title: "اختر نوع حسابك",onBack: (){},),
+        backgroundColor: const Color(0xffFFFFFF),
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              GreenHeader(title: "اختر نوع حسابك", onBack: () {}),
 
-            SizedBox(height: 35.h),
+              SizedBox(height: 35.h),
 
-            Text(
-              "حدد نوع الحساب لنقدم لك",
-              style: GoogleFonts.cairo(
-                fontSize: 20.sp,
-                fontWeight: FontWeight.w600,
+              Text(
+                "حدد نوع الحساب لنقدم لك",
+                style: GoogleFonts.cairo(
+                  fontSize: 20.sp,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
-            ),
 
-            SizedBox(height: 15.h),
+              SizedBox(height: 15.h),
 
-            Text(
-              " افضل تجربة",
-              style: GoogleFonts.cairo(
-                fontSize: 20.sp,
-                fontWeight: FontWeight.w600,
+              Text(
+                " افضل تجربة",
+                style: GoogleFonts.cairo(
+                  fontSize: 20.sp,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
-            ),
 
-            ...List.generate(accountTypes.length, (index) {
-              return AccountTypeCard(
-                index: index,
-                selectedIndex: provider.selectedIndex,
-                title: accountTypes[index]["title"]!,
-                subtitle: accountTypes[index]["subtitle"]!,
-                onTap: () {
-                  provider.selectAccount(index);
-                },
-              );
-            }),
-            SizedBox(height: 280.h),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20.w),
-              child: SizedBox(
-                height: 50.h,
-                width: double.infinity,
-                child: CustomButton(
-                  button: ButtonModel(
-                    text: "المتابعة",
-                    color: Color(0xffF57C00),
-                    onPressed: () async {
-                      if (provider.selectedIndex == -1) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text("يرجى اختيار نوع الحساب")),
-                        );
-                        return;
-                      }
-
-                      // حفظ نوع الحساب في Supabase
-                      final userId = Supabase.instance.client.auth.currentUser?.id;
-                      if (userId != null) {
-                        try {
-                          await Supabase.instance.client
-                              .from('profiles')
-                              .update({'account_type': provider.selectedIndex})
-                              .eq('id', userId);
-                        } catch (e) {
+              ...List.generate(accountTypes.length, (index) {
+                return AccountTypeCard(
+                  index: index,
+                  selectedIndex: provider.selectedIndex,
+                  title: accountTypes[index]["title"]!,
+                  subtitle: accountTypes[index]["subtitle"]!,
+                  onTap: () {
+                    provider.selectAccount(index);
+                  },
+                );
+              }),
+              SizedBox(height: 180.h), // تم تقليل الارتفاع قليلاً ليتناسب مع الشاشات
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20.w),
+                child: SizedBox(
+                  height: 50.h,
+                  width: double.infinity,
+                  child: CustomButton(
+                    button: ButtonModel(
+                      text: "المتابعة",
+                      color: const Color(0xffF57C00),
+                      onPressed: () async {
+                        if (provider.selectedIndex == -1) {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text("فشل حفظ البيانات: $e")),
+                            const SnackBar(content: Text("يرجى اختيار نوع الحساب")),
                           );
                           return;
                         }
-                      }
 
-                      final pages = [Homepage(), ShopData()];
+                        // 1. الحفظ المحلي
+                        final prefs = await SharedPreferences.getInstance();
+                        await prefs.setInt("accountType", provider.selectedIndex);
 
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => pages[provider.selectedIndex],
-                        ),
-                      );
-                    },
+                        // 2. الحفظ في Supabase
+                        final userId = Supabase.instance.client.auth.currentUser?.id;
+                        if (userId != null) {
+                          try {
+                            await Supabase.instance.client
+                                .from('profiles')
+                                .update({'account_type': provider.selectedIndex})
+                                .eq('id', userId);
+                          } catch (e) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text("فشل حفظ البيانات في القاعدة: $e")),
+                            );
+                            return;
+                          }
+                        }
+
+                        final pages = [const Homepage(), const ShopData()];
+
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => pages[provider.selectedIndex],
+                          ),
+                        );
+                      },
+                    ),
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

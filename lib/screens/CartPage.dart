@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:t_1app/Rest_App_Screens/Pesron.dart';
 import 'package:t_1app/models/Button_Model.dart';
-import 'package:t_1app/models/cart_model.dart';
 import 'package:t_1app/screens/FavPage.dart';
 import 'package:t_1app/screens/HomePage.dart';
 import 'package:t_1app/screens/TheComplete_Order_page.dart';

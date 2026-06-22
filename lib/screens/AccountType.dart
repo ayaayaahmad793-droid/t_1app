@@ -11,6 +11,8 @@ import 'package:t_1app/widgets/Button.dart';
 import 'package:t_1app/widgets/greenHeader.dart';
 import 'package:t_1app/widgets/account_type_card.dart';
 
+import 'package:supabase_flutter/supabase_flutter.dart';
+
 class Accounttype extends StatefulWidget {
   const Accounttype({super.key});
 
@@ -76,12 +78,28 @@ class _AccounttypeState extends State<Accounttype> {
                   button: ButtonModel(
                     text: "المتابعة",
                     color: Color(0xffF57C00),
-                    onPressed: () {
+                    onPressed: () async {
                       if (provider.selectedIndex == -1) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(content: Text("يرجى اختيار نوع الحساب")),
                         );
                         return;
+                      }
+
+                      // حفظ نوع الحساب في Supabase
+                      final userId = Supabase.instance.client.auth.currentUser?.id;
+                      if (userId != null) {
+                        try {
+                          await Supabase.instance.client
+                              .from('profiles')
+                              .update({'account_type': provider.selectedIndex})
+                              .eq('id', userId);
+                        } catch (e) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text("فشل حفظ البيانات: $e")),
+                          );
+                          return;
+                        }
                       }
 
                       final pages = [Homepage(), ShopData()];

@@ -7,6 +7,9 @@ class AuthService extends ChangeNotifier {
   Future<AuthResponse> signIn(String email, String password) async =>
       await _client.auth.signInWithPassword(email: email, password: password);
 
+  // Future<AuthResponse> signUp({required String email, required String password, required Map<String, dynamic> data}) async =>
+  //     await _client.auth.signUp(email: email, password: password, data: data);
+
   Future<AuthResponse> signUp({required String email, required String password, required Map<String, dynamic> data}) async =>
       await _client.auth.signUp(email: email, password: password, data: data);
 

@@ -8,8 +8,10 @@ class CartProvider extends ChangeNotifier {
   final List<CartModel> _cartItems = [];
 
   List<CartModel> get cartItems => _cartItems;
-   CartProvider() {
-    loadCart();
+
+  CartProvider() {
+    // تم إزالة loadCart() لضمان أن السلة تبدأ فارغة عند فتح التطبيق
+    // Initial state: Cart starts empty by default
   }
 
   double get subtotal {
@@ -45,11 +47,13 @@ class CartProvider extends ChangeNotifier {
     saveCart();
     notifyListeners();
   }
+
   void clearCart() {
     _cartItems.clear();
     saveCart();
     notifyListeners();
   }
+
   void addToCart(CartModel product) {
     final index = _cartItems.indexWhere(
       (item) => item.productName == product.productName,
@@ -60,31 +64,25 @@ class CartProvider extends ChangeNotifier {
     } else {
       _cartItems.add(product);
     }
-saveCart();
+    saveCart();
     notifyListeners();
   }
+
   Future<void> saveCart() async {
     final prefs = await SharedPreferences.getInstance();
-
     final data = _cartItems.map((item) => item.toJson()).toList();
-
     await prefs.setString('cart_items', jsonEncode(data));
   }
+
+  // يمكن استدعاء هذه الدالة يدوياً إذا لزم الأمر في المستقبل
   Future<void> loadCart() async {
     final prefs = await SharedPreferences.getInstance();
-
     final data = prefs.getString('cart_items');
-
     if (data != null) {
       final decoded = jsonDecode(data) as List;
-
       _cartItems.clear();
-
       _cartItems.addAll(decoded.map((item) => CartModel.fromJson(item)));
-    } else {
-      _cartItems.addAll(cartProduct);
     }
-
     notifyListeners();
   }
 }

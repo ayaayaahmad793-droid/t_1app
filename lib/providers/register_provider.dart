@@ -2,43 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class RegisterProvider extends ChangeNotifier {
-
-
   bool isLoading = false;
 
-  Future<bool> signUpUser(BuildContext context) async {
-    // 1. التأكد من الـ Validation أولاً
-    if (!validate()) return false;
-
-    isLoading = true;
-    notifyListeners();
-
-    try {
-      final supabase = Supabase.instance.client;
-
-      // 2. إرسال طلب التسجيل لـ Supabase
-      await supabase.auth.signUp(
-        email: email,
-        password: password,
-        data: {'full_name': name, 'phone': phone}, // إرسال بيانات إضافية
-      );
-
-      isLoading = false;
-      notifyListeners();
-      return true; // تم التسجيل بنجاح
-    } on AuthException catch (e) {
-      // 3. معالجة الأخطاء (مثلاً: الإيميل مسجل مسبقاً)
-      emailError = e.message;
-      isLoading = false;
-      notifyListeners();
-      return false;
-    } catch (e) {
-      isLoading = false;
-      notifyListeners();
-      return false;
-    }
-  }
-  //////////////////////////////////////////////////////////////////////////////
   String name = '';
   String email = '';
   String phone = '';
@@ -80,7 +45,6 @@ class RegisterProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  // 🔥 Validation
   bool validate() {
     bool isValid = true;
 
@@ -100,7 +64,7 @@ class RegisterProvider extends ChangeNotifier {
     }
 
     if (password.length < 6) {
-      passwordError = "كلمة المرور ضعيفة";
+      passwordError = "كلمة المرور ضعيفة (6 خانات على الأقل)";
       isValid = false;
     }
 
@@ -112,4 +76,98 @@ class RegisterProvider extends ChangeNotifier {
     notifyListeners();
     return isValid;
   }
+
+
+  Future<bool> signUpUser(BuildContext context) async {
+    if (!validate()) return false;
+
+    isLoading = true;
+    notifyListeners();
+
+    try {
+      final supabase = Supabase.instance.client;
+
+      // 1. إنشاء الحساب في المصادقة (Auth)
+      final response = await supabase.auth.signUp(
+        email: email,
+        password: password,
+        data: {
+          'full_name': name,
+          'phone': phone,
+        },
+      );
+
+      // 2. إذا تم إنشاء الحساب بنجاح في الـ Auth، نقوم بإضافة البروفايل يدوياً
+      if (response.user != null) {
+        await supabase.from('profiles').insert({
+          'id': response.user!.id,
+          'full_name': name,
+          'phone': phone,
+          'account_type': 0, // تأكدي من كتابتها هكذا
+        });
+      }
+
+      isLoading = false;
+      notifyListeners();
+      return response.user != null;
+
+    } on AuthException catch (e) {
+      emailError = e.message;
+      isLoading = false;
+      notifyListeners();
+      return false;
+    } catch (e) {
+      print("Registration error: $e");
+      isLoading = false;
+      notifyListeners();
+      return false;
+    }
+  }
+
+  // Future<bool> signUpUser(BuildContext context) async {
+  //   if (!validate()) return false;
+  //
+  //   isLoading = true;
+  //   notifyListeners();
+  //
+  //   try {
+  //     final supabase = Supabase.instance.client;
+  //
+  //     // 1. تسجيل الحساب في Auth
+  //     final response = await supabase.auth.signUp(
+  //       email: email,
+  //       password: password,
+  //       data: {'full_name': name, 'phone': phone},
+  //     );
+  //
+  //     if (response.user != null) {
+  //       // 2. إنشاء السجل في جدول profiles يدوياً لضمان المزامنة
+  //       try {
+  //         await supabase.from('profiles').upsert({
+  //           'id': response.user!.id,
+  //           'full_name': name,
+  //           'phone': phone,
+  //           'email': email,
+  //         });
+  //       } catch (e) {
+  //         print("Note: Profile creation failed or already exists: $e");
+  //         // نتابع العملية لأن الحساب في Auth تم إنشاؤه بالفعل
+  //       }
+  //     }
+  //
+  //     isLoading = false;
+  //     notifyListeners();
+  //     return true;
+  //   } on AuthException catch (e) {
+  //     emailError = e.message;
+  //     isLoading = false;
+  //     notifyListeners();
+  //     return false;
+  //   } catch (e) {
+  //     print("Registration error: $e");
+  //     isLoading = false;
+  //     notifyListeners();
+  //     return false;
+  //   }
+  // }
 }

@@ -191,6 +191,7 @@ class _AddproductState extends State<Addproduct> {
                     width: 267.w,
                     height: 48.h,
                     child: TextField(
+                      controller: nameController,
                       keyboardType: TextInputType.text,
                       controller: nameController,
                       decoration: InputDecoration(
@@ -222,6 +223,7 @@ class _AddproductState extends State<Addproduct> {
                 height: 56.h,
 
                 child: TextField(
+                  controller: descController,
                   keyboardType: TextInputType.text,
                   controller: descController,
                   decoration: InputDecoration(
@@ -419,6 +421,7 @@ class _AddproductState extends State<Addproduct> {
                     width: 86.w,
                     height: 30.h,
                     child: TextField(
+                      controller: quantityController,
                       keyboardType: TextInputType.number,
                       controller: quantityController,
                       decoration: InputDecoration(

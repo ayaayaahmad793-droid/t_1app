@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:t_1app/Rest_App_Screens/Services/Auth_Supa.dart';
 
 class OtpProvider extends ChangeNotifier {
-  List<String> otp = ["", "", "", ""];
+  List<String> otp = List.generate(6, (_) => "");
 
   String? error;
 
@@ -14,13 +14,13 @@ class OtpProvider extends ChangeNotifier {
     return await context.read<AuthService>().verifyOTP(email, code);
   }
 
-  void setDigit(int index, String value) => notifyListeners();
-
-  // void setDigit(int index, String value) {
-  //   otp[index] = value;
-  //   error = null;
-  //   notifyListeners();
-  // }
+  void setDigit(int index, String value) {
+    if (index >= 0 && index < otp.length) {
+      otp[index] = value;
+      error = null;
+      notifyListeners();
+    }
+  }
 
   String getCode() {
     return otp.join();
@@ -36,7 +36,7 @@ class OtpProvider extends ChangeNotifier {
   }
 
   void clear() {
-    otp = ["", "", "", ""];
+    otp = List.generate(6, (_) => "");
     notifyListeners();
   }
 }

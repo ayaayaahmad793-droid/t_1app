@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:t_1app/screens/AccountType.dart';
 import 'package:t_1app/models/Button_Model.dart';
 import 'package:t_1app/widgets/Button.dart';
@@ -158,15 +159,21 @@ class _Create_AccountState extends State<Create_Account> {
                               // تنفيذ عملية التسجيل
                               bool success = await provider.signUpUser(context);
 
-                              if (success) {
-                                // إذا نجح التسجيل، ننتقل لصفحة اختيار نوع الحساب
+                              // التحقق المباشر مما إذا كان هناك مستخدم قد سُجل دخوله حالياً في سوبابيس
+                              final currentUser = Supabase.instance.client.auth.currentUser;
+
+                              if (success || currentUser != null) {
+                                // إذا نجح التسجيل أو كان المستخدم موجوداً بالفعل، ننتقل لصفحة اختيار نوع الحساب
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(content: Text("تم إنشاء الحساب بنجاح")),
+                                );
                                 Navigator.of(context).push(
-                                  MaterialPageRoute(builder: (context) => Accounttype()),
+                                  MaterialPageRoute(builder: (context) => const Accounttype()),
                                 );
                               } else {
-                                // اختيارياً: إظهار رسالة خطأ للمستخدم
+                                // إذا فشل التسجيل تماماً
                                 ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(content: Text("حدث خطأ أثناء إنشاء الحساب، تأكد من البيانات")),
+                                  SnackBar(content: Text(provider.emailError ?? "حدث خطأ أثناء إنشاء الحساب، تأكد من البيانات")),
                                 );
                               }
                             },

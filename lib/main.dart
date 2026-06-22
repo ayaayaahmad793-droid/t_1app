@@ -30,6 +30,7 @@ import 'Rest_App_Screens/Services/Auth_Supa.dart';
 import 'providers/login_provider.dart';
 import 'package:t_1app/providers/uniqe_product_provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:t_1app/screens/TheShop.dart';
 
 final supabase = Supabase.instance.client;
 
@@ -43,6 +44,41 @@ void main() async {
 
   final shopProvider = ShopProvider();
   await shopProvider.loadData(); //  مهم جداً
+
+  Widget homeScreen = const Onboarding1();
+
+  final session = Supabase.instance.client.auth.currentSession;
+  if (session != null) {
+    try {
+      final res = await Supabase.instance.client
+          .from('profiles')
+          .select('account_type')
+          .eq('id', session.user.id)
+          .maybeSingle();
+
+      if (res != null) {
+        final accountType = res['account_type'] as int?;
+        if (accountType == 0) {
+          homeScreen = Homepage();
+        } else if (accountType == 1) {
+          // Check if shop details are already filled
+          final shopRes = await Supabase.instance.client
+              .from('shops')
+              .select('id')
+              .eq('id', session.user.id)
+              .maybeSingle();
+
+          if (shopRes != null) {
+            homeScreen = const Theshop();
+          } else {
+            homeScreen = const ShopData();
+          }
+        }
+      }
+    } catch (e) {
+      print("Error loading profile on startup: $e");
+    }
+  }
 
   runApp(
     MultiProvider(
@@ -72,15 +108,15 @@ void main() async {
        ChangeNotifierProvider(create: (_) => CardProvider()),
        ChangeNotifierProvider(create: (_) => OrderProvider()),
       ],
-      child: MyApp(),
+      child: MyApp(homeScreen: homeScreen),
     ),
   );
 }
 
 class MyApp extends StatelessWidget {
-  final int? accountType;
+  final Widget homeScreen;
 
-  const MyApp({super.key, this.accountType});
+  const MyApp({super.key, required this.homeScreen});
 
   @override
   Widget build(BuildContext context) {
@@ -96,10 +132,7 @@ class MyApp extends StatelessWidget {
           /// مهم: خلي الاتجاه من هون
           home: Directionality(
             textDirection: TextDirection.rtl,
-            child:
-                accountType == null
-                    ? const Onboarding1()
-                    : (accountType == 0 ? Homepage() : ShopData()),
+            child: homeScreen,
           ),
         );
       },

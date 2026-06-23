@@ -33,8 +33,12 @@ class _AddproductState extends State<Addproduct> {
       if (!status.isGranted) return;
     } else {
       if (Platform.isAndroid) {
-        var status = await Permission.photos.request();
-        if (!status.isGranted) return;
+        // For Android 13+ use photos, for older use storage
+        if (await Permission.photos.request().isGranted || await Permission.storage.request().isGranted) {
+           // Proceed
+        } else {
+           return;
+        }
       }
     }
 
@@ -153,7 +157,6 @@ class _AddproductState extends State<Addproduct> {
                 onBack: () {
                   Navigator.pushReplacement(
                     context,
-
                     MaterialPageRoute(builder: (_) => Theproduct()),
                   );
                 },
@@ -193,7 +196,6 @@ class _AddproductState extends State<Addproduct> {
                     child: TextField(
                       controller: nameController,
                       keyboardType: TextInputType.text,
-                      controller: nameController,
                       decoration: InputDecoration(
                         hintText: "",
                         fillColor: Color(0xffF5F5F5),
@@ -221,11 +223,9 @@ class _AddproductState extends State<Addproduct> {
               Container(
                 width: 343.w,
                 height: 56.h,
-
                 child: TextField(
                   controller: descController,
                   keyboardType: TextInputType.text,
-                  controller: descController,
                   decoration: InputDecoration(
                     hintText: "",
                     fillColor: Color(0xffF5F5F5),
@@ -423,7 +423,6 @@ class _AddproductState extends State<Addproduct> {
                     child: TextField(
                       controller: quantityController,
                       keyboardType: TextInputType.number,
-                      controller: quantityController,
                       decoration: InputDecoration(
                         hintText: "",
                         fillColor: Color(0xffF5F5F5),
@@ -451,7 +450,7 @@ class _AddproductState extends State<Addproduct> {
                   ),
 
                   Expanded(
-                    child: RadioListTile(
+                    child: RadioListTile<String>(
                       activeColor: Color(0xff05FF5D),
                       title: Text(
                         "متوفر",
@@ -471,7 +470,7 @@ class _AddproductState extends State<Addproduct> {
                     ),
                   ),
                   Expanded(
-                    child: RadioListTile(
+                    child: RadioListTile<String>(
                       activeColor: Color(0xffD90105),
                       title: Text(
                         "غير متوفر",
@@ -505,7 +504,7 @@ class _AddproductState extends State<Addproduct> {
                         showSuccessDialog(context);
 
                         Future.delayed(Duration(seconds: 2), () {
-                          Navigator.pop(context);
+                          Navigator.pop(context); // Close dialog
 
                           Navigator.pop(context, {
                             "name": nameController.text,

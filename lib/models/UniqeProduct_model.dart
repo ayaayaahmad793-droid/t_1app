@@ -8,6 +8,43 @@ class ProductU1 {
 
   bool isFavorite;
 
+
+  factory ProductU1.fromJson(Map<String, dynamic> json) {
+    return ProductU1(
+      productName: json['productName'] ?? '',
+      productDescription: json['productDescription'] ?? '',
+      price: (json['price'] as num?)?.toDouble() ?? 0.0,
+      oldPrice: (json['oldPrice'] as num?)?.toDouble() ?? 0.0,
+      evaluation: (json['evaluation'] as num?)?.toDouble() ?? 0.0,
+      productImage: json['productImage'] ?? '',
+      isFavorite: json['isFavorite'] ?? false,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'productName': productName,
+      'productDescription': productDescription,
+      'price': price,
+      'oldPrice': oldPrice,
+      'evaluation': evaluation,
+      'productImage': productImage,
+      'isFavorite': isFavorite,
+    };
+  }
+
+
+  ProductU1 mapToProductU1(Map<String, dynamic> map) {
+    return ProductU1(
+      productName: map['productName'] ?? '',
+      price: (map['price'] as num?)?.toDouble() ?? 0.0,
+      oldPrice: (map['oldPrice'] as num?)?.toDouble() ?? 0.0,
+      productImage: map['productImage'] ?? '',
+      evaluation: (map['evaluation'] as num?)?.toDouble() ?? 0.0,
+      productDescription: map['productDescription'] ?? '',
+    );
+  }
+
   ProductU1({
     required this.productName,
     required this.productDescription,
@@ -17,6 +54,7 @@ class ProductU1 {
     required this.productImage,
     this.isFavorite = false,
   });
+
 }
 
 class UniqeProductItem {

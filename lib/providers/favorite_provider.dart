@@ -1,76 +1,176 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:t_1app/models/Home_all_model/product_model.dart' as home_model;
+import 'package:t_1app/models/UniqeProduct_model.dart' as uniqe_model;
 
 class FavoriteProvider extends ChangeNotifier {
   final List<dynamic> _favoriteProducts = [];
-  final _supabase = Supabase.instance.client;
 
   List<dynamic> get favoriteProducts => _favoriteProducts;
 
   FavoriteProvider() {
-    fetchFavorites();
+    loadFavorites();
   }
 
-  Future<void> fetchFavorites() async {
-    final user = _supabase.auth.currentUser;
-    if (user == null) return;
-
-    try {
-      final data = await _supabase
-          .from('favorites')
-          .select('product_data')
-          .eq('user_id', user.id);
-
-      _favoriteProducts.clear();
-      for (var item in data) {
-        _favoriteProducts.add(item['product_data']);
-      }
-      notifyListeners();
-    } catch (e) {
-      print("Error fetching favorites: $e");
+  void toggleFavorite(dynamic product) {
+    if (isFavorite(product)) {
+      removeFromFavorite(product);
+    } else {
+      addToFavorite(product);
     }
   }
 
-  Future<void> addToFavorite(dynamic product) async {
-    final user = _supabase.auth.currentUser;
-    if (user == null) return;
+  void addToFavorite(dynamic product) {
+    bool exists = _favoriteProducts.any((item) => _getProductName(item) == _getProductName(product));
 
-    if (!_favoriteProducts.contains(product)) {
+    if (!exists) {
       _favoriteProducts.add(product);
+      saveFavorites();
       notifyListeners();
-
-      try {
-        await _supabase.from('favorites').insert({
-          'user_id': user.id,
-          'product_data': product,
-        });
-      } catch (e) {
-        print("Error saving favorite: $e");
-      }
     }
   }
 
-  Future<void> removeFromFavorite(dynamic product) async {
-    final user = _supabase.auth.currentUser;
-    if (user == null) return;
-
-    _favoriteProducts.remove(product);
+  void removeFromFavorite(dynamic product) {
+    _favoriteProducts.removeWhere((item) => _getProductName(item) == _getProductName(product));
+    saveFavorites();
     notifyListeners();
-
-    try {
-      // Assuming product has an 'id' or we match the whole data
-      // For simplicity, matching the whole product_data or a unique field if available
-      await _supabase
-          .from('favorites')
-          .delete()
-          .eq('user_id', user.id)
-          .eq('product_data', product);
-    } catch (e) {
-      print("Error removing favorite: $e");
-    }
   }
 
   bool isFavorite(dynamic product) {
-    return _favoriteProducts.any((item) => item.toString() == product.toString());
+    return _favoriteProducts.any((item) => _getProductName(item) == _getProductName(product));
+  }
+
+  String _getProductName(dynamic product) {
+    if (product is home_model.Product) return product.productName;
+    if (product is uniqe_model.ProductU1) return product.productName;
+    return "";
+  }
+
+  Future<void> saveFavorites() async {
+    final prefs = await SharedPreferences.getInstance();
+    List<String> data = _favoriteProducts.map((item) {
+      if (item is home_model.Product) {
+        return jsonEncode({'type': 'Product', 'data': item.toJson()});
+      } else if (item is uniqe_model.ProductU1) {
+        return jsonEncode({'type': 'ProductU1', 'data': item.toJson()});
+      }
+      return "";
+    }).where((s) => s.isNotEmpty).toList();
+
+    await prefs.setStringList('favorites_list', data);
+  }
+
+  Future<void> loadFavorites() async {
+    final prefs = await SharedPreferences.getInstance();
+    List<String>? data = prefs.getStringList('favorites_list');
+
+    if (data != null) {
+      _favoriteProducts.clear();
+      for (String itemStr in data) {
+        try {
+          final Map<String, dynamic> map = jsonDecode(itemStr);
+          final String type = map['type'];
+          final dynamic jsonData = map['data'];
+
+          if (type == 'Product') {
+            _favoriteProducts.add(home_model.Product.fromJson(jsonData));
+          } else if (type == 'ProductU1') {
+            _favoriteProducts.add(uniqe_model.ProductU1.fromJson(jsonData));
+          }
+        } catch (e) {
+          print("Error decoding fav item: $e");
+        }
+      }
+      notifyListeners();
+    }
   }
 }
+
+
+// import 'dart:convert';
+// import 'package:flutter/material.dart';
+// import 'package:shared_preferences/shared_preferences.dart';
+// import 'package:t_1app/models/Home_all_model/product_model.dart';
+// import 'package:t_1app/models/UniqeProduct_model.dart';
+//
+// class FavoriteProvider extends ChangeNotifier {
+//   final List<dynamic> _favoriteProducts = [];
+//
+//   List<dynamic> get favoriteProducts => _favoriteProducts;
+//
+//   FavoriteProvider() {
+//     loadFavorites();
+//   }
+//
+//   void toggleFavorite(dynamic product) {
+//     if (isFavorite(product)) {
+//       removeFromFavorite(product);
+//     } else {
+//       addToFavorite(product);
+//     }
+//   }
+//
+//   void addToFavorite(dynamic product) {
+//     // Check if already exists based on unique name
+//     bool exists = _favoriteProducts.any((item) => _getProductName(item) == _getProductName(product));
+//
+//     if (!exists) {
+//       _favoriteProducts.add(product);
+//       saveFavorites();
+//       notifyListeners();
+//     }
+//   }
+//
+//   void removeFromFavorite(dynamic product) {
+//     _favoriteProducts.removeWhere((item) => _getProductName(item) == _getProductName(product));
+//     saveFavorites();
+//     notifyListeners();
+//   }
+//
+//   bool isFavorite(dynamic product) {
+//     return _favoriteProducts.any((item) => _getProductName(item) == _getProductName(product));
+//   }
+//
+//   String _getProductName(dynamic product) {
+//     if (product is Product) return product.productName;
+//     if (product is ProductU1) return product.productName;
+//     if (product is Map) return product['productName'] ?? '';
+//     return "";
+//   }
+//
+//   Future<void> saveFavorites() async {
+//     final prefs = await SharedPreferences.getInstance();
+//     List<String> data = _favoriteProducts.map((item) {
+//       if (item is Product) {
+//         return jsonEncode({'type': 'Product', 'data': item.toJson()});
+//       } else if (item is ProductU1) {
+//         return jsonEncode({'type': 'ProductU1', 'data': item.toJson()});
+//       }
+//       return "";
+//     }).where((s) => s.isNotEmpty).toList();
+//
+//     await prefs.setStringList('favorites_list', data);
+//   }
+//
+//   Future<void> loadFavorites() async {
+//     final prefs = await SharedPreferences.getInstance();
+//     List<String>? data = prefs.getStringList('favorites_list');
+//
+//     if (data != null) {
+//       _favoriteProducts.clear();
+//       for (String itemStr in data) {
+//         final Map<String, dynamic> map = jsonDecode(itemStr);
+//         final String type = map['type'];
+//         final dynamic jsonData = map['data'];
+//
+//         if (type == 'Product') {
+//           _favoriteProducts.add(Product.fromJson(jsonData));
+//         } else if (type == 'ProductU1') {
+//           _favoriteProducts.add(ProductU1.fromJson(jsonData));
+//         }
+//       }
+//       notifyListeners();
+//     }
+//   }
+// }

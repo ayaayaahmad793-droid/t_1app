@@ -128,19 +128,19 @@ class _TheshopState extends State<Theshop> {
                   child: ListView(
                     children: [
                       OrderItem(
-                        customerName: "احمد محمد",
+                        customerName: "اية احمد",
                         productName: "سماعات headphone",
                         status: "مكتمل",
                         color: Color(0xff3EAA44),
                       ),
                       OrderItem(
-                        customerName: "احمد محمد",
-                        productName: "سماعات headphone",
+                        customerName: "رؤى اياد",
+                        productName: "ايفون 17 بروملكس ",
                         status: "قيد التنفيذ",
                         color: Color(0xff0755E6),
                       ),
                       OrderItem(
-                        customerName: "احمد محمد",
+                        customerName: "ريهام مروان",
                         productName: "سماعات headphone",
                         status: "غير مكتمل",
                         color: Color(0xffFFB800),

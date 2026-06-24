@@ -193,7 +193,7 @@ class _AddproductState extends State<Addproduct> {
                     child: TextField(
                       controller: nameController,
                       keyboardType: TextInputType.text,
-                      controller: nameController,
+                     
                       decoration: InputDecoration(
                         hintText: "",
                         fillColor: Color(0xffF5F5F5),
@@ -225,7 +225,7 @@ class _AddproductState extends State<Addproduct> {
                 child: TextField(
                   controller: descController,
                   keyboardType: TextInputType.text,
-                  controller: descController,
+                 
                   decoration: InputDecoration(
                     hintText: "",
                     fillColor: Color(0xffF5F5F5),
@@ -423,7 +423,7 @@ class _AddproductState extends State<Addproduct> {
                     child: TextField(
                       controller: quantityController,
                       keyboardType: TextInputType.number,
-                      controller: quantityController,
+                     
                       decoration: InputDecoration(
                         hintText: "",
                         fillColor: Color(0xffF5F5F5),

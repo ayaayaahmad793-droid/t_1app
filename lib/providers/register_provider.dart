@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:t_1app/Rest_App_Screens/Services/SupabaseService.dart';
 
 class RegisterProvider extends ChangeNotifier {
   bool isLoading = false;
@@ -77,7 +78,6 @@ class RegisterProvider extends ChangeNotifier {
     return isValid;
   }
 
-
   Future<bool> signUpUser(BuildContext context) async {
     if (!validate()) return false;
 
@@ -97,14 +97,14 @@ class RegisterProvider extends ChangeNotifier {
         },
       );
 
-      // 2. إذا تم إنشاء الحساب بنجاح في الـ Auth، نقوم بإضافة البروفايل يدوياً
+      // 2. المزامنة وإضافة البيانات لجدول profiles باستخدام الخدمة الجديدة
       if (response.user != null) {
-        await supabase.from('profiles').insert({
-          'id': response.user!.id,
-          'full_name': name,
-          'phone': phone,
-          'account_type': 0, // تأكدي من كتابتها هكذا
-        });
+        await SupabaseService().createUserProfile(
+          userId: response.user!.id,
+          fullName: name,
+          phone: phone,
+          accountType: 0, // القيمة الافتراضية
+        );
       }
 
       isLoading = false;
@@ -123,7 +123,6 @@ class RegisterProvider extends ChangeNotifier {
       return false;
     }
   }
-
   // Future<bool> signUpUser(BuildContext context) async {
   //   if (!validate()) return false;
   //
@@ -133,31 +132,38 @@ class RegisterProvider extends ChangeNotifier {
   //   try {
   //     final supabase = Supabase.instance.client;
   //
-  //     // 1. تسجيل الحساب في Auth
+  //     // 1. إنشاء الحساب في المصادقة (Auth)
   //     final response = await supabase.auth.signUp(
   //       email: email,
   //       password: password,
-  //       data: {'full_name': name, 'phone': phone},
+  //       data: {
+  //         'full_name': name,
+  //         'phone': phone,
+  //       },
   //     );
   //
+  //     // 2. إذا تم إنشاء الحساب بنجاح في الـ Auth، نقوم بإضافة البروفايل يدوياً
   //     if (response.user != null) {
-  //       // 2. إنشاء السجل في جدول profiles يدوياً لضمان المزامنة
-  //       try {
-  //         await supabase.from('profiles').upsert({
-  //           'id': response.user!.id,
-  //           'full_name': name,
-  //           'phone': phone,
-  //           'email': email,
-  //         });
-  //       } catch (e) {
-  //         print("Note: Profile creation failed or already exists: $e");
-  //         // نتابع العملية لأن الحساب في Auth تم إنشاؤه بالفعل
-  //       }
+  //       await supabase.from('profiles').insert({
+  //         'id': response.user!.id,
+  //         'full_name': name,
+  //         'phone': phone,
+  //         'account_type': 0, // تأكدي من كتابتها هكذا
+  //       });
+  //
+  //         // استدعاء الخدمة لحفظ بيانات البروفايل الأساسية بدلاً من كتابتها مباشرة
+  //         await SupabaseService().createUserProfile(
+  //           userId: response.user!.id,
+  //           fullName: name,
+  //           phone: phone,
+  //           accountType: 0,
+  //         );
   //     }
   //
   //     isLoading = false;
   //     notifyListeners();
-  //     return true;
+  //     return response.user != null;
+  //
   //   } on AuthException catch (e) {
   //     emailError = e.message;
   //     isLoading = false;
@@ -170,4 +176,5 @@ class RegisterProvider extends ChangeNotifier {
   //     return false;
   //   }
   // }
+
 }

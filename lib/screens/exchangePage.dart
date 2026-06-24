@@ -10,6 +10,8 @@ import 'package:provider/provider.dart';
 import 'package:t_1app/providers/exchange_provider.dart';
 import 'package:t_1app/providers/favorite_provider.dart';
 
+import '../models/UniqeProduct_model.dart';
+
 class Exchange extends StatefulWidget {
   const Exchange({super.key});
 
@@ -63,27 +65,75 @@ class _ExchangeState extends State<Exchange> {
                     childAspectRatio: 167 / 205,
                   ),
                   itemBuilder: (context, index) {
-                    return ExchangeCard(
-                      title: exchangeList[index].title,
-                      description: exchangeList[index].description,
-                      image: exchangeList[index].image,
-                     isFavorite: favoriteProvider.isFavorite(
-                        exchangeList[index],
-                      ),
-                     onFavoriteTap: () {
-                        final item = exchangeList[index];
+                    final currentItem = exchangeList[index];
 
-                        if (favoriteProvider.isFavorite(item)) {
-                          favoriteProvider.removeFromFavorite(item);
+                    // 🟢 الحل الجذري: إنشاء كائن ProductU1 مؤقت يحمل بيانات العنصر الحالي
+                    final tempProduct = ProductU1(
+                      productName: currentItem.title,
+                      productDescription: currentItem.description,
+                      price: 0.0,
+                      oldPrice: 0.0,
+                      evaluation: 0.0,
+                      productImage: currentItem.image,
+                    );
+
+                    return ExchangeCard(
+                      title: currentItem.title,
+                      description: currentItem.description,
+                      image: currentItem.image,
+
+                      // 🟢 التحقق من المفضلة باستخدام الكائن المؤقت
+                      isFavorite: favoriteProvider.isFavorite(tempProduct),
+
+                      onFavoriteTap: () {
+                        // 🟢 التفاعل مع المفضلة باستخدام الكائن المؤقت لتجنب أي أخطاء في التطابق
+                        if (favoriteProvider.isFavorite(tempProduct)) {
+                          favoriteProvider.removeFromFavorite(tempProduct);
                         } else {
-                          favoriteProvider.addToFavorite(item);
+                          favoriteProvider.addToFavorite(tempProduct);
                         }
+                        setState(() {});
                       },
                     );
                   },
                 ),
               ),
             ),
+
+            // Expanded(
+            //   child: Padding(
+            //     padding: EdgeInsets.symmetric(horizontal: 20.w),
+            //     child: GridView.builder(
+            //       padding: EdgeInsets.symmetric(vertical: 10.h),
+            //       itemCount: exchangeList.length,
+            //       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            //         crossAxisCount: 2,
+            //         crossAxisSpacing: 10.w,
+            //         mainAxisSpacing: 12.h,
+            //         childAspectRatio: 167 / 205,
+            //       ),
+            //       itemBuilder: (context, index) {
+            //         return ExchangeCard(
+            //           title: exchangeList[index].title,
+            //           description: exchangeList[index].description,
+            //           image: exchangeList[index].image,
+            //          isFavorite: favoriteProvider.isFavorite(
+            //             exchangeList[index],
+            //           ),
+            //          onFavoriteTap: () {
+            //             final item = exchangeList[index];
+            //
+            //             if (favoriteProvider.isFavorite(item)) {
+            //               favoriteProvider.removeFromFavorite(item);
+            //             } else {
+            //               favoriteProvider.addToFavorite(item);
+            //             }
+            //           },
+            //         );
+            //       },
+            //     ),
+            //   ),
+            // ),
             Padding(
               padding: EdgeInsets.only(bottom: 20.h, left: 20, right: 20),
               child: SizedBox(

@@ -107,6 +107,7 @@ flutter:
     - images/HomeProfile.png
     - images/dep1.png
     - images\اشارة التبادل.png
+    - images\profileImage.png
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
 

@@ -234,4 +234,3 @@ class _ProductSliderPageState extends State<ProductSliderPage> {
     );
   }
 }
-

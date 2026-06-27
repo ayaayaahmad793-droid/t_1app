@@ -39,7 +39,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               textDirection: TextDirection.ltr,
               child: Icon(Icons.arrow_back_ios),
             ),
-            onPressed: () => Get.back(),
+            onPressed: () => Get.to(()=> Homepage()),
           ),
         ],
         title: Text(
@@ -171,6 +171,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     "تسجيل الخروج",
                     Icons.logout,
                     color: Colors.orange,
+                    onTap: (){
+                      controller.logout();
+                    }
                   ),
                 ],
               ),

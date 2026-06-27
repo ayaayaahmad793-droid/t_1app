@@ -106,7 +106,7 @@ class _AccounttypeState extends State<Accounttype> {
                           }
                         }
 
-                        final pages = [const Homepage(), const ShopData()];
+                        final pages = [ Homepage(), const ShopData()];
 
                         Navigator.push(
                           context,
